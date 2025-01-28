@@ -15,8 +15,8 @@ title: Smart Site Printing Rover
 
 ## Team
 -  E/20/168, Jayasinghe B.V.R.R, [e20168@eng.pdn.ac.lk](mailto:name@email.com)
--  E/20/242, Name, [e20242@eng.pdn.ac.lk](mailto:name@email.com)
--  E/20/276, Name, [e20276@eng.pdn.ac.lk](mailto:name@email.com)
+-  E/20/242, Malinga G.A.I, [e20242@eng.pdn.ac.lk](mailto:name@email.com)
+-  E/20/276, Padeniya S.M.N.N, [e20276@eng.pdn.ac.lk](mailto:name@email.com)
 -  E/20/369, Seneviratne G.S, [e20369@eng.pdn.ac.lk](mailto:name@email.com)
 
 <!-- Image (photo/drawing of the final hardware) should be here -->
