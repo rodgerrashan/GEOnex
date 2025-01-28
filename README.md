@@ -1,10 +1,6 @@
-___
-# DELETE THIS INSTRUCTIONS AND ADD AN INTRODUCTION ABOUT YOUR PROJECT
-___
+# Smart Site Printing Rover 
 
-# eYY-3yp-project-template
-
-This is a sample repository you can use for your Embedded Systems project. Once you followed these instructions, remove the text and add a brief introduction to here.
+The Site Printing Rover is a smart land surveying tool designed to automate the stakeout process in land surveying. Equipped with advanced IoT-enabled features, it can mark lines and patterns with precision according to a given plan. This innovation addresses the inefficiencies of traditional methods, making surveying faster, more accurate, and more cost-effective.
 
 ### Enable GitHub Pages
 
@@ -18,32 +14,33 @@ These projects will be automatically added into [https://projects.ce.pdn.ac.lk](
 
 ```
 {
-  "title": "This is the title of the project",
+  "title": "Smart Site Printing Rover",
   "team": [
     {
-      "name": "Team Member Name 1",
-      "email": "email@eng.pdn.ac.lk",
-      "eNumber": "E/yy/xxx"
+      "name": "Jayasingha B.V.R.R",
+      "email": "e20168@eng.pdn.ac.lk",
+      "eNumber": "E/20/168"
     },
     {
-      "name": "Team Member Name 2",
-      "email": "email@eng.pdn.ac.lk",
-      "eNumber": "E/yy/xxx"
+      "name": "Malinga G.A.I",
+      "email": "e20242@eng.pdn.ac.lk",
+      "eNumber": "E/20/242"
     },
     {
-      "name": "Team Member Name 3",
-      "email": "email@eng.pdn.ac.lk",
-      "eNumber": "E/yy/xxx"
-    }
+      "name": "Padeniya S.M.N.N",
+      "email": "e20276@eng.pdn.ac.lk",
+      "eNumber": "E/20/276"
+    },
+    {
+      "name": "Seneviratne G.S",
+      "email": "e20369@eng.pdn.ac.lk",
+      "eNumber": "E/20/369"
+     }
   ],
   "supervisors": [
     {
-      "name": "Dr. Supervisor 1",
-      "email": "email@eng.pdn.ac.lk"
-    },
-    {
-      "name": "Supervisor 2",
-      "email": "email@eng.pdn.ac.lk"
+      "name": "Dr. Isuru Nawinne",
+      "email": "isurunawinne@eng.pdn.ac.lk"
     }
   ],
   "tags": ["Web", "Embedded Systems"]
