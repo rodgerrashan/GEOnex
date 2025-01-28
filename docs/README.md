@@ -3,7 +3,8 @@ layout: home
 permalink: index.html
 
 # Please update this with your repository name and project title
-repository-name: e20-3yp-Intelligent-Land-Surveying-System
+repository-name: e20-3yp-Smart-Site-Printing-Rover
+
 title: Smart Site Printing Rover 
 ---
 
