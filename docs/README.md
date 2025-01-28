@@ -3,20 +3,21 @@ layout: home
 permalink: index.html
 
 # Please update this with your repository name and project title
-repository-name: eYY-3yp-project-template
-title: Project Template
+repository-name: e20-3yp-Intelligent-Land-Surveying-System
+title: Smart Site Printing Rover 
 ---
 
 [comment]: # "This is the standard layout for the project, but you can clean this and use your own template"
 
-# Project Title
+# Smart Site Printing Rover
 
 ---
 
 ## Team
--  eNumber, Name, [email](mailto:name@email.com)
--  eNumber, Name, [email](mailto:name@email.com)
--  eNumber, Name, [email](mailto:name@email.com)
+-  E/20/168, Jayasinghe B.V.R.R, [e20168@eng.pdn.ac.lk](mailto:name@email.com)
+-  E/20/242, Name, [e20242@eng.pdn.ac.lk](mailto:name@email.com)
+-  E/20/276, Name, [e20276@eng.pdn.ac.lk](mailto:name@email.com)
+-  E/20/369, Seneviratne G.S, [e20369@eng.pdn.ac.lk](mailto:name@email.com)
 
 <!-- Image (photo/drawing of the final hardware) should be here -->
 
@@ -35,7 +36,7 @@ title: Project Template
 
 ## Introduction
 
-Description of the real world problem and solution, impact
+The Site Printing Rover is a smart land surveying tool designed to automate the stakeout process in land surveying. Equipped with advanced IoT-enabled features, it can mark lines and patterns with precision according to a given plan. This innovation addresses the inefficiencies of traditional methods, making surveying faster, more accurate, and more cost-effective.
 
 
 ## Solution Architecture
