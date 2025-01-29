@@ -1,12 +1,13 @@
 # Smart Site Printing Rover 
 
+![Logo](docs/images/rover.jpg "This is the logo")
+
 The Site Printing Rover is a smart land surveying tool designed to automate the stakeout process in land surveying. Equipped with advanced IoT-enabled features, it can mark lines and patterns with precision according to a given plan. This innovation addresses the inefficiencies of traditional methods, making surveying faster, more accurate, and more cost-effective.
 
 ### Enable GitHub Pages
 
 You can put the things to be shown in GitHub pages into the _docs/_ folder. Both html and md file formats are supported. You need to go to settings and enable GitHub pages and select _main_ branch and _docs_ folder from the dropdowns, as shown in the below image.
 
-![image](https://user-images.githubusercontent.com/11540782/98789936-028d3600-2429-11eb-84be-aaba665fdc75.png)
 
 ### Special Configurations
 
