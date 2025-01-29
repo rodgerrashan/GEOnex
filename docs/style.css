@@ -71,7 +71,7 @@ header{
 .home{
     width: 100%;
     min-height: 100vh;
-    background: url(/images/cover.jpeg);
+    background: url(../docs/images/cover.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
