@@ -1,8 +1,8 @@
-# Smart Site Printing Rover 
+# Smart Surveying Device
 
 ![Logo](docs/images/rover.jpg "This is the logo")
 
-The Site Printing Rover is a smart land surveying tool designed to automate the stakeout process in land surveying. Equipped with advanced IoT-enabled features, it can mark lines and patterns with precision according to a given plan. This innovation addresses the inefficiencies of traditional methods, making surveying faster, more accurate, and more cost-effective.
+The Smart Surveying Device is an innovative solution addressing the inefficiencies in land surveying, boundary marking, and construction layout tasks. It automates stake placement with high precision, reducing both manual labor and project costs.
 
 ### Enable GitHub Pages
 
@@ -15,7 +15,7 @@ These projects will be automatically added into [https://projects.ce.pdn.ac.lk](
 
 ```
 {
-  "title": "Smart Site Printing Rover",
+  "title": "Smart Surveying Device",
   "team": [
     {
       "name": "Jayasingha B.V.R.R",
