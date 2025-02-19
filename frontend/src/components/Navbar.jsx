@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { assets } from '../assets/assets';
 
 const Navbar = () => {
@@ -22,11 +22,14 @@ const Navbar = () => {
       className={`w-full md:w-[15%]  ${navbarHeightClass} flex flex-col justify-between transition-all duration-300`}
       style={{ backgroundColor: 'rgba(197, 197, 198, 1)' }}
     >
-      {/* GEOnex Logo */}
-      <div className="pt-10 pl-10">
-        <span className="text-3xl font-semi-bold text-black">GEO</span>
-        <span className="text-xl font-semi-bold text-black">nex</span>
-      </div>
+      <Link to="/">
+        {/* GEOnex Logo */}
+        <div className="pt-10 pl-10">
+          <span className="text-3xl font-semi-bold text-black">GEO</span>
+          <span className="text-xl font-semi-bold text-black">nex</span>
+        </div>
+      </Link>
+      
 
       {/* Navigation Frame */}
       <div className="flex flex-col gap-3 md:gap-4 pt-4 md:pt-20 text-[13px] md:text-[15px]">
