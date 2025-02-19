@@ -1,6 +1,6 @@
 # Smart Surveying Device
 
-![Logo](docs/images/device.jpg "This is the logo")
+![Logo](docs/images/device.png "This is the logo")
 
 The Smart Surveying Device is an innovative solution addressing the inefficiencies in land surveying, boundary marking, and construction layout tasks. It automates stake placement with high precision, reducing both manual labor and project costs.
 
