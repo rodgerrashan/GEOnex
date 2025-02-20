@@ -4,6 +4,8 @@ import devices from './location.png'
 import projects from './map.png'
 import base from './base.png'
 import device from './device.png'
+import arrow from './left-arrow.png'
+import down from './down.png'
 
 export const assets = {
     home,
@@ -11,5 +13,7 @@ export const assets = {
     devices,
     projects,
     base,
-    device
+    device,
+    arrow,
+    down
 }
