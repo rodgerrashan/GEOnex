@@ -6,10 +6,12 @@
 #include <Wire.h>
 #include <PubSubClient.h>
 
-extern NMEAGPS gps;
-extern gps_fix fix;
 extern PubSubClient client;
 extern char AWS_IOT_PUBLISH_TOPIC[];
+
+// GPS instance
+NMEAGPS gps;
+gps_fix fix;
 
 void publishGPSData()
 {
