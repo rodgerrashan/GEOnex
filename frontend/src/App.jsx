@@ -1,34 +1,35 @@
-import React from 'react'
+import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Home from './pages/Home';
-import Devices from './pages/Devices';
-import Projects from './pages/Projects';
-import Settings from './pages/Settings';
+import Home from "./pages/Home";
+import Devices from "./pages/Devices";
+import Projects from "./pages/Projects";
+import Settings from "./pages/Settings";
 import Login from "./pages/Login";
-import Navbar from './components/Navbar';
-
+import Navbar from "./components/Navbar";
 
 const App = () => {
   return (
-    <div >
+    <div>
+      <div className="flex w-full"
+      style={{ backgroundColor: 'rgba(232, 232, 232, 1)' }}
+      >
+        <Navbar />
+        <div className="w-[75%] mx-auto ml-[max(5vw,25px)] my-8 border border-red-500">
+          <Routes>
+            <Route path="/" element={<Home />} />
 
-      <Navbar/>
+            <Route path="/devices" element={<Devices />} />
 
-      <Routes>
-        <Route path='/' element={<Home />}/>
+            <Route path="/projects" element={<Projects />} />
 
-        <Route path='/devices' element={<Devices />}/>
+            <Route path="/settings" element={<Settings />} />
 
-        <Route path='/projects' element={<Projects />}/>
-
-        <Route path='/settings' element={<Settings />}/>
-
-        <Route path='/login' element={<Login />}/>
-
-      </Routes>
-      
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
