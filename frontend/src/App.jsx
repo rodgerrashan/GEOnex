@@ -6,6 +6,7 @@ import Projects from "./pages/Projects";
 import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
+import NewProject from "./pages/NewProject";
 
 const App = () => {
   return (
@@ -25,6 +26,9 @@ const App = () => {
             <Route path="/settings" element={<Settings />} />
 
             <Route path="/login" element={<Login />} />
+
+            <Route path="/newproject" element={<NewProject />} />
+
           </Routes>
         </div>
       </div>
