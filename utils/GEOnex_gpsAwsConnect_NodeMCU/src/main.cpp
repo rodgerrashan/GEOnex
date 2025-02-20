@@ -1,18 +1,32 @@
-#include <Arduino.h>
-
-// put function declarations here:
-int myFunction(int, int);
+#include <ESP8266WiFi.h>
+#include <WiFiClientSecure.h>
+#include <PubSubClient.h>
+#include "wifi_manager.h"
+#include "mqtt_manager.h"
+#include "gps_manager.h"
+#include "env.h"
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  Serial.begin(115200);
+  Serial1.begin(9600);
+
+  // Initialize WiFi and connect to network
+  connectWiFi();
+
+  // Initialize MQTT
+  connectMQTT();
+
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-}
+  if (Serial1.available()) {
+    Serial.write(Serial1.read());  // Debug: Print raw GPS data
+  }
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+  if (mqttConnected()) {
+    publishGPSData();
+  }
+  
+  delay(2000); // Delay to manage loop frequency
+  mqttLoop();
 }
