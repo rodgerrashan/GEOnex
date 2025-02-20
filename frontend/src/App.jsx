@@ -7,6 +7,7 @@ import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
 import NewProject from "./pages/NewProject";
+import PointSurvey from "./pages/PointSurvey";
 
 const App = () => {
   return (
@@ -28,6 +29,8 @@ const App = () => {
             <Route path="/login" element={<Login />} />
 
             <Route path="/newproject" element={<NewProject />} />
+
+            <Route path="/pointsurvey" element={<PointSurvey />} />
 
           </Routes>
         </div>

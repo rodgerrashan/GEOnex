@@ -126,8 +126,7 @@ const NewProject = () => {
           <button
             className="mt-auto w-full bg-black text-white py-2 rounded-md text-sm font-semibold"
             onClick={() => {
-              // Handle form submission or navigation here
-              alert("Starting survey...");
+                navigate("/pointsurvey");
             }}
           >
             Start Survey
