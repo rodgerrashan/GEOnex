@@ -6,6 +6,9 @@ import base from './base.png'
 import device from './device.png'
 import arrow from './left-arrow.png'
 import down from './down.png'
+import map from './squares.png'
+import points from './points.png'
+import export_data from './file-export.png'
 
 export const assets = {
     home,
@@ -15,5 +18,8 @@ export const assets = {
     base,
     device,
     arrow,
-    down
+    down,
+    map,
+    points,
+    export_data
 }

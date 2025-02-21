@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
 import NewProject from "./pages/NewProject";
 import PointSurvey from "./pages/PointSurvey";
+import ProjectDetails from "./pages/ProjectDetails";
 
 const App = () => {
   return (
@@ -31,6 +32,8 @@ const App = () => {
             <Route path="/newproject" element={<NewProject />} />
 
             <Route path="/pointsurvey" element={<PointSurvey />} />
+
+            <Route path="/projectdetails" element={<ProjectDetails />} />
 
           </Routes>
         </div>
