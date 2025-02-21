@@ -7,9 +7,9 @@ const wss = new WebSocket.Server({ port: 8080 });
 
 // AWS IoT Configuration
 const device = awsIot.device({
-    keyPath: "./certs/private.pem.key",
-    certPath: "./certs/certificate.pem.crt",
-    caPath: "./certs/AmazonRootCA1.pem",
+    keyPath: process.env.AWS_PRIVATE_KEY,
+    certPath: process.env.AWS_CERT,
+    caPath: process.env.AWS_ROOT_CA,
     clientId: process.env.AWS_CLIENT_ID,
     host: process.env.AWS_IOT_ENDPOINT
 });
