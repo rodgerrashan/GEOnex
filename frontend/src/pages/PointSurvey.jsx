@@ -1,6 +1,7 @@
 import React, { useContext }  from "react";
 import { assets } from "../assets/assets";
 import { Context } from "../context/Context";
+import SensorData from "../components/SensorData";
 
 const PointSurvey = () => {
   const { navigate } = useContext(Context);
@@ -40,6 +41,7 @@ const PointSurvey = () => {
           </button>
 
         </div>
+        <SensorData />
       </div>
     </div>
   );
