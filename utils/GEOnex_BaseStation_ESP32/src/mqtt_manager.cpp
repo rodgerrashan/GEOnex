@@ -19,6 +19,8 @@ const char AWS_IOT_SUBSCRIBE_TOPIC[] = "esp8266/sub";
 // Function to connect to NTP server and set time
 void NTPConnect()
 {
+
+    
     // Set time using SNTP
     Serial.print("Setting time using SNTP");
     configTime(TIME_ZONE * 3600, 0, "pool.ntp.org", "time.nist.gov");
@@ -90,7 +92,7 @@ void publishGPSData(float latitude, float longitude, float altitude, float speed
         connectMQTT();
     }
 
-    StaticJsonDocument<200> jsonDoc;
+    JsonDocument jsonDoc;
     jsonDoc["latitude"] = latitude;
     jsonDoc["longitude"] = longitude;
     jsonDoc["altitude"] = altitude;
@@ -115,11 +117,12 @@ void mockPublishGPSData()
     float baseLongitude = -122.4194;
     float baseAltitude = 15.0;
     float baseSpeed = 10.5;
-    
+
     float randomLatitude = baseLatitude + ((rand() % 100 - 50) * 0.0001);
     float randomLongitude = baseLongitude + ((rand() % 100 - 50) * 0.0001);
     float randomAltitude = baseAltitude + ((rand() % 10 - 5) * 0.1);
     float randomSpeed = baseSpeed + ((rand() % 10 - 5) * 0.1);
-    
+
+    delay(500);
     publishGPSData(randomLatitude, randomLongitude, randomAltitude, randomSpeed);
 }
