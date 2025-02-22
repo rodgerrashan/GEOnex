@@ -29,7 +29,10 @@ const ProjectDetails = () => {
         {/* Actions Section (Left) */}
         <div className="col-span-1 row-span-6 bg-white p-4 rounded-lg flex flex-col gap-4">
           <h2 className="text-lg font-semibold">Actions</h2>
-          <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-100">
+          <div
+            className="flex items-center gap-3 p-3 rounded-lg"
+            style={{ backgroundColor: "rgba(217, 217, 217, 1)" }}
+          >
             <img className="w-8 h-8" src={assets.map} alt="View on Map" />
             <div>
               <h3 className="font-semibold">View on Map</h3>
@@ -40,7 +43,10 @@ const ProjectDetails = () => {
           </div>
 
           {/* Points */}
-          <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-100">
+          <div
+            className="flex items-center gap-3 p-3 rounded-lg"
+            style={{ backgroundColor: "rgba(217, 217, 217, 1)" }}
+          >
             <img className="w-8 h-8" src={assets.points} alt="Points" />
             <div>
               <h3 className="font-semibold">Points</h3>
@@ -51,7 +57,10 @@ const ProjectDetails = () => {
           </div>
 
           {/* Export Data */}
-          <div className="bg-gray-100 p-3 rounded-lg">
+          <div
+            className="p-3 rounded-lg"
+            style={{ backgroundColor: "rgba(217, 217, 217, 1)" }}
+          >
             <div className="flex items-center gap-3 mb-2">
               <img
                 className="w-8 h-8"
@@ -75,36 +84,64 @@ const ProjectDetails = () => {
           </div>
 
           {/* Delete Project */}
-          <div className="bg-red-100 p-3 rounded-lg">
-            <h3 className="font-semibold text-red-600">Delete Project</h3>
-            <p className="text-xs text-gray-600">
-              This action cannot be undone
-            </p>
+          <div className="flex items-center gap-3 p-3 rounded-lg bg-red-500">
+            <img className="w-8 h-8" src={assets.bin} alt="delete" />
+            <div>
+              <h3 className="font-semibold text-white">Delete Project</h3>
+              <p className="text-xs text-white">This action cannot be undone</p>
+            </div>
           </div>
         </div>
 
         {/* Overview Section (Right) */}
         <div className="col-span-1 row-span-3 bg-white p-4 rounded-lg flex flex-col gap-3">
           <h2 className="text-lg font-semibold">Overview</h2>
-          <div className="flex justify-between">
-            <span className="font-semibold">Created On</span>
-            <span>Jan 15, 2025</span>
+
+          <div className="flex justify-between items-center">
+            <span className="font-semibold text-sm">Created On</span>
+            <span
+              className="px-3 py-1 rounded-xl text-xs w-24 text-center"
+              style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
+            >
+              Jan 15, 2025
+            </span>
           </div>
-          <div className="flex justify-between">
-            <span className="font-semibold">Last Modified</span>
-            <span>10 mins ago</span>
+
+          <div className="flex justify-between items-center">
+            <span className="font-semibold text-sm">Last Modified</span>
+            <span
+              className="px-3 py-1 rounded-xl text-xs w-24 text-center"
+              style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
+            >
+              10 mins ago
+            </span>
           </div>
-          <div className="flex justify-between">
-            <span className="font-semibold">Status</span>
-            <span className="text-blue-600">In Progress</span>
+
+          <div className="flex justify-between items-center">
+            <span className="font-semibold text-sm">Status</span>
+            <span className="bg-blue-600 text-white px-3 py-1 rounded-xl text-xs w-24 text-center">
+              In Progress
+            </span>
           </div>
-          <div className="flex justify-between">
-            <span className="font-semibold">Number of Points</span>
-            <span>25</span>
+
+          <div className="flex justify-between items-center">
+            <span className="font-semibold text-sm">Number of Points</span>
+            <span
+              className="px-3 py-1 rounded-xl text-xs w-24 text-center"
+              style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
+            >
+              25
+            </span>
           </div>
-          <div className="flex justify-between">
-            <span className="font-semibold">Survey Time</span>
-            <span>10 hrs</span>
+
+          <div className="flex justify-between items-center">
+            <span className="font-semibold text-sm">Survey Time</span>
+            <span
+              className="px-3 py-1 rounded-xl text-xs w-24 text-center"
+              style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
+            >
+              10 hrs
+            </span>
           </div>
         </div>
       </div>

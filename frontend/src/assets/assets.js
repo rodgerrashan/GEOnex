@@ -9,6 +9,8 @@ import down from './down.png'
 import map from './squares.png'
 import points from './points.png'
 import export_data from './file-export.png'
+import bin from './bin.png'
+import refresh from './refresh.png'
 
 export const assets = {
     home,
@@ -21,5 +23,7 @@ export const assets = {
     down,
     map,
     points,
-    export_data
+    export_data,
+    bin,
+    refresh
 }
