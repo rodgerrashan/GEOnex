@@ -3,6 +3,7 @@
 
 void connectMQTT();
 void publishGPSData(float latitude, float longitude, int satellites);
+
 bool mqttConnected();
 void mqttLoop();
 void mockPublishGPSData();
