@@ -29,7 +29,10 @@ const ProjectDetails = () => {
         {/* Actions Section (Left) */}
         <div className="col-span-1 row-span-6 bg-white p-4 rounded-lg flex flex-col gap-4">
           <h2 className="text-lg font-semibold">Actions</h2>
-          <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-100">
+          <div
+            className="flex items-center gap-3 p-3 rounded-lg"
+            style={{ backgroundColor: "rgba(217, 217, 217, 1)" }}
+          >
             <img className="w-8 h-8" src={assets.map} alt="View on Map" />
             <div>
               <h3 className="font-semibold">View on Map</h3>
@@ -40,7 +43,10 @@ const ProjectDetails = () => {
           </div>
 
           {/* Points */}
-          <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-100">
+          <div
+            className="flex items-center gap-3 p-3 rounded-lg"
+            style={{ backgroundColor: "rgba(217, 217, 217, 1)" }}
+          >
             <img className="w-8 h-8" src={assets.points} alt="Points" />
             <div>
               <h3 className="font-semibold">Points</h3>
@@ -51,7 +57,10 @@ const ProjectDetails = () => {
           </div>
 
           {/* Export Data */}
-          <div className="bg-gray-100 p-3 rounded-lg">
+          <div
+            className="p-3 rounded-lg"
+            style={{ backgroundColor: "rgba(217, 217, 217, 1)" }}
+          >
             <div className="flex items-center gap-3 mb-2">
               <img
                 className="w-8 h-8"
@@ -90,14 +99,20 @@ const ProjectDetails = () => {
 
           <div className="flex justify-between items-center">
             <span className="font-semibold text-sm">Created On</span>
-            <span className="bg-gray-200 px-3 py-1 rounded-xl text-xs w-24 text-center">
+            <span
+              className="px-3 py-1 rounded-xl text-xs w-24 text-center"
+              style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
+            >
               Jan 15, 2025
             </span>
           </div>
 
           <div className="flex justify-between items-center">
             <span className="font-semibold text-sm">Last Modified</span>
-            <span className="bg-gray-200 px-3 py-1 rounded-xl text-xs w-24 text-center">
+            <span
+              className="px-3 py-1 rounded-xl text-xs w-24 text-center"
+              style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
+            >
               10 mins ago
             </span>
           </div>
@@ -111,12 +126,20 @@ const ProjectDetails = () => {
 
           <div className="flex justify-between items-center">
             <span className="font-semibold text-sm">Number of Points</span>
-            <span className="bg-gray-200 px-3 py-1 rounded-xl text-xs w-24 text-center">25</span>
+            <span
+              className="px-3 py-1 rounded-xl text-xs w-24 text-center"
+              style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
+            >
+              25
+            </span>
           </div>
 
           <div className="flex justify-between items-center">
             <span className="font-semibold text-sm">Survey Time</span>
-            <span className="bg-gray-200 px-3 py-1 rounded-xl text-xs w-24 text-center">
+            <span
+              className="px-3 py-1 rounded-xl text-xs w-24 text-center"
+              style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
+            >
               10 hrs
             </span>
           </div>
