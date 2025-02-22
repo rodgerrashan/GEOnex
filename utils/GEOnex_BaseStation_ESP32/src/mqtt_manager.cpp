@@ -19,8 +19,6 @@ const char AWS_IOT_SUBSCRIBE_TOPIC[] = "esp8266/sub";
 // Function to connect to NTP server and set time
 void NTPConnect()
 {
-
-    
     // Set time using SNTP
     Serial.print("Setting time using SNTP");
     configTime(TIME_ZONE * 3600, 0, "pool.ntp.org", "time.nist.gov");
@@ -84,7 +82,9 @@ void mqttLoop()
     client.loop();
 }
 
-void publishGPSData(float latitude, float longitude, float altitude, float speed)
+
+void publishGPSData(float latitude, float longitude, int satellites)
+
 {
     if (!mqttConnected())
     {
@@ -95,8 +95,8 @@ void publishGPSData(float latitude, float longitude, float altitude, float speed
     JsonDocument jsonDoc;
     jsonDoc["latitude"] = latitude;
     jsonDoc["longitude"] = longitude;
-    jsonDoc["altitude"] = altitude;
-    jsonDoc["speed"] = speed;
+    jsonDoc["Satellites"] = satellites;
+
 
     char jsonBuffer[256];
     serializeJson(jsonDoc, jsonBuffer);
@@ -110,6 +110,7 @@ void publishGPSData(float latitude, float longitude, float altitude, float speed
         Serial.println("Failed to publish GPS data");
     }
 }
+
 
 void mockPublishGPSData()
 {
@@ -126,3 +127,4 @@ void mockPublishGPSData()
     delay(500);
     publishGPSData(randomLatitude, randomLongitude, randomAltitude, randomSpeed);
 }
+
