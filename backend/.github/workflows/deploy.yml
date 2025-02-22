@@ -1,0 +1,36 @@
+name: Deploy WebSocket Server to AWS EC2
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: Backend_env
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Deploy to AWS EC2 using SSH and Rsync
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: "13.60.34.78"
+          username: "ubuntu"
+          key: "${{ secrets.SSH_PRIVATE_KEY }}"
+          script: |
+            cd /home/ubuntu/e20-3yp-GEOnex
+            git pull origin master
+            npm install
+            pm2 restart backend || pm2 start server.js --name backend
+            pm2 save
