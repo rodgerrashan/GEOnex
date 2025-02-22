@@ -16,6 +16,7 @@ public:
     bool hasNewLocation();
     double getLatitude();
     double getLongitude();
+    int getSatellites();
 };
 
 #endif // GNSS_ESP32_H

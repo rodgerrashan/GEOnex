@@ -27,3 +27,8 @@ double GPSModule::getLongitude()
 {
     return gps.location.lng();
 }
+
+int GPSModule::getSatellites()
+{
+    return gps.satellites.value();
+}

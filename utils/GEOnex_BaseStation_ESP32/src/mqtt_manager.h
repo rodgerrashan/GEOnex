@@ -2,8 +2,9 @@
 #define MQTT_MANAGER_H
 
 void connectMQTT();
-void publishGPSData();
+void publishGPSData(float latitude, float longitude, int satellites);
 bool mqttConnected();
 void mqttLoop();
+void mockPublishGPSData();
 
 #endif

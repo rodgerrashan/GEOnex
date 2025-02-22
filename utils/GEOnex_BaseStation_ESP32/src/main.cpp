@@ -43,10 +43,15 @@ void loop()
     double Lon = gpsModule.getLongitude();
     Serial.println(Lon, 6);
 
-    //   Serial.print("Satellites: ");
+    Serial.print("Satellites: ");
+    int sat = gpsModule.getSatellites();
+    Serial.println(sat);
     //   Serial.println(gpsModule.getSatellites());
+
+    publishGPSData(Lat, Lon, sat);
     //   Publish to MQTT (Uncomment if needed)
     //   publishGPSData(gpsModule.getLatitude(), gpsModule.getLongitude(), gpsModule.getAltitude(), gpsModule.getSpeed());
+    //   mockPublishGPSData();
   }
 
   else
