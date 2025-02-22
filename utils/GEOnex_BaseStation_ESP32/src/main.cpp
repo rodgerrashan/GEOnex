@@ -5,6 +5,7 @@
 #include "mqtt_manager.h"
 #include "gps_manager.h"
 #include "env.h"
+#include "gnss_esp.h"
 
 // Create GPS module instance
 // GPSModule gpsModule(4, 5, 9600);
@@ -13,7 +14,7 @@ GPSModule gpsModule(16, 17, 9600);
 void setup()
 {
   Serial.begin(115200);
-  // // Disable WiFi to stop debug messages
+  // Disable WiFi to stop debug messages when needed
   // WiFi.mode(WIFI_OFF);
   // WiFi.disconnect(true);
 
@@ -22,36 +23,32 @@ void setup()
 
   // Initialize MQTT
   connectMQTT();
+
+  Serial.println("ESP32 GPS Module Test");
 }
 
 void loop()
 {
 
   gpsModule.processGPSData();
-  // mqttLoop();
+  mqttLoop();
 
   if (gpsModule.hasNewLocation())
   {
-    Serial.println("=== GPS Data ===");
     Serial.print("Latitude: ");
-    Serial.println(gpsModule.getLatitude(), 6);
-    Serial.print("Longitude: ");
-    Serial.println(gpsModule.getLongitude(), 6);
-    Serial.print("Altitude: ");
-    Serial.print(gpsModule.getAltitude(), 2);
-    Serial.println(" m");
-    Serial.print("Speed: ");
-    Serial.print(gpsModule.getSpeed(), 2);
-    Serial.println(" km/h");
-    Serial.print("Satellites: ");
-    Serial.println(gpsModule.getSatellites());
-    Serial.print("Date/Time: ");
-    Serial.println(gpsModule.getDateTime());
-    Serial.println("================");
+    double Lat = gpsModule.getLatitude();
+    Serial.print(Lat, 6);
 
-    // Publish to MQTT (Uncomment if needed)
-    // publishGPSData(gpsModule.getLatitude(), gpsModule.getLongitude(), gpsModule.getAltitude(), gpsModule.getSpeed());
+    Serial.print(", Longitude: ");
+    double Lon = gpsModule.getLongitude();
+    Serial.println(Lon, 6);
+
+    //   Serial.print("Satellites: ");
+    //   Serial.println(gpsModule.getSatellites());
+    //   Publish to MQTT (Uncomment if needed)
+    //   publishGPSData(gpsModule.getLatitude(), gpsModule.getLongitude(), gpsModule.getAltitude(), gpsModule.getSpeed());
   }
+
   else
   {
     Serial.println("Waiting for GPS fix...");

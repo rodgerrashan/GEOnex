@@ -24,8 +24,11 @@ void loop()
   if (gpsModule.hasNewLocation())
   {
     Serial.print("Latitude: ");
-    Serial.print(gpsModule.getLatitude(), 6);
+    double Lat = gpsModule.getLatitude();
+    Serial.print(Lat, 6);
+
     Serial.print(", Longitude: ");
-    Serial.println(gpsModule.getLongitude(), 6);
+    double Lon = gpsModule.getLongitude();
+    Serial.println(Lon, 6);
   }
 }

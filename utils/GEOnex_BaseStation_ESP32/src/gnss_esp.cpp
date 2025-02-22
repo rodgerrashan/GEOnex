@@ -1,4 +1,4 @@
-#include "gnss_esp32.h"
+#include "gnss_esp.h"
 
 GPSModule::GPSModule(int rxPin, int txPin, int baudRate) : gpsSerial(2)
 {
@@ -27,4 +27,3 @@ double GPSModule::getLongitude()
 {
     return gps.location.lng();
 }
-
