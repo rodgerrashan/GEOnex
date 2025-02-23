@@ -10,7 +10,7 @@ const SensorData = () => {
     });
 
     // Connect to WebSocket Server
-    const { lastMessage } = useWebSocket("ws://localhost:8080", {
+    const { lastMessage } = useWebSocket("ws://13.61.32.218:8080", {
         shouldReconnect: () => true, 
     });
 
