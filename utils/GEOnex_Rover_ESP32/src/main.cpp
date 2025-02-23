@@ -11,6 +11,9 @@
 // Create GPS module instance
 GPSModule gpsModule(16, 17, 9600);
 
+// Function prototype declaration
+void setupPins();
+
 void setup()
 {
   Serial.begin(115200);
