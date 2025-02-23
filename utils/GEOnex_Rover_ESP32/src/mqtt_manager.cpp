@@ -5,6 +5,7 @@
 #include <WiFi.h>
 #include "env.h"
 #include <WiFiClientSecure.h>
+#include "pins.h"
 
 WiFiClientSecure net;
 
@@ -69,6 +70,7 @@ void connectMQTT()
 
     // Subscribe to MQTT topic
     client.subscribe(AWS_IOT_SUBSCRIBE_TOPIC);
+    digitalWrite(LED_MQTT, HIGH);
     Serial.println("AWS IoT Connected!");
 }
 

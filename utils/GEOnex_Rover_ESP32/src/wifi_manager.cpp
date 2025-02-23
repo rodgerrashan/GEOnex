@@ -1,6 +1,7 @@
 #include <WiFi.h>
 #include "wifi_manager.h"
 #include "env.h"
+#include "pins.h"
 
 const char WIFI_SSID[] = "Ministry Of Wifi";
 const char WIFI_PASSWORD[] = "ExpectoRouter";
@@ -17,6 +18,7 @@ void connectWiFi() {
 
     while (WiFi.status() != WL_CONNECTED) {
         Serial.print(".");
+        digitalWrite(LED_WIFI, !digitalRead(LED_WIFI)); // Blink if connecting
         delay(1000);
         if (millis() - startTime >= timeout) {
             Serial.println("\nFailed to connect to WiFi.");
@@ -25,4 +27,5 @@ void connectWiFi() {
     }
 
     Serial.println("\nWiFi Connected!");
+    digitalWrite(LED_WIFI, HIGH);
 }
