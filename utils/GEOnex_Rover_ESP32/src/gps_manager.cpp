@@ -1,16 +1,17 @@
 #include "gps_manager.h"
-#include "mqtt_manager.h"  
+#include "mqtt_manager.h"
 #include <gnss_esp.h>
 #include "config.h"
 
-
 GPSModule gpsModule(GPS_RX, GPS_TX, GNSS_BAUD_RATE);
 
-void processGPS() {
+void processGPS()
+{
   gpsModule.processGPSData();
   Serial.println("[INFO] Processing GPS data...");
 
-  if (gpsModule.hasNewLocation()) {
+  if (gpsModule.hasNewLocation())
+  {
     Serial.print("\nLatitude: ");
     double Lat = gpsModule.getLatitude();
     Serial.print(Lat, 6);
@@ -25,15 +26,21 @@ void processGPS() {
 
     handleGPSLED(sat);
     handleMQTTLED(Lat, Lon, sat);
-  } else {
+  }
+  else
+  {
     Serial.println("[WAIT]  Waiting for GPS fix...");
   }
 }
 
-void handleGPSLED(int sat) {
-  if (sat >= MIN_SATELLITES) { 
+void handleGPSLED(int sat)
+{
+  if (sat >= MIN_SATELLITES)
+  {
     digitalWrite(LED_GPS, HIGH);
-  } else {
-    digitalWrite(LED_GPS, !digitalRead(LED_GPS));  // Blink in float mode
+  }
+  else
+  {
+    digitalWrite(LED_GPS, !digitalRead(LED_GPS)); // Blink in float mode
   }
 }
