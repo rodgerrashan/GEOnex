@@ -7,6 +7,5 @@ void publishGPSData(float latitude, float longitude, int satellites);
 bool mqttConnected();
 void mqttLoop();
 void mockPublishGPSData();
-void handleMQTTLED(double Lat, double Lon, int sat) ;
 
 #endif
