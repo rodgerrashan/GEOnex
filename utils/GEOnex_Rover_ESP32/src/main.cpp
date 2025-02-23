@@ -9,6 +9,9 @@
 #include "config.h"
 #include "button_manager.h"
 
+// Function prototype declaration
+void setupPins();
+
 void setup()
 {
   Serial.begin(SERIAL_BAUD_RATE);
