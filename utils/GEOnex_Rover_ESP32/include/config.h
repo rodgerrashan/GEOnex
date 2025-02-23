@@ -30,12 +30,12 @@
 // LED Pins
 #define LED_POWER 2 // Power Indicator (Always ON)
 #define LED_WIFI 4  // WiFi Status (ON if connected, blinks if connecting)
-#define LED_GPS 5   // GPS RTK Fix Indicator (ON when fix, blinks in float mode)
-#define LED_MQTT 18 // MQTT Publish Indicator (Blinks on publish)
+#define LED_MQTT 5 // MQTT Publish Indicator (Blinks on publish)
+#define LED_GPS 18   // GPS RTK Fix Indicator (ON when fix, blinks in float mode)
 
 // BUTTON Pins
-#define BUTTON_RESET_WIFI 32 // Reset WiFi
-#define BUTTON_SEND_GPS 33   // Manually Send GPS Data
+#define BUTTON_RESET_WIFI 19 // Reset WiFi
+#define BUTTON_SEND_GPS 23   // Manually Send GPS Data
 
 // Publishing Intervals (ms)
 #define PUBLISH_INTERVAL 2000  
@@ -53,7 +53,7 @@
 #define MQTT_PUBLISH_DELAY_MOCK 1000     // Delay for MQTT publish (in milliseconds)
 
 // GPS Settings
-#define MIN_SATELLITES 3            // Minimum number of satellites required for RTK fix
+#define MIN_SATELLITES 5           // Minimum number of satellites required for RTK fix
 
 // Timeouts
 #define WIFI_TIMEOUT 30000          // Timeout for WiFi connection (in milliseconds)

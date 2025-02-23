@@ -29,7 +29,11 @@ void processGPS()
   }
   else
   {
+    digitalWrite(LED_GPS, LOW);
     Serial.println("[WAIT]  Waiting for GPS fix...");
+    delay(GPS_LED_DELAY);
+    digitalWrite(LED_GPS, HIGH);
+    //digitalWrite(LED_GPS, !digitalRead(LED_GPS)); // Blink in float mode
   }
 }
 
