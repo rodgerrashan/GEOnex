@@ -1,30 +1,31 @@
 #include <WiFi.h>
 #include "wifi_manager.h"
 #include "env.h"
-#include "config.h"
+#include "pins.h"
 
-void connectWiFi()
-{
-    delay(WIFI_RETRY_DELAY);
+const char WIFI_SSID[] = "Ministry Of Wifi";
+const char WIFI_PASSWORD[] = "ExpectoRouter";
+
+void connectWiFi() {
+    delay(3000);
     WiFi.mode(WIFI_STA);
-    WiFi.begin(WIFI_SSID, WIFI_PASS);
-
-    Serial.println(String("[INFO]   Attempting to connect to SSID: ") + String(WIFI_SSID));
+    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+    
+    Serial.println(String("Attempting to connect to SSID: ") + String(WIFI_SSID));
 
     unsigned long startTime = millis();
+    const unsigned long timeout = 30000; 
 
-    while (WiFi.status() != WL_CONNECTED)
-    {
+    while (WiFi.status() != WL_CONNECTED) {
         Serial.print(".");
         digitalWrite(LED_WIFI, !digitalRead(LED_WIFI)); // Blink if connecting
-        delay(WIFI_RETRY_DELAY);
-        if (millis() - startTime >= WIFI_TIMEOUT)
-        {
-            Serial.println("\n[FAILED]  Failed to connect to WiFi.");
-            return;
+        delay(1000);
+        if (millis() - startTime >= timeout) {
+            Serial.println("\nFailed to connect to WiFi.");
+            return; 
         }
     }
 
-    Serial.println("\n[SUCCESS] WiFi Connected!");
+    Serial.println("\nWiFi Connected!");
     digitalWrite(LED_WIFI, HIGH);
 }
