@@ -15,9 +15,13 @@
 #define MQTT_PORT 8883
 #define DEVICE_ID "rover1234"
 
-// MQTT Topics
-#define MQTT_TOPIC_COMMAND "/siteSurvey/commands/" DEVICE_ID
-#define MQTT_TOPIC_DATA_LIVE "/siteSurvey/data/" DEVICE_ID "/gps/live"
+// MQTT Topics (subscribed)
+#define MQTT_TOPIC_COMMAND "GEOnex/siteSurvey/commands/" DEVICE_ID
+
+
+// MQTT Topics (published)
+#define MQTT_TOPIC_DATA_LIVE "GEOnex/siteSurvey/data/" DEVICE_ID "/gps/live"
+
 
 // Hardware Pins
 #define GPS_RX 16
