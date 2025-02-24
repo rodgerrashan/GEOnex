@@ -60,9 +60,9 @@ const TakenPoints = () => {
             {/* Left arrow button */}
             <button
               className="text-2xl"
-              //   onClick={() => {
-              //     navigate("/");
-              //   }}
+                onClick={() => {
+                  navigate("/pointsurvey");
+                }}
             >
               <img className="w-8 h-8" src={assets.arrow} alt="Go back" />
             </button>
