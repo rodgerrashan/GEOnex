@@ -1,7 +1,7 @@
 import React, { useContext }  from "react";
 import { assets } from "../assets/assets";
 import { Context } from "../context/Context";
-import SensorData from "../components/SensorData";
+import MapSection from "../components/MapSection";
 
 const PointSurvey = () => {
   const { navigate } = useContext(Context);
@@ -41,7 +41,9 @@ const PointSurvey = () => {
           </button>
 
         </div>
-        <SensorData />
+        <div className="col-span-2 row-span-6 bg-white p-4 rounded-lg flex flex-col gap-4">
+          <MapSection />
+        </div>
       </div>
     </div>
   );
