@@ -2,22 +2,22 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const connectDB = require('./config/db');
-const authRoutes = require('./services/auth-service/routes/authRoutes');
-const projectRoutes = require('./services/project-service/routes/projectRoutes');
-const trackingRoutes = require('./services/tracking-service/routes/trackingRoutes');
-const mqttService = require('./services/mqtt-service/mqttClient');
+// const connectDB = require('./config/db');
+// const authRoutes = require('./services/auth-service/routes/authRoutes');
+// const projectRoutes = require('./services/project-service/routes/projectRoutes');
+// const trackingRoutes = require('./services/tracking-service/routes/trackingRoutes');
+// const mqttService = require('./services/mqtt-service/mqttClient');
 
-dotenv.config();
-connectDB();
+// dotenv.config();
+// connectDB();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/projects', projectRoutes);
+// app.use('/api/auth', authRoutes);
+// app.use('/api/projects', projectRoutes);
 app.use('/api/tracking', trackingRoutes);
 
 // Start server
