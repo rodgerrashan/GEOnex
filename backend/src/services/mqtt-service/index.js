@@ -1,4 +1,4 @@
 const device = require('./mqttClient');
-require('./messageHandler'); // Load message processing
+require('./messageHandler'); 
 
 module.exports = device;
