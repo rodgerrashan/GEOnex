@@ -2,6 +2,8 @@ const awsIot = require("aws-iot-device-sdk");
 const path = require("path");
 require("dotenv").config();
 
+let sendToClients = null;
+
 
 const device = awsIot.device({
     keyPath: path.resolve(__dirname, process.env.AWS_PRIVATE_KEY) ,
@@ -16,16 +18,23 @@ const init = () => {
     
     device.on('connect', () => {
         console.log('Connected to AWS IoT Core');
-        device.subscribe('iot/data'); 
+        device.subscribe(process.env.AWS_TOPIC); 
     });
 
     device.on('message', (topic, payload) => {
         console.log(`Received message on ${topic}:`, payload.toString());
+        if (sendToClients) {
+            sendToClients(payload.toString());
+        }
+
     });
     
     device.on('error', (error) => {
         console.error('MQTT Error:', error);
     });
+
+
+
 
 
 }
