@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const AutoIncrement = require('mongoose-sequence')(mongoose);
+const deviceSchema = require("../../device-service/models/Device");
+
 
 const projectSchema = new mongoose.Schema({
     Project_Id: { type: Number, unique: true, required: true },
@@ -10,8 +13,9 @@ const projectSchema = new mongoose.Schema({
     Survey_Time: { type: String, required: true },
     Description: { type: String },
     Total_Points: { type: Number },
-    Devices: [deviceSchema] 
+    Devices: [deviceSchema.schema] 
   });
 
+  projectSchema.plugin(AutoIncrement, {inc_field: 'Project_Id'});
   const Project = mongoose.model("Project", projectSchema);
   module.exports = Project;

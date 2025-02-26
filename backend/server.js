@@ -2,15 +2,14 @@
 const express = require('express');
 require("dotenv").config();
 const cors = require('cors');
-// const connectDB = require('./config/db');
+const connectDB = require('./src/config/db');
 // const authRoutes = require('./services/auth-service/routes/authRoutes');
-// const projectRoutes = require('./services/project-service/routes/projectRoutes');
+const projectRoutes = require('./src/services/project-service/routes/projectRoutes');
 // const trackingRoutes = require('./services/tracking-service/routes/trackingRoutes');
 const mqttService = require('./src/services/mqtt-service/mqttClient');
 const socketService = require('./src/services/socket-service/socketServer');
 
-// dotenv.config();
-// connectDB();
+connectDB();
 
 const app = express();
 const server = require('http').createServer(app);
