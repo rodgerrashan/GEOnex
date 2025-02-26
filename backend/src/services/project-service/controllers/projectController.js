@@ -7,7 +7,7 @@ const {ObjectId} = require('mongodb');
 // Create new project
 const createProject = async (req, res) => {
     try {
-        const { User_Id, Name, Status, Survey_Time, Description, Total_Points, Devices } = req.body;
+        const {Project_Id, User_Id, Name, Status, Survey_Time, Description, Total_Points, Devices } = req.body;
         
         // Check if the Project_Id already exists
         const existingProject = await Project.findOne({ Project_Id });
@@ -16,6 +16,7 @@ const createProject = async (req, res) => {
         }
         
         const newProject = new Project({
+            Project_Id,
             User_Id,
             Name,
             Status,
@@ -36,7 +37,7 @@ const createProject = async (req, res) => {
 const getProjects = async (req, res) => {
     const db = getDb();
     try {
-        const projects = await db.collection('Projects').find().toArray();
+        const projects = await db.collection('projects').find().toArray();
         res.json(projects);
     } catch (error) {
         res.status(500).json({message: 'Error fetching projects', error});
@@ -48,7 +49,7 @@ const getProjectById = async (req, res) => {
     const db = getDb();
     const {id} = req.params;
     try {
-        const project = await db.collection('Projects').findOne({_id: ObjectId(id)});
+        const project = await db.collection('projects').findOne({_id: ObjectId(id)});
         if (!project) {
             return res.status(404).json({message: 'Project not found'});
         }

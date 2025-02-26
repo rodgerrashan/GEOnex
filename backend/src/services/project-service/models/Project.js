@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const AutoIncrement = require('mongoose-sequence')(mongoose);
 const deviceSchema = require("../../device-service/models/Device");
 
 
@@ -16,6 +15,6 @@ const projectSchema = new mongoose.Schema({
     Devices: [deviceSchema.schema] 
   });
 
-  projectSchema.plugin(AutoIncrement, {inc_field: 'Project_Id'});
+
   const Project = mongoose.model("Project", projectSchema);
   module.exports = Project;
