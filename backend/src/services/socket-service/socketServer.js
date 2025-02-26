@@ -19,10 +19,22 @@ const init = (server) => {
     });
 };
 
-const sendToClients = (data) => {
+const sendToClients = (deviceName, deviceType, action, value, status) => {
     if (io) {
-        io.emit('liveLocation', data); 
+        const data = {
+            deviceName,
+            deviceType,
+            action,
+            value,
+            status,
+        };
+        if (action === 'corrections'){
+            // Handles base corrections
+            io.emit(`corrections:${deviceType}`, data);
+        };
+        // Handles live tracking of Base and Rover
+        if (action === 'tracking') io.emit(`live:${deviceType}`, data);
+    
     }
 };
-
 module.exports = { init, sendToClients };
