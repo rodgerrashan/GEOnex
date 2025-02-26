@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
-import osm from "./osm-provider";
 import "leaflet/dist/leaflet.css";
 
 const MapSection = () => {
@@ -16,14 +15,18 @@ const MapSection = () => {
         ref={mapRef}
         className="w-full h-full"
       >
-        <TileLayer url={osm.maptiler.url} attribution={osm.maptiler.attribution} />
+        <TileLayer
+          url="https://api.maptiler.com/maps/basic-v2/256/{z}/{x}/{y}.png?key=adWhcNjZozsvPpfwl4Zo"
+          //https://api.maptiler.com/maps/outdoor-v2/256/{z}/{x}/{y}.png?key=adWhcNjZozsvPpfwl4Zo
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
         <MapFix />
       </MapContainer>
     </div>
   );
 };
 
-// ✅ Fix: Custom component to invalidate size on load
+// Custom component to invalidate size on load
 const MapFix = () => {
   const map = useMap();
   useEffect(() => {
@@ -35,4 +38,3 @@ const MapFix = () => {
 };
 
 export default MapSection;
-
