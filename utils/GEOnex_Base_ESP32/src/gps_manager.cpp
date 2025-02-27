@@ -30,7 +30,6 @@ GPSData processGPS()
     Serial.println(gpsdata.satellites);
 
     handleGPSLED(gpsdata.satellites);
-    // handleMQTTLED(Lat, Lon, sat);
   }
   else
   {

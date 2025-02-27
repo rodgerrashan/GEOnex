@@ -7,14 +7,14 @@
 
 
 // WiFi Credentials
-// #define WIFI_SSID "Ministry Of Wifi"
-// #define WIFI_PASS "ExpectoRouter"
+#define WIFI_SSID "Ministry Of Wifi"
+#define WIFI_PASS "ExpectoRouter"
 
 // #define WIFI_SSID "Samuditha's iPhone"
 // #define WIFI_PASS "Gnpss2001"
 
-#define WIFI_SSID "Eng-Student"
-#define WIFI_PASS "3nG5tuDt"
+// #define WIFI_SSID "Eng-Student"
+// #define WIFI_PASS "3nG5tuDt"
 
 // MQTT Broker
 #define MQTT_HOST "a1qulasp0wzg24-ats.iot.eu-north-1.amazonaws.com"
@@ -26,7 +26,8 @@
 
 // MQTT Topics (published)
 // #define MQTT_TOPIC_DATA_LIVE "GEOnex/siteSurvey/data/" DEVICE_ID "/gps/live"
-#define MQTT_TOPIC_DATA_LIVE "esp8266/pub"
+// #define MQTT_TOPIC_DATA_LIVE "esp8266/pub"
+#define MQTT_TOPIC_DATA_LIVE "tracking/r/live/rover1234/data"
 
 // Hardware Pins
 #define GPS_RX 16

@@ -31,10 +31,17 @@ void setup()
 void loop()
 {
   // Process GPS Data
-  processGPS();
+  GPSData gpsInfo = processGPS();
+  if (gpsInfo.isValid)
+  {
+    publishGPSData(gpsInfo.latitude, gpsInfo.longitude, gpsInfo.satellites);
+  }
 
   mqttLoop();
+
   checkButtonPresses();
+
+  //Main loop delay
   delay(MAIN_LOOP_DELAY);
 }
 
