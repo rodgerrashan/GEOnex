@@ -64,6 +64,8 @@
 #define WIFI_TIMEOUT 30000          // Timeout for WiFi connection (in milliseconds)
 #define MQTT_TIMEOUT 30000          // Timeout for MQTT connection (in milliseconds)
 
+//Base Calibration
+#define BUFFER_SIZE 50
 
 #endif // CONFIG_H
 
