@@ -32,7 +32,12 @@ void loop()
 {
   // Process GPS Data
   GPSData gpsInfo = processGPS();
-  publishGPSData(gpsInfo.latitude, gpsInfo.longitude, gpsInfo.satellites);
+  if (gpsInfo.isValid)
+  {
+    publishGPSData(gpsInfo.latitude, gpsInfo.longitude, gpsInfo.satellites);
+  }
+  
+  
 
   mqttLoop();
 
