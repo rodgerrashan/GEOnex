@@ -34,9 +34,13 @@ socketService.init(server);
 // Initialize MQTT connection
 mqttService.init();
 
+
+const pointsUrl = process.env.API_POINTS_URL   
+const projectsUrl = process.env.API_PROJECTS_URL 
+
 // Proxy to the points
-app.use('/api/points', createProxyMiddleware({ target: 'http://localhost:5005', changeOrigin: true }));
-app.use('/api/projects', createProxyMiddleware({ target: 'http://localhost:5004', changeOrigin: true }));
+app.use('/api/points', createProxyMiddleware({ target: pointsUrl, changeOrigin: true }));
+app.use('/api/projects', createProxyMiddleware({ target: projectsUrl, changeOrigin: true }));
 
 
 // Start server
