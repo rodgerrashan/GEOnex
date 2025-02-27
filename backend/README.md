@@ -6,6 +6,7 @@ This backend is built using **Node.js (Express.js)** and follows a **microservic
 ## Features
 - **User Authentication** (JWT-based login/register)
 - **Project Management** (CRUD operations)
+- **Point Management**
 - **Device Management** (Base & receiver tracking)
 - **Live Tracking** (MQTT subscription from AWS IoT Core)
 - **Survey Points Management**
