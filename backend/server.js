@@ -5,9 +5,15 @@ const cors = require('cors');
 const connectDB = require('./src/config/db');
 // const authRoutes = require('./services/auth-service/routes/authRoutes');
 const projectRoutes = require('./src/services/project-service/routes/projectRoutes');
+const pointRoutes = require('./src/services/point-service/routes/pointRoutes');
 // const trackingRoutes = require('./services/tracking-service/routes/trackingRoutes');
 const mqttService = require('./src/services/mqtt-service/mqttClient');
 const socketService = require('./src/services/socket-service/socketServer');
+
+
+const { createProxyMiddleware } = require("http-proxy-middleware");
+
+
 
 connectDB();
 
@@ -20,12 +26,16 @@ app.use(express.json());
 // Routes
 // app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/points', pointRoutes);
 // app.use('/api/tracking', trackingRoutes);
 
 // Initialize socket server
 socketService.init(server);
 // Initialize MQTT connection
 mqttService.init();
+
+// Proxy to the points
+app.use('/api/points', createProxyMiddleware({ target: 'http://localhost:5005', changeOrigin: true }));
 
 
 // Start server
