@@ -27,37 +27,33 @@ This backend is built using **Node.js (Express.js)** and follows a **microservic
 ## API Endpoints
 
 ### **Authentication (`/auth` Microservice)**
+Note: Development in progress
+
 | Method | Endpoint | Description |
 |--------|---------|-------------|
-| **POST** | `/auth/register` | Register a new user |
-| **POST** | `/auth/login` | User login |
-| **GET** | `/auth/me` | Get logged-in user details (requires token) |
-| **POST** | `/auth/logout` | Logout user |
+| **POST** | `/api/auth/register` | Register a new user |
+| **POST** | `/api/auth/login` | User login |
+| **GET** | `/api/auth/me` | Get logged-in user details (requires token) |
+| **POST** | `/api/auth/logout` | Logout user |
 
 ### **Project Management (`/projects` Microservice)**
 | Method | Endpoint | Description |
 |--------|---------|-------------|
-| **POST** | `/projects` | Create a new project |
-| **GET** | `/projects` | Get all projects of the logged-in user |
-| **GET** | `/projects/:id` | Get project details by ID |
-| **PUT** | `/projects/:id` | Update project details |
-| **DELETE** | `/projects/:id` | Delete a project |
+| **POST** | `/api/projects/` | Create a new project |
+| **GET** | `/api/projects` | Get all projects of the logged-in user |
+| **GET** | `/api/projects/:id` | Get project details by ID |
+| **PUT** | `/api/projects/:id` | Update project details |
+| **DELETE** | `/api/projects/:id` | Delete a project |
 
 ### **Device Management (`/devices` Microservice)**
+Note: Not implemented
 | Method | Endpoint | Description |
 |--------|---------|-------------|
-| **POST** | `/devices` | Register a new device |
-| **GET** | `/devices` | Get all devices |
-| **GET** | `/devices/:id` | Get device details |
-| **PUT** | `/devices/:id` | Update device details |
-| **DELETE** | `/devices/:id` | Delete a device |
-
-### **Live Tracking (`/tracking` Microservice)**
-| Method | Endpoint | Description |
-|--------|---------|-------------|
-| **GET** | `/tracking/devices` | Get all connected devices & their status |
-| **GET** | `/tracking/device/:id` | Get real-time location of a device |
-| **GET** | `/tracking/project/:projectId` | Get live updates for a project |
+| **POST** | `/api/devices` | Register a new device |
+| **GET** | `/api/devices` | Get all devices |
+| **GET** | `/api/devices/:id` | Get device details |
+| **PUT** | `/api/devices/:id` | Update device details |
+| **DELETE** | `/api/devices/:id` | Delete a device |
 
 ### **MQTT & IoT Core (`/mqtt` Microservice)**
 | Method | Endpoint | Description |
@@ -68,12 +64,62 @@ This backend is built using **Node.js (Express.js)** and follows a **microservic
 
 ---
 
+### **Web Socket Service**
+The backend emits two types of events
+1. `live:{deviceType}` → For tracking updates
+   
+   e.g.:
+   ```sh
+        {
+        "deviceName": "rover-1",
+        "deviceType": "rover",
+        "action": "tracking",
+        "value": "{latitude: 7.29, longitude: 80.5923, timeStamp: }",
+        "status": "active"
+        }
+   ```
+2. `corrections:{deviceType}` → For base station corrections
+
+    e.g.:
+    ```sh
+
+            {
+        "deviceName": "base-1",
+        "deviceType": "base",
+        "action": "corrections",
+        "value":"{deltaLat: 0.1234, deltaLong: -0.1234, timeStamp: }",
+        "status": "stable"
+        }
+    ```
+   
+
+Example frontend code for frontend dev `@NisithaPadeniya`
+```sh
+const socket = io("http://backend-ip:5000"); 
+
+// live tracking updates
+socket.on("live:rover", (data) => {
+    console.log("Live Rover Data:", data);
+});
+
+socket.on("live:base", (data) => {
+    console.log("Live Base Data:", data);
+});
+
+// base corrections
+socket.on("corrections:base", (data) => {
+    console.log("Base Correction Data:", data);
+});
+
+```
+
+
 ## **Setup Instructions**
 
 ### **1️⃣ Clone the Repository**
 ```sh
-git clone https://github.com/your-repo/iot-survey-backend.git
-cd iot-survey-backend
+git clone https://github.com/cepdnaclk/e20-3yp-GEOnex.git
+cd E203YP-GEONEX
 ```
 
 ### **2️⃣ Install Dependencies**
@@ -95,11 +141,8 @@ AWS_SECRET_ACCESS_KEY=your_aws_secret_key
 ### **4️⃣ Run the Microservices**
 Start each service separately using:
 ```sh
-npm run auth
 npm run projects
-npm run devices
-npm run tracking
-npm run mqtt
+npm run points
 ```
 Or start all services together:
 ```sh
@@ -111,8 +154,14 @@ npm run dev
 
 ## **Real-time Data Flow**
 1️⃣ IoT device publishes data to **AWS IoT Core (MQTT)**.
+
+
 2️⃣ AWS IoT forwards data to **Express backend**.
+
+
 3️⃣ Backend processes & forwards data to **MongoDB**.
+
+
 4️⃣ Frontend **subscribes** to updates & displays them **live**.
 
 ---
@@ -123,5 +172,6 @@ npm run dev
 ---
 
 ## **License**
+- Not yet
 
 

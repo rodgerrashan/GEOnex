@@ -26,7 +26,7 @@ const sendToClients = (deviceName, deviceType, action, value, status) => {
             deviceType,
             action,
             value,
-            status,
+            status
         };
         if (action === 'corrections'){
             // Handles base corrections
