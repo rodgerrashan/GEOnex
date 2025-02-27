@@ -24,8 +24,8 @@ void processGPS()
     int sat = gpsModule.getSatellites();
     Serial.println(sat);
 
-    handleGPSLED(sat);
-    handleMQTTLED(Lat, Lon, sat);
+    // handleGPSLED(sat);
+    // handleMQTTLED(Lat, Lon, sat);
   }
   else
   {
