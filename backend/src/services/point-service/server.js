@@ -20,5 +20,5 @@ const pointRoutes = require("./routes/pointRoutes");
 app.use("/api/points", pointRoutes);
 
 // Start Service
-const PORT = process.env.PORT || 5005;
+const PORT =  5005;
 app.listen(PORT, () => console.log(`Point Service running on port ${PORT}`));
