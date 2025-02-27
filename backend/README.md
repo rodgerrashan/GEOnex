@@ -103,9 +103,6 @@ e.g.: Payload of `POST +/api/points`
 | **PUT** | `/api/devices/:projectId/:id` | Modify a point |
 | **DELETE** | `/api/devices/:projectId` | Delete all points of a project |
 
-
-
-
 ### **MQTT & IoT Core (`/mqtt` Microservice)**
 | Method | Endpoint | Description |
 |--------|---------|-------------|
@@ -163,6 +160,58 @@ socket.on("corrections:base", (data) => {
 });
 
 ```
+
+### **MQTT TOPICS**
+An overview of the MQTT topics used in the IoT project, including details on how to subscribe to them.
+`Please note this section @gssamuditha`
+
+1. Rover Live Data
+   * Topic `tracking/r/live/{deviceId}/data`
+   * Description
+        Subscribe to this topic to receive live data from all rovers.
+    * Payload:
+  ```sh
+    {
+    "deviceId": "rover1",
+    "latitude": 45.1234,
+    "longitude": 93.1234,
+    "status": "active",
+    "timestamp": "2025-02-27T12:05:00Z"
+    }
+
+  ```
+2. Base Live Data
+   * Topic `tracking/b/live/{deviceId}/data`
+   * Description
+        Subscribe to this topic to receive live data from all base stations. 
+    * Payload:
+  ```sh
+    {
+    "deviceId": "base2031",
+    "latitude": 45.1234,
+    "longitude": 93.1234,
+    "status": "active",
+    "timestamp": "2025-02-27T12:05:00Z"
+    }
+
+  ```
+3. Base Correction Data
+   * Topic `corrections/b/live/{deviceId}/data`
+   * Description
+        Subscribe to this topic to receive correction data for all base stations.
+    * Payload:
+  ```sh
+    {
+    "deviceId": "rover1",
+    "deltaLat": 0.1234,
+    "deltaLong": 0.1234,
+    "status": "stable",
+    "timestamp": "2025-02-27T12:05:00Z"
+    }
+
+  ```
+   
+
 
 
 ## **Setup Instructions**
