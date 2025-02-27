@@ -9,7 +9,7 @@ app.use(express.json());
 
 app.use('/api/projects', projectRoutes);
 
-const PORT = process.env.PORT || 5002;
+const PORT = process.env.PORT || 5004;
 
 connectDb()
     .then(() => {

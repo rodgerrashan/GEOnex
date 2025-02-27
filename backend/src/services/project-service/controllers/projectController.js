@@ -44,52 +44,64 @@ const getProjects = async (req, res) => {
     }
 };
 
-// Get project by ID
 const getProjectById = async (req, res) => {
     const db = getDb();
-    const {id} = req.params;
+    const id = Number(req.params.id);  
+
     try {
-        const project = await db.collection('projects').findOne({_id: ObjectId(id)});
+        const project = await db.collection('projects').findOne({ Project_Id: id });
+
         if (!project) {
-            return res.status(404).json({message: 'Project not found'});
+            return res.status(404).json({ message: 'Project not found' });
         }
+
         res.json(project);
     } catch (error) {
-        res.status(500).json({message: 'Error fetching project', error});
+        console.error("Error fetching project:", error);
+        res.status(500).json({ message: 'Error fetching project', error });
     }
 };
 
-// Update project by ID
 const updateProject = async (req, res) => {
     const db = getDb();
-    const { id } = req.params;
+    const id = Number(req.params.id); 
     const { Name, Description } = req.body;
+
     try {
-        const result = await Project.findByIdAndUpdate(id, { Name, Description, Last_Modified: Date.now() }, { new: true });
-        if (!result) {
+        const result = await db.collection('projects').updateOne(
+            { Project_Id: id }, 
+            { $set: { Name, Description, Last_Modified: new Date() } } 
+        );
+
+        if (result.matchedCount === 0) { 
             return res.status(404).json({ message: 'Project not found' });
         }
-        res.json({ message: 'Project updated', project: result });
+
+        res.json({ message: 'Project updated successfully' });
     } catch (error) {
+        console.error("Error updating project:", error);
         res.status(500).json({ message: 'Error updating project', error });
     }
 };
 
-
-// Delete project by ID
 const deleteProject = async (req, res) => {
-    const { id } = req.params;
+    const id = Number(req.params.id);  
     const db = getDb();
+
     try {
-        const result = await Project.findByIdAndDelete(id);
-        if (!result) {
+        const result = await db.collection('projects').deleteOne({ Project_Id: id });
+
+        if (result.deletedCount === 0) {  
             return res.status(404).json({ message: 'Project not found' });
         }
-        res.json({ message: 'Project deleted' });
+
+        res.json({ message: 'Project deleted successfully' });
     } catch (error) {
+        console.error("Error deleting project:", error);
         res.status(500).json({ message: 'Error deleting project', error });
     }
 };
+
 
 
 module.exports = {createProject, getProjects, getProjectById, updateProject, deleteProject};

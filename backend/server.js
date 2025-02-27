@@ -36,6 +36,7 @@ mqttService.init();
 
 // Proxy to the points
 app.use('/api/points', createProxyMiddleware({ target: 'http://localhost:5005', changeOrigin: true }));
+app.use('/api/projects', createProxyMiddleware({ target: 'http://localhost:5004', changeOrigin: true }));
 
 
 // Start server
