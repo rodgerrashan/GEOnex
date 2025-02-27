@@ -1,44 +1,50 @@
+// server.js - Main entry point
+const express = require('express');
 require("dotenv").config();
-const awsIot = require("aws-iot-device-sdk");
-const WebSocket = require("ws");
+const cors = require('cors');
+const connectDB = require('./src/config/db');
+// const authRoutes = require('./services/auth-service/routes/authRoutes');
+const projectRoutes = require('./src/services/project-service/routes/projectRoutes');
+const pointRoutes = require('./src/services/point-service/routes/pointRoutes');
+// const trackingRoutes = require('./services/tracking-service/routes/trackingRoutes');
+const mqttService = require('./src/services/mqtt-service/mqttClient');
+const socketService = require('./src/services/socket-service/socketServer');
 
-// Create a WebSocket server
-const wss = new WebSocket.Server({ port: 8080 });
 
-// AWS IoT Configuration
-const device = awsIot.device({
-    keyPath: process.env.AWS_PRIVATE_KEY,
-    certPath: process.env.AWS_CERT,
-    caPath: process.env.AWS_ROOT_CA,
-    clientId: process.env.AWS_CLIENT_ID,
-    host: process.env.AWS_IOT_ENDPOINT
-});
+const { createProxyMiddleware } = require("http-proxy-middleware");
 
-// Connect to AWS IoT Core
-device.on("connect", () => {
-    console.log("✅ Connected to AWS IoT Core");
-    device.subscribe(process.env.AWS_TOPIC);
-});
 
-// Listen for MQTT Messages
-device.on("message", (topic, payload) => {
-    console.log(`📩 Message Received [${topic}]:`, payload.toString());
 
-    // Send Data to Web Clients
-    wss.clients.forEach(client => {
-        if (client.readyState === WebSocket.OPEN) {
-            client.send(payload.toString());
-        }
-    });
-});
+connectDB();
 
-// WebSocket Server Connection
-wss.on("connection", ws => {
-    console.log("🔗 New WebSocket Client Connected");
+const app = express();
+const server = require('http').createServer(app);
+app.use(cors());
+app.use(express.json());
 
-    ws.on("close", () => {
-        console.log("❌ WebSocket Client Disconnected");
-    });
-});
 
-console.log("🚀 WebSocket Server running on ws://localhost:8080");
+// Routes
+// app.use('/api/auth', authRoutes);
+app.use('/api/projects', projectRoutes);
+app.use('/api/points', pointRoutes);
+// app.use('/api/tracking', trackingRoutes);
+
+// Initialize socket server
+socketService.init(server);
+// Initialize MQTT connection
+mqttService.init();
+
+
+const pointsUrl = process.env.API_POINTS_URL   
+const projectsUrl = process.env.API_PROJECTS_URL 
+
+// Proxy to the points
+app.use('/api/points', createProxyMiddleware({ target: pointsUrl, changeOrigin: true }));
+app.use('/api/projects', createProxyMiddleware({ target: projectsUrl, changeOrigin: true }));
+
+
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+
