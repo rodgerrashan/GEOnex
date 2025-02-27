@@ -37,6 +37,24 @@ Note: Development in progress
 | **POST** | `/api/auth/logout` | Logout user |
 
 ### **Project Management (`/projects` Microservice)**
+
+Note: Please only use numbers for project_id.
+
+e.g.: Payload of `POST +/api/projects`
+```bash
+{
+        "Project_Id": 364,
+        "User_Id": 123,
+        "Name": "Survey Project nasa",
+        "Status": "Active",
+        "Survey_Time": "22 hours",
+        "Description": "A test project",
+        "Total_Points": 10,
+        "Devices": []  
+}
+
+```
+
 | Method | Endpoint | Description |
 |--------|---------|-------------|
 | **POST** | `/api/projects/` | Create a new project |
@@ -54,6 +72,39 @@ Note: Not implemented
 | **GET** | `/api/devices/:id` | Get device details |
 | **PUT** | `/api/devices/:id` | Update device details |
 | **DELETE** | `/api/devices/:id` | Delete a device |
+
+
+### **Point Management (`/points` Microservice)**
+
+Note: Please only use numbers for project_id and point_id.
+
+e.g.: Payload of `POST +/api/points`
+
+```bash
+{
+  "Point_Id": 5106,
+  "Project_Id": 102,
+  "Name": "New Location",
+  "Type": "Survey Data",
+  "Latitude": 40.7128,
+  "Longitude": -74.0060,
+  "Survey_Id": 30,
+  "Accuracy": 1.0,
+  "Timestamp": "14:20:00"
+}
+
+```
+
+| Method | Endpoint | Description |
+|--------|---------|-------------|
+| **POST** | `/api/points` | Create a new point |
+| **GET** | `/api/points:projectId` | Get points of a project |
+| **DELETE** | `/api/devices/:projectId/:id` | Delete a point from a project |
+| **PUT** | `/api/devices/:projectId/:id` | Modify a point |
+| **DELETE** | `/api/devices/:projectId` | Delete all points of a project |
+
+
+
 
 ### **MQTT & IoT Core (`/mqtt` Microservice)**
 | Method | Endpoint | Description |
@@ -136,6 +187,9 @@ JWT_SECRET=your_jwt_secret
 AWS_IOT_ENDPOINT=your_aws_iot_endpoint
 AWS_ACCESS_KEY_ID=your_aws_access_key
 AWS_SECRET_ACCESS_KEY=your_aws_secret_key
+AWS_TOPIC_ROVER_LIVE=Subscribe to all rovers
+AWS_TOPIC_BASE_LIVE=Subscribe to all bases
+AWS_TOPIC_BASE_CORRECTIONS=Subscribe to all bases
 ```
 
 ### **4️⃣ Run the Microservices**
