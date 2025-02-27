@@ -4,7 +4,16 @@
 #include <TinyGPS++.h>
 #include <HardwareSerial.h>
 
-void processGPS();
+// Structure to hold GPS data
+struct GPSData
+{
+    double latitude;
+    double longitude;
+    int satellites;
+    bool isValid;
+};
+
+GPSData processGPS();
 void handleGPSLED(int sat);
 
 #endif 

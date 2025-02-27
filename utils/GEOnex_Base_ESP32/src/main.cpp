@@ -20,10 +20,10 @@ void setup()
   setupPins();
 
   // Initialize WiFi and connect to network
-  //connectWiFi();
+  connectWiFi();
 
   // Initialize MQTT
-  //connectMQTT();
+  connectMQTT();
 
   Serial.println("[INFO]  ESP32 Setup complete");
 }
@@ -31,10 +31,14 @@ void setup()
 void loop()
 {
   // Process GPS Data
-  processGPS();
+  GPSData gpsInfo = processGPS();
+  publishGPSData(gpsInfo.latitude, gpsInfo.longitude, gpsInfo.satellites);
 
-  //mqttLoop();
-  //checkButtonPresses();
+  mqttLoop();
+
+  checkButtonPresses();
+
+  //Main loop delay
   delay(MAIN_LOOP_DELAY);
 }
 

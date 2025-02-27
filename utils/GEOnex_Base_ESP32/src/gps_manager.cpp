@@ -5,26 +5,31 @@
 
 GPSModule gpsModule(GPS_RX, GPS_TX, GNSS_BAUD_RATE);
 
-void processGPS()
+GPSData processGPS()
 {
   gpsModule.processGPSData();
   Serial.println("[INFO] Processing GPS data...");
 
+  GPSData gpsdata = {0.0, 0.0, 0, false};
+
   if (gpsModule.hasNewLocation())
   {
+
+    gpsdata.latitude = gpsModule.getLatitude();
+    gpsdata.longitude = gpsModule.getLongitude();
+    gpsdata.satellites = gpsModule.getSatellites();
+    gpsdata.isValid = true;
+
     Serial.print("\nLatitude: ");
-    double Lat = gpsModule.getLatitude();
-    Serial.print(Lat, 6);
+    Serial.print(gpsdata.latitude, 6);
 
     Serial.print(", Longitude: ");
-    double Lon = gpsModule.getLongitude();
-    Serial.println(Lon, 6);
+    Serial.println(gpsdata.longitude, 6);
 
     Serial.print("Satellites: ");
-    int sat = gpsModule.getSatellites();
-    Serial.println(sat);
+    Serial.println(gpsdata.satellites);
 
-    // handleGPSLED(sat);
+    handleGPSLED(gpsdata.satellites);
     // handleMQTTLED(Lat, Lon, sat);
   }
   else
@@ -35,6 +40,7 @@ void processGPS()
     digitalWrite(LED_GPS, HIGH);
     //digitalWrite(LED_GPS, !digitalRead(LED_GPS)); // Blink in float mode
   }
+  return gpsdata; // Return the struct containing GPS values
 }
 
 void handleGPSLED(int sat)

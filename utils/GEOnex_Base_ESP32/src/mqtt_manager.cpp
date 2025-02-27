@@ -94,6 +94,7 @@ void publishGPSData(float latitude, float longitude, int satellites)
     if (client.publish(MQTT_TOPIC_DATA_LIVE, jsonBuffer))
     {
         Serial.println("[INFO]  GPS data published successfully");
+        handleMQTTLED();
     }
     else
     {
@@ -115,10 +116,9 @@ void mockPublishGPSData()
     publishGPSData(randomLatitude, randomLongitude, randomSatellites);
 }
 
-void handleMQTTLED(double Lat, double Lon, int sat)
+void handleMQTTLED()
 {
     digitalWrite(LED_MQTT, LOW);
-    publishGPSData(Lat, Lon, sat);
     delay(MQTT_LED_DELAY);
     digitalWrite(LED_MQTT, HIGH);
 }

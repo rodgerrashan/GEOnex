@@ -3,11 +3,10 @@
 #include "WiFi.h"
 #include "TinyGPSPlus.h"
 #include <BasicLinearAlgebra.h>
+#include "config.h"
+#include "gps_manager.h"
 
 // Create GPS module instance
-GPSModule gpsModule(16, 17, 9600);
-
-TinyGPSPlus gps;
 
 #define BUFFER_SIZE 50
 double lat_buffer[BUFFER_SIZE];
