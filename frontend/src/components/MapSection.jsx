@@ -12,6 +12,7 @@ const MapSection = () => {
   const mapRef = useRef();
 
   const {
+    navigate,
     showPointRecorded,
     setShowPointRecorded,
     showConfirmDiscard,
@@ -37,7 +38,10 @@ const MapSection = () => {
       {/* Buttons on the bottom right */}
       <div className="absolute bottom-4 right-2 flex flex-col gap-2 z-[1000] items-center">
         {/* Button 1 */}
-        <button className="bg-black p-3 rounded-full shadow-md w-12 h-12 flex items-center justify-center ">
+        <button className="bg-black p-3 rounded-full shadow-md w-12 h-12 flex items-center justify-center "
+        onClick={() => {
+          navigate("/takenpoints");
+        }}>
           <img src={assets.filter} alt="Button 1" className="w-6 h-6" />
         </button>
 
