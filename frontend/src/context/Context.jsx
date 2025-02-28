@@ -1,4 +1,4 @@
-import React, { createContext } from 'react';
+import React, { createContext, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const Context = createContext();
@@ -6,9 +6,12 @@ export const Context = createContext();
 const ContextProvider = (props) => {
 
   const navigate = useNavigate();
+  const [showPopup, setShowPopup] = useState(false);
 
   const value = {
-    navigate
+    navigate,
+    showPopup,
+    setShowPopup
   }
   
   return (

@@ -1,12 +1,18 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { assets } from "../assets/assets";
+import PointRecorded from "./PointRecorded";
+import { Context } from "../context/Context";
 
 const MapSection = () => {
   const [center, setCenter] = useState({ lat: 7.254822, lng: 80.59215 });
   const ZOOM_LEVEL = 24;
   const mapRef = useRef();
+
+  // Use context to get popup state and updater
+  const { showPopup, setShowPopup } = useContext(Context);
+  
 
   return (
     <div className="w-full h-[500px] relative">
@@ -25,7 +31,7 @@ const MapSection = () => {
       </MapContainer>
 
        {/* Buttons on the bottom right */}
-       <div className="absolute bottom-4 right-2 flex flex-col gap-2 z-[1000]">
+       <div className="absolute bottom-4 right-2 flex flex-col gap-2 z-[1000] items-center">
         {/* Button 1 */}
         <button className="bg-black p-3 rounded-full shadow-md w-12 h-12 flex items-center justify-center ">
           <img src={assets.filter} alt="Button 1" className="w-6 h-6" />
@@ -35,10 +41,19 @@ const MapSection = () => {
           <img src={assets.reverse} alt="Button 2" className="w-6 h-6" />
         </button>
         {/* Button 3 */}
-        <button className="bg-blue-500 p-4 rounded-full shadow-md w-16 h-16 flex items-center ">
+        <button className="bg-blue-500 p-4 rounded-full shadow-md w-16 h-16 flex items-center "
+        onClick={() => setShowPopup(true)}
+        >
           <img src={assets.add_location} alt="Button 3" className="w-8 h-8" />
         </button>
       </div>
+
+      {/* Popup Dialog (Shown when showPopup is true) */}
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[5px] z-[2000]">
+          <PointRecorded/>
+        </div>
+      )}
 
     </div>
   );
