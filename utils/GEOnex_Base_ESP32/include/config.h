@@ -7,14 +7,14 @@
 
 
 // WiFi Credentials
-#define WIFI_SSID "Ministry Of Wifi"
-#define WIFI_PASS "ExpectoRouter"
+// #define WIFI_SSID "Ministry Of Wifi"
+// #define WIFI_PASS "ExpectoRouter"
 
 // #define WIFI_SSID "Samuditha's iPhone"
 // #define WIFI_PASS "Gnpss2001"
 
-// #define WIFI_SSID "Eng-Student"
-// #define WIFI_PASS "3nG5tuDt"
+#define WIFI_SSID "Eng-Student"
+#define WIFI_PASS "3nG5tuDt"
 
 // MQTT Broker
 #define MQTT_HOST "a1qulasp0wzg24-ats.iot.eu-north-1.amazonaws.com"
@@ -42,6 +42,7 @@
 // BUTTON Pins
 #define BUTTON_RESET_WIFI 19 // Reset WiFi
 #define BUTTON_SEND_GPS 23   // Manually Send GPS Data
+#define BUTTON_CALIBRATION 20 // Malually set Calibration in base station
 
 // Publishing Intervals (ms)
 #define PUBLISH_INTERVAL 2000  

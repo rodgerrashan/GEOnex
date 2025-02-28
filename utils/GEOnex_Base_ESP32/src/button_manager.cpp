@@ -31,3 +31,14 @@ void checkButtonPresses()
         }
     }
 }
+
+void calibrationButton()
+{
+    if (digitalRead(BUTTON_CALIBRATION) == LOW)
+    {
+        Serial.println("[RESET] Resetting WiFi...");
+        WiFi.disconnect();
+        delay(WIFI_RETRY_DELAY);
+        connectWiFi();
+    }
+}

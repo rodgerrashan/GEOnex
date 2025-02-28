@@ -102,6 +102,33 @@ void publishGPSData(float latitude, float longitude, int satellites)
     }
 }
 
+void publishBaseFix(float latitude, float longitude)
+
+{
+    if (!mqttConnected())
+    {
+        Serial.println("[RETRYING]  MQTT not connected. Attempting to reconnect...");
+        connectMQTT();
+    }
+
+    JsonDocument jsonDoc;
+    jsonDoc["latitude"] = latitude;
+    jsonDoc["longitude"] = longitude;
+
+    char jsonBuffer[256];
+    serializeJson(jsonDoc, jsonBuffer);
+
+    if (client.publish(MQTT_TOPIC_DATA_LIVE, jsonBuffer))
+    {
+        Serial.println("[INFO]  GPS Base Clibration data published successfully");
+        handleMQTTLED();
+    }
+    else
+    {
+        Serial.println("[FAILED]    Failed to publish GPS data");
+    }
+}
+
 void mockPublishGPSData()
 {
     float baseLatitude = 37.7749;

@@ -8,6 +8,7 @@
 #include "gnss_esp.h"
 #include "config.h"
 #include "button_manager.h"
+#include "base_calibration.h"
 
 // Function prototype declaration
 void setupPins();
@@ -31,12 +32,18 @@ void setup()
 void loop()
 {
   // Process GPS Data
-  GPSData gpsInfo = processGPS();
-  if (gpsInfo.isValid)
+  // GPSData gpsInfo = processGPS();
+  // if (gpsInfo.isValid)
+  // {
+  //   publishGPSData(gpsInfo.latitude, gpsInfo.longitude, gpsInfo.satellites);
+  // }
+
+  //Base Calibration
+  FIXEDData fix = computePrecisePosition();
+  if (fix.isValid)
   {
-    publishGPSData(gpsInfo.latitude, gpsInfo.longitude, gpsInfo.satellites);
+    publishBaseFix(fix.latitude, fix.longitude);
   }
-  
   
 
   mqttLoop();
@@ -60,6 +67,7 @@ void setupPins()
   // Set button pins as inputs with pull-up resistors
   pinMode(BUTTON_RESET_WIFI, INPUT_PULLUP);
   pinMode(BUTTON_SEND_GPS, INPUT_PULLUP);
+  pinMode(BUTTON_CALIBRATION, INPUT_PULLUP);
 
   // Power LED always ON
   digitalWrite(LED_POWER, HIGH);
