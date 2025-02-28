@@ -69,6 +69,10 @@
 //Base Calibration
 #define BUFFER_SIZE 10
 
+//GPS time Settings
+#define UTCOFFSETHOURS 5
+#define UTCOFFSETMINS 30
+
 #endif // CONFIG_H
 
 

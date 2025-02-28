@@ -23,7 +23,7 @@ void checkButtonPresses()
         Serial.println("[INFO]  Manual GPS Data Send");
         if (gpsModule.hasNewLocation())
         {
-            publishGPSData(gpsModule.getLatitude(), gpsModule.getLongitude(), gpsModule.getSatellites());
+            publishGPSData(gpsModule.getLatitude(), gpsModule.getLongitude(), gpsModule.getSatellites(), gpsModule.getLocalTime(UTCOFFSETHOURS, UTCOFFSETMINS));
         }
         else
         {
