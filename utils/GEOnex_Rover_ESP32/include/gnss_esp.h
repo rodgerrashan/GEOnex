@@ -17,6 +17,7 @@ public:
     double getLatitude();
     double getLongitude();
     int getSatellites();
+    String getLocalTime(int utcOffsetHours, int utcOffsetMinutes);
 };
 
 #endif // GNSS_ESP32_H
