@@ -11,6 +11,9 @@ import points from './points.png'
 import export_data from './file-export.png'
 import bin from './bin.png'
 import refresh from './refresh.png'
+import filter from './filter.png'
+import reverse from './reverse.png'
+import add_location from './add_location.png'
 
 export const assets = {
     home,
@@ -25,5 +28,8 @@ export const assets = {
     points,
     export_data,
     bin,
-    refresh
+    refresh,
+    filter,
+    reverse,
+    add_location,
 }
