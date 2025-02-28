@@ -32,11 +32,11 @@ This is a PlatformIO-based project for the **GEOnex Rover** and **GEOnex Base**,
 
 ## PIO libraries
 This project uses the following PlatformIO libraries:
-- **TinyGPSPlus** GPS parsing library for retrieving latitude and longitude from GPS modules.
-- **PubSubClient** MQTT client for publishing and subscribing to topics.
-- **WiFiClientSecure** Provides secure TLS/SSL communication over Wi-Fi for encrypted MQTT messages.
-- **BasicLinearAlgebra** Matrix and vector operations (only used in Base Setup)
-- **ArduinoJson** JSON serialization and deserialization library used for handling MQTT messages efficiently.
+- **TinyGPSPlus** - GPS parsing library for retrieving latitude and longitude from GPS modules.
+- **PubSubClient** -  MQTT client for publishing and subscribing to topics.
+- **WiFiClientSecure** -  Provides secure TLS/SSL communication over Wi-Fi for encrypted MQTT messages.
+- **BasicLinearAlgebra** -  Matrix and vector operations (only used in Base Setup)
+- **ArduinoJson** - JSON serialization and deserialization library used for handling MQTT messages efficiently.
 
 ---
 
