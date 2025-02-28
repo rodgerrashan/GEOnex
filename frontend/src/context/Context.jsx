@@ -6,12 +6,15 @@ export const Context = createContext();
 const ContextProvider = (props) => {
 
   const navigate = useNavigate();
-  const [showPopup, setShowPopup] = useState(false);
+  const [showPointRecorded, setShowPointRecorded] = useState(false);
+  const [showConfirmDiscard, setShowConfirmDiscard] = useState(false);
 
   const value = {
     navigate,
-    showPopup,
-    setShowPopup
+    showPointRecorded,
+    setShowPointRecorded,
+    showConfirmDiscard,
+    setShowConfirmDiscard
   }
   
   return (

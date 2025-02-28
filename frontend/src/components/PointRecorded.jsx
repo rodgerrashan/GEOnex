@@ -3,7 +3,7 @@ import { Context } from "../context/Context";
 
 const PointRecorded = () => {
 
-  const { setShowPopup } = useContext(Context);
+  const { setShowPointRecorded } = useContext(Context);
 
   return (
     <div>
@@ -30,7 +30,7 @@ const PointRecorded = () => {
           </button>
           <button
             className="border border-black p-2 rounded-md"
-            onClick={() => setShowPopup(false)}
+            onClick={() => setShowPointRecorded(false)}
           >
             Discard
           </button>

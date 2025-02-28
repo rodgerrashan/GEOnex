@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { assets } from "../assets/assets";
 import PointRecorded from "./PointRecorded";
+import ConfirmDiscard from "./ConfirmDiscard";
 import { Context } from "../context/Context";
 
 const MapSection = () => {
@@ -10,9 +11,12 @@ const MapSection = () => {
   const ZOOM_LEVEL = 24;
   const mapRef = useRef();
 
-  // Use context to get popup state and updater
-  const { showPopup, setShowPopup } = useContext(Context);
-  
+  const {
+    showPointRecorded,
+    setShowPointRecorded,
+    showConfirmDiscard,
+    setShowConfirmDiscard,
+  } = useContext(Context);
 
   return (
     <div className="w-full h-[500px] relative">
@@ -30,31 +34,43 @@ const MapSection = () => {
         <MapFix />
       </MapContainer>
 
-       {/* Buttons on the bottom right */}
-       <div className="absolute bottom-4 right-2 flex flex-col gap-2 z-[1000] items-center">
+      {/* Buttons on the bottom right */}
+      <div className="absolute bottom-4 right-2 flex flex-col gap-2 z-[1000] items-center">
         {/* Button 1 */}
         <button className="bg-black p-3 rounded-full shadow-md w-12 h-12 flex items-center justify-center ">
           <img src={assets.filter} alt="Button 1" className="w-6 h-6" />
         </button>
+
         {/* Button 2 */}
-        <button className="bg-orange-500 p-3 rounded-full shadow-md w-12 h-12 flex items-center ">
+        <button
+          className="bg-orange-500 p-3 rounded-full shadow-md w-12 h-12 flex items-center "
+          onClick={() => setShowConfirmDiscard(true)}
+        >
           <img src={assets.reverse} alt="Button 2" className="w-6 h-6" />
         </button>
+
         {/* Button 3 */}
-        <button className="bg-blue-500 p-4 rounded-full shadow-md w-16 h-16 flex items-center "
-        onClick={() => setShowPopup(true)}
+        <button
+          className="bg-blue-500 p-4 rounded-full shadow-md w-16 h-16 flex items-center "
+          onClick={() => setShowPointRecorded(true)}
         >
           <img src={assets.add_location} alt="Button 3" className="w-8 h-8" />
         </button>
       </div>
 
-      {/* Popup Dialog (Shown when showPopup is true) */}
-      {showPopup && (
+      {/* Show Point Recorded Popup */}
+      {showPointRecorded && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[5px] z-[2000]">
-          <PointRecorded/>
+          <PointRecorded />
         </div>
       )}
 
+      {/* Show Confirm Discard Popup */}
+      {showConfirmDiscard && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[5px] z-[2000]">
+          <ConfirmDiscard />
+        </div>
+      )}
     </div>
   );
 };
