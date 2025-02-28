@@ -13,40 +13,45 @@ double lat_buffer[BUFFER_SIZE];
 double lon_buffer[BUFFER_SIZE];
 double fixedLat, fixedLon;
 
-int i = 0;
-
 FIXEDData computePrecisePosition(){
     FIXEDData fixeddata = { 0.0, 0.0, false };
+    int i = 0;
 
-    for (size_t i = 0; i <= BUFFER_SIZE; i++)
+    while(i < BUFFER_SIZE)
     {
         GPSData gpssample = processGPS();
-        lat_buffer[i] = gpssample.latitude;
-        lon_buffer[i] = gpssample.longitude;
-        delay(500);
-
-        if (i == BUFFER_SIZE)
+        if (gpssample.satellites > 1)
         {
-            fixeddata.latitude = calculateMean(lat_buffer, BUFFER_SIZE);
-            fixeddata.longitude = calculateMean(lon_buffer, BUFFER_SIZE);
+            lat_buffer[i] = gpssample.latitude;
+            lon_buffer[i] = gpssample.longitude;
+            i++;
+            Serial.print("Sample collected: ");
+            Serial.println(i);
+            delay(500);
+        }        
+    }
 
-            Serial.println("Base Station Position Stabilized! meancalculation");
-            Serial.print("Final Coordinates: ");
-            Serial.print(fixeddata.latitude, 8);
-            Serial.print(", ");
-            Serial.println(fixeddata.longitude, 8);
+    if (i == BUFFER_SIZE)
+    {
+        fixeddata.latitude = calculateMean(lat_buffer, BUFFER_SIZE);
+        fixeddata.longitude = calculateMean(lon_buffer, BUFFER_SIZE);
 
-            fixeddata.latitude = kalmanFilter(lat_buffer, BUFFER_SIZE);
-            fixeddata.longitude = kalmanFilter(lon_buffer, BUFFER_SIZE);
+        Serial.println("Base Station Position Stabilized! mean calculation");
+        Serial.print("Final Coordinates: ");
+        Serial.print(fixeddata.latitude, 8);
+        Serial.print(", ");
+        Serial.println(fixeddata.longitude, 8);
 
-            Serial.println("Base Station Position Stabilized! kalmanFilter");
-            Serial.print("Final Coordinates: ");
-            Serial.print(fixeddata.latitude, 8);
-            Serial.print(", ");
-            Serial.println(fixeddata.longitude, 8);
+        fixeddata.latitude = kalmanFilter(lat_buffer, BUFFER_SIZE);
+        fixeddata.longitude = kalmanFilter(lon_buffer, BUFFER_SIZE);
 
-            fixeddata.isValid = true;
-        }
+        Serial.println("Base Station Position Stabilized! kalmanFilter");
+        Serial.print("Final Coordinates: ");
+        Serial.print(fixeddata.latitude, 8);
+        Serial.print(", ");
+        Serial.println(fixeddata.longitude, 8);
+
+        fixeddata.isValid = true;
     }
     return fixeddata;
 }

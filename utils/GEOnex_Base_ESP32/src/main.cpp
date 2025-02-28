@@ -27,24 +27,23 @@ void setup()
   connectMQTT();
 
   Serial.println("[INFO]  ESP32 Setup complete");
-}
 
-void loop()
-{
-  // Process GPS Data
-  // GPSData gpsInfo = processGPS();
-  // if (gpsInfo.isValid)
-  // {
-  //   publishGPSData(gpsInfo.latitude, gpsInfo.longitude, gpsInfo.satellites);
-  // }
-
-  //Base Calibration
+  // Base Calibration
   FIXEDData fix = computePrecisePosition();
   if (fix.isValid)
   {
     publishBaseFix(fix.latitude, fix.longitude);
   }
-  
+}
+
+void loop()
+{
+  // Process GPS Data
+  GPSData gpsInfo = processGPS();
+  if (gpsInfo.isValid)
+  {
+    publishGPSData(gpsInfo.latitude, gpsInfo.longitude, gpsInfo.satellites);
+  }
 
   mqttLoop();
 
