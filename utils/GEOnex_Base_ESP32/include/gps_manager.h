@@ -10,6 +10,7 @@ struct GPSData
     double latitude;
     double longitude;
     int satellites;
+    String time;
     bool isValid;
 };
 

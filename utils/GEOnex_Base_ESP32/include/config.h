@@ -7,14 +7,14 @@
 
 
 // WiFi Credentials
-// #define WIFI_SSID "Ministry Of Wifi"
-// #define WIFI_PASS "ExpectoRouter"
+#define WIFI_SSID "Ministry Of Wifi"
+#define WIFI_PASS "ExpectoRouter"
 
 // #define WIFI_SSID "Samuditha's iPhone"
 // #define WIFI_PASS "Gnpss2001"
 
-#define WIFI_SSID "Eng-Student"
-#define WIFI_PASS "3nG5tuDt"
+// #define WIFI_SSID "Eng-Student"
+// #define WIFI_PASS "3nG5tuDt"
 
 // MQTT Broker
 #define MQTT_HOST "a1qulasp0wzg24-ats.iot.eu-north-1.amazonaws.com"
@@ -49,7 +49,7 @@
 
 // Delay Settings
 #define POWERUP_DELAY 5000         // Delay for power-up (in milliseconds)
-#define MAIN_LOOP_DELAY 2000        // Delay for main loop (in milliseconds)
+#define MAIN_LOOP_DELAY 500        // Delay for main loop (in milliseconds)
 #define WIFI_RETRY_DELAY 1000       // Delay for WiFi connection retries (in milliseconds)
 #define MQTT_RETRY_DELAY 1000       // Delay for MQTT connection retries (in milliseconds)
 #define GPS_UPDATE_DELAY 2000       // Delay between GPS updates (in milliseconds)
@@ -67,7 +67,11 @@
 #define MQTT_TIMEOUT 30000          // Timeout for MQTT connection (in milliseconds)
 
 //Base Calibration
-#define BUFFER_SIZE 50
+#define BUFFER_SIZE 10
+
+//GPS time Settings
+#define UTCOFFSETHOURS 5
+#define UTCOFFSETMINS 30
 
 #endif // CONFIG_H
 
