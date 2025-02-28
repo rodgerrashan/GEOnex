@@ -81,10 +81,6 @@ The project uses MQTT to transmit JSON-formatted data to a broker. The data stru
   ```
 ---
 
-## Project Structure
-
----
-
 ## **Setup Instructions**
 
 ### **1️ Clone the Repository**
