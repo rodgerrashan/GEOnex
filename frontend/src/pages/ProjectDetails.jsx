@@ -1,9 +1,45 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { Context } from "../context/Context";
+import axios from "axios";
+import dayjs from "dayjs";
+import { toast } from "react-toastify";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+// Extend dayjs with relativeTime
+dayjs.extend(relativeTime);
 
 const ProjectDetails = () => {
-  const { navigate } = useContext(Context);
+  const { navigate, backendUrl, removeProject } = useContext(Context);
+  const { projectId } = useParams();
+  const [project, setProject] = useState(null);
+
+  const handleDelete = async () => {
+    await removeProject(projectId);
+    navigate("/projects");  
+  };
+
+  useEffect(() => {
+    // Fetch project details from backend using projectId from the URL.
+    const fetchProject = async () => {
+      try {
+        const response = await axios.get(
+          `${backendUrl}/api/projects/${projectId}`
+        );
+        if (response.data.success) {
+          setProject(response.data.project);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching project details:", error);
+      }
+    };
+    fetchProject();
+  }, [projectId]);
+
+  if (!project) return <div>Loading...</div>;
 
   return (
     <div>
@@ -21,8 +57,8 @@ const ProjectDetails = () => {
 
           {/* Title & subtitle */}
           <div>
-            <h1 className="text-2xl font-semibold">Project Name</h1>
-            <p className="text-xs mt-1">Here goes project description</p>
+            <h1 className="text-2xl font-semibold">{project.Name}</h1>
+            <p className="text-xs mt-1">{project.Description}</p>
           </div>
         </div>
 
@@ -30,8 +66,11 @@ const ProjectDetails = () => {
         <div className="col-span-1 row-span-6 bg-white p-4 rounded-lg flex flex-col gap-4">
           <h2 className="text-lg font-semibold">Actions</h2>
           <div
-            className="flex items-center gap-3 p-3 rounded-lg"
+            className="flex items-center gap-3 p-3 rounded-lg cursor-pointer"
             style={{ backgroundColor: "rgba(217, 217, 217, 1)" }}
+            onClick={() => {
+              navigate(`/pointsurvey/${projectId}`);
+            }}
           >
             <img className="w-8 h-8" src={assets.map} alt="View on Map" />
             <div>
@@ -44,8 +83,11 @@ const ProjectDetails = () => {
 
           {/* Points */}
           <div
-            className="flex items-center gap-3 p-3 rounded-lg"
+            className="flex items-center gap-3 p-3 rounded-lg cursor-pointer"
             style={{ backgroundColor: "rgba(217, 217, 217, 1)" }}
+            onClick={() => {
+              navigate(`/pointsurvey/${projectId}`);
+            }}
           >
             <img className="w-8 h-8" src={assets.points} alt="Points" />
             <div>
@@ -84,7 +126,10 @@ const ProjectDetails = () => {
           </div>
 
           {/* Delete Project */}
-          <div className="flex items-center gap-3 p-3 rounded-lg bg-red-500">
+          <div
+            className="flex items-center gap-3 p-3 rounded-lg bg-red-500 cursor-pointer"
+            onClick={handleDelete}
+          >
             <img className="w-8 h-8" src={assets.bin} alt="delete" />
             <div>
               <h3 className="font-semibold text-white">Delete Project</h3>
@@ -103,7 +148,7 @@ const ProjectDetails = () => {
               className="px-3 py-1 rounded-xl text-xs w-24 text-center"
               style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
             >
-              Jan 15, 2025
+              {dayjs(project.Created_On).format("MMM D, YYYY")}
             </span>
           </div>
 
@@ -113,14 +158,14 @@ const ProjectDetails = () => {
               className="px-3 py-1 rounded-xl text-xs w-24 text-center"
               style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
             >
-              10 mins ago
+              {dayjs(project.Last_Modified).fromNow()}
             </span>
           </div>
 
           <div className="flex justify-between items-center">
             <span className="font-semibold text-sm">Status</span>
             <span className="bg-blue-600 text-white px-3 py-1 rounded-xl text-xs w-24 text-center">
-              In Progress
+              {project.Status}
             </span>
           </div>
 
@@ -130,7 +175,7 @@ const ProjectDetails = () => {
               className="px-3 py-1 rounded-xl text-xs w-24 text-center"
               style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
             >
-              25
+              {project.Total_Points || 0}
             </span>
           </div>
 
@@ -140,7 +185,7 @@ const ProjectDetails = () => {
               className="px-3 py-1 rounded-xl text-xs w-24 text-center"
               style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
             >
-              10 hrs
+              {project.Survey_Time || "N/A"}
             </span>
           </div>
         </div>

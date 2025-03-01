@@ -1,47 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Context } from "../context/Context";
-
-const projects = [
-  {
-    name: "Road Layout Survey",
-    createdOn: "Jan 15, 2025",
-    lastModified: "Feb 10, 2025",
-    status: "In Progress",
-  },
-  {
-    name: "Building Site Mapping",
-    createdOn: "Jan 15, 2025",
-    lastModified: "Feb 10, 2025",
-    status: "Completed",
-  },
-  {
-    name: "Farm Land Measurement",
-    createdOn: "Jan 15, 2025",
-    lastModified: "Feb 10, 2025",
-    status: "Completed",
-  },
-  {
-    name: "Farm Land Measurement",
-    createdOn: "Jan 15, 2025",
-    lastModified: "Feb 10, 2025",
-    status: "Pending",
-  },
-  {
-    name: "Farm Land Measurement",
-    createdOn: "Jan 15, 2025",
-    lastModified: "Feb 10, 2025",
-    status: "Completed",
-  },
-  {
-    name: "Farm Land Measurement",
-    createdOn: "Jan 15, 2025",
-    lastModified: "Feb 10, 2025",
-    status: "Completed",
-  },
-];
+import dayjs from "dayjs";
+import { assets } from "../assets/assets";
+import axios from 'axios';
+import { toast } from "react-toastify";
 
 const Projects = () => {
-  const { navigate } = useContext(Context);
+  const { navigate, projects, getProjectsData, removeProject } = useContext(Context);
+
+  useEffect(() => {
+    getProjectsData();
+  }, [getProjectsData]);
 
   return (
     <div>
@@ -75,7 +44,7 @@ const Projects = () => {
                 className="w-full text-sm text-left border-separate border-spacing-y-2"
                 style={{ borderCollapse: "separate" }}
               >
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                <thead className="text-base text-gray-700 uppercase bg-gray-50">
                   <tr>
                     <th scope="col" className="px-6 py-3">
                       Project
@@ -86,35 +55,61 @@ const Projects = () => {
                     <th scope="col" className="px-6 py-3">
                       Last Modified
                     </th>
-                    <th scope="col" className="px-12 py-3">
+                    <th scope="col" className="px-6 py-3">
                       Status
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {projects.map((project, index) => (
-                    <tr
-                      key={index}
-                      style={{ backgroundColor: "rgba(197,197,198,1)" }}
-                    >
-                      <td className="px-6 py-4 rounded-l-lg">{project.name}</td>
-                      <td className="px-6 py-4">{project.createdOn}</td>
-                      <td className="px-6 py-4">{project.lastModified}</td>
-                      <td className="px-6 py-4 rounded-r-lg">
-                        <span
-                          className={`px-3 py-1 text-sm font-semibold ${
-                            project.status === "In Progress"
-                              ? "text-blue-700"
-                              : project.status === "Pending"
-                              ? "text-orange-500"
-                              : "text-green-700"
-                          }`}
-                        >
-                          {project.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
+                  {projects.map((project, index) => {
+                    // Declare variables here
+                    const createdOn = dayjs(project.Created_On).format(
+                      "MMM D, YYYY"
+                    );
+                    const lastModified = dayjs(project.Last_Modified).format(
+                      "MMM D, YYYY"
+                    );
+
+                    return (
+                      <tr
+                        key={index}
+                        style={{ backgroundColor: "rgba(197,197,198,1)" }}
+                        onClick={() => navigate(`/project/${project._id}`)}
+                        className="cursor-pointer"
+                      >
+                        <td className="px-6 py-4 rounded-l-lg">
+                          {project.Name}
+                        </td>
+                        <td className="px-6 py-4">{createdOn}</td>
+                        <td className="px-6 py-4">{lastModified}</td>
+
+                        <td className="px-6 py-4 rounded-r-lg">
+                          <div className="flex items-center justify-between">
+                            <span
+                              className={`px-1 py-1 text-sm font-semibold ${
+                                project.Status === "Active"
+                                  ? "text-blue-700"
+                                  : project.Status === "Pending"
+                                  ? "text-orange-500"
+                                  : "text-green-700"
+                              }`}
+                            >
+                              {project.Status}
+                            </span>
+                            <img
+                              src={assets.bin} 
+                              alt="Delete Project"
+                              className="w-5 h-5 cursor-pointer"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                removeProject(project._id);
+                              }}
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

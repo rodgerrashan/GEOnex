@@ -44,7 +44,7 @@ Note: Please only use numbers for project_id.
 e.g.: Payload of `POST +/api/projects`
 ```bash
 {
-        "Project_Id": 364,
+        # "Project_Id": 364,  # removed this field
         "User_Id": 123,
         "Name": "Survey Project nasa",
         "Status": "Active",

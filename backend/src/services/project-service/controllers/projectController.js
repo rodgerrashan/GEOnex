@@ -2,28 +2,18 @@ const {getDb} = require('../db.js');
 const Project = require('../models/Project');
 const {ObjectId} = require('mongodb');
 
-
-
 // Create new project
 const createProject = async (req, res) => {
     try {
-        const {Project_Id, User_Id, Name, Status, Survey_Time, Description, Total_Points, Devices } = req.body;
-        
-        // Check if the Project_Id already exists
-        const existingProject = await Project.findOne({ Project_Id });
-        if (existingProject) {
-            return res.status(400).json({ message: "Project_Id already exists" });
-        }
+        const { Name, Description } = req.body;
         
         const newProject = new Project({
-            Project_Id,
-            User_Id,
+            // User_Id,
             Name,
-            Status,
-            Survey_Time,
             Description,
-            Total_Points,
-            Devices,
+            // Devices,
+            Created_On: new Date(),      
+            Last_Modified: new Date() 
         });
 
         const savedProject = await newProject.save();
@@ -38,27 +28,27 @@ const getProjects = async (req, res) => {
     const db = getDb();
     try {
         const projects = await db.collection('projects').find().toArray();
-        res.json(projects);
+        res.json({success:true,projects});
     } catch (error) {
-        res.status(500).json({message: 'Error fetching projects', error});
+        res.status(500).json({success:false , message: 'Error fetching projects', error});
     }
 };
 
 const getProjectById = async (req, res) => {
     const db = getDb();
-    const id = Number(req.params.id);  
+    const id = req.params.id; 
 
     try {
-        const project = await db.collection('projects').findOne({ Project_Id: id });
+        const project = await db.collection('projects').findOne({ _id: new ObjectId(id) });
 
         if (!project) {
             return res.status(404).json({ message: 'Project not found' });
         }
 
-        res.json(project);
+        res.json({success:true, project});
     } catch (error) {
         console.error("Error fetching project:", error);
-        res.status(500).json({ message: 'Error fetching project', error });
+        res.status(500).json({success:false , message: 'Error fetching project', error: error.message });
     }
 };
 
@@ -85,20 +75,20 @@ const updateProject = async (req, res) => {
 };
 
 const deleteProject = async (req, res) => {
-    const id = Number(req.params.id);  
+    const id = req.params.id;  
     const db = getDb();
 
     try {
-        const result = await db.collection('projects').deleteOne({ Project_Id: id });
+        const result = await db.collection('projects').deleteOne({ _id: new ObjectId(id) });
 
         if (result.deletedCount === 0) {  
             return res.status(404).json({ message: 'Project not found' });
         }
 
-        res.json({ message: 'Project deleted successfully' });
+        res.json({ success: true, message: 'Project deleted successfully' });
     } catch (error) {
         console.error("Error deleting project:", error);
-        res.status(500).json({ message: 'Error deleting project', error });
+        res.status(500).json({ message: 'Error deleting project', error: error.message });
     }
 };
 

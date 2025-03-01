@@ -11,14 +11,19 @@ import PointSurvey from "./pages/PointSurvey";
 import ProjectDetails from "./pages/ProjectDetails";
 import TakenPoints from "./pages/TakenPoints";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const App = () => {
   return (
     <div>
       <div className="flex w-full"
       style={{ backgroundColor: 'rgba(232, 232, 232, 1)' }}
       >
+        <ToastContainer />
+
         <Navbar />
-        <div className="w-[75%] mx-auto ml-[max(5vw,25px)] my-8 border border-red-500">
+        <div className="w-[75%] mx-auto ml-[max(5vw,25px)] my-8">
           <Routes>
             <Route path="/" element={<Home />} />
 
@@ -32,11 +37,13 @@ const App = () => {
 
             <Route path="/newproject" element={<NewProject />} />
 
-            <Route path="/pointsurvey" element={<PointSurvey />} />
+            <Route path="/pointsurvey/:projectId" element={<PointSurvey />} />
 
             <Route path="/projectdetails" element={<ProjectDetails />} />
 
-            <Route path="/takenpoints" element={<TakenPoints />} />
+            <Route path="/takenpoints/:projectId" element={<TakenPoints />} />
+
+            <Route path="/project/:projectId" element={<ProjectDetails />} />
 
           </Routes>
         </div>

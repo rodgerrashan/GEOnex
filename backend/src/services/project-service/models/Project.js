@@ -3,13 +3,12 @@ const deviceSchema = require("../../device-service/models/Device");
 
 
 const projectSchema = new mongoose.Schema({
-    Project_Id: { type: Number, unique: true, required: true },
-    User_Id: { type: Number, ref: "User", required: true },
+    User_Id: { type: Number, ref: "User",required: false },
     Name: { type: String, required: true },
-    Created_On: { type: Date, default: Date.now },
-    Last_Modified: { type: Date, default: Date.now },
-    Status: { type: String, required: true },
-    Survey_Time: { type: String, required: true },
+    Created_On: { type: Date, required: true },
+    Last_Modified: { type: Date, required: true },
+    Status: { type: String, default: "Active" },
+    Survey_Time: { type: String,required: false  },
     Description: { type: String },
     Total_Points: { type: Number },
     Devices: [deviceSchema.schema] 
