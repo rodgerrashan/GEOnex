@@ -2,8 +2,6 @@ const {getDb} = require('../db.js');
 const Project = require('../models/Project');
 const {ObjectId} = require('mongodb');
 
-
-
 // Create new project
 const createProject = async (req, res) => {
     try {
@@ -77,20 +75,20 @@ const updateProject = async (req, res) => {
 };
 
 const deleteProject = async (req, res) => {
-    const id = Number(req.params.id);  
+    const id = req.params.id;  
     const db = getDb();
 
     try {
-        const result = await db.collection('projects').deleteOne({ Project_Id: id });
+        const result = await db.collection('projects').deleteOne({ _id: new ObjectId(id) });
 
         if (result.deletedCount === 0) {  
             return res.status(404).json({ message: 'Project not found' });
         }
 
-        res.json({ message: 'Project deleted successfully' });
+        res.json({ success: true, message: 'Project deleted successfully' });
     } catch (error) {
         console.error("Error deleting project:", error);
-        res.status(500).json({ message: 'Error deleting project', error });
+        res.status(500).json({ message: 'Error deleting project', error: error.message });
     }
 };
 

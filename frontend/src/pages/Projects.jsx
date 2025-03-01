@@ -1,9 +1,28 @@
 import React, { useContext, useEffect } from "react";
 import { Context } from "../context/Context";
 import dayjs from "dayjs";
+import { assets } from "../assets/assets";
+import axios from 'axios';
+import { toast } from "react-toastify";
 
 const Projects = () => {
-  const { navigate, projects, getProjectsData } = useContext(Context);
+  const { navigate, projects, getProjectsData, backendUrl } = useContext(Context);
+
+  const removeProject = async (projectId) => {
+    try {
+      const response = await axios.delete(`${backendUrl}/api/projects/${projectId}`);
+      if (response.data.success) {
+        toast.success(response.data.message);
+        getProjectsData();
+
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
 
   useEffect(() => {
     getProjectsData();
@@ -71,7 +90,7 @@ const Projects = () => {
                     return (
                       <tr
                         key={index}
-                        style={{ backgroundColor: "rgba(197,197,198,1)" }} 
+                        style={{ backgroundColor: "rgba(197,197,198,1)" }}
                       >
                         <td className="px-6 py-4 rounded-l-lg">
                           {project.Name}
@@ -80,17 +99,25 @@ const Projects = () => {
                         <td className="px-6 py-4">{lastModified}</td>
 
                         <td className="px-6 py-4 rounded-r-lg">
-                          <span
-                            className={`px-1 py-1 text-sm font-semibold ${
-                              project.Status === "Active"
-                                ? "text-blue-700"
-                                : project.Status === "Pending"
-                                ? "text-orange-500"
-                                : "text-green-700"
-                            }`}
-                          >
-                            {project.Status}
-                          </span>
+                          <div className="flex items-center justify-between">
+                            <span
+                              className={`px-1 py-1 text-sm font-semibold ${
+                                project.Status === "Active"
+                                  ? "text-blue-700"
+                                  : project.Status === "Pending"
+                                  ? "text-orange-500"
+                                  : "text-green-700"
+                              }`}
+                            >
+                              {project.Status}
+                            </span>
+                            <img
+                              src={assets.bin} 
+                              alt="Delete Project"
+                              className="w-5 h-5 cursor-pointer"
+                              onClick={() => removeProject(project._id)}
+                            />
+                          </div>
                         </td>
                       </tr>
                     );

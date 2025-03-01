@@ -14,6 +14,7 @@ import refresh from './refresh.png'
 import filter from './filter.png'
 import reverse from './reverse.png'
 import add_location from './add_location.png'
+import delete_icon from './delete.png'
 
 export const assets = {
     home,
@@ -32,4 +33,5 @@ export const assets = {
     filter,
     reverse,
     add_location,
+    delete_icon
 }
