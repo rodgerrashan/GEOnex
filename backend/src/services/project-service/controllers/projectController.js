@@ -7,23 +7,15 @@ const {ObjectId} = require('mongodb');
 // Create new project
 const createProject = async (req, res) => {
     try {
-        const {Project_Id, User_Id, Name, Status, Survey_Time, Description, Total_Points, Devices } = req.body;
-        
-        // Check if the Project_Id already exists
-        const existingProject = await Project.findOne({ Project_Id });
-        if (existingProject) {
-            return res.status(400).json({ message: "Project_Id already exists" });
-        }
+        const { Name, Description } = req.body;
         
         const newProject = new Project({
-            Project_Id,
-            User_Id,
+            // User_Id,
             Name,
-            Status,
-            Survey_Time,
             Description,
-            Total_Points,
-            Devices,
+            // Devices,
+            Created_On: new Date(),      
+            Last_Modified: new Date() 
         });
 
         const savedProject = await newProject.save();
