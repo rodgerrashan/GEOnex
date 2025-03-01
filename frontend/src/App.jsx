@@ -18,7 +18,7 @@ const App = () => {
       style={{ backgroundColor: 'rgba(232, 232, 232, 1)' }}
       >
         <Navbar />
-        <div className="w-[75%] mx-auto ml-[max(5vw,25px)] my-8 border border-red-500">
+        <div className="w-[75%] mx-auto ml-[max(5vw,25px)] my-8">
           <Routes>
             <Route path="/" element={<Home />} />
 
