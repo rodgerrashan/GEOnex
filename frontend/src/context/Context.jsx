@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from "react-toastify";
 
 export const Context = createContext();
 
@@ -17,12 +18,13 @@ const ContextProvider = (props) => {
   const getProjectsData = async () => {
     try {
 
-      const response = await axios.get(backendUrl + '/api/projects')
+      const response = await axios.get(backendUrl + '/api/projects');
     
       if(response.data.success){
-        setProjects(response.data.projects)
+        setProjects(response.data.projects);
+        toast.success('yeah!');
       }else{
-        
+
       }
       
     } catch (error) {

@@ -11,12 +11,17 @@ import PointSurvey from "./pages/PointSurvey";
 import ProjectDetails from "./pages/ProjectDetails";
 import TakenPoints from "./pages/TakenPoints";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const App = () => {
   return (
     <div>
       <div className="flex w-full"
       style={{ backgroundColor: 'rgba(232, 232, 232, 1)' }}
       >
+        <ToastContainer />
+
         <Navbar />
         <div className="w-[75%] mx-auto ml-[max(5vw,25px)] my-8">
           <Routes>
