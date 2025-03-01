@@ -1,47 +1,48 @@
 import React, { useContext } from "react";
 import { Context } from "../context/Context";
+import dayjs from "dayjs";
 
-const projects = [
-  {
-    name: "Road Layout Survey",
-    createdOn: "Jan 15, 2025",
-    lastModified: "Feb 10, 2025",
-    status: "In Progress",
-  },
-  {
-    name: "Building Site Mapping",
-    createdOn: "Jan 15, 2025",
-    lastModified: "Feb 10, 2025",
-    status: "Completed",
-  },
-  {
-    name: "Farm Land Measurement",
-    createdOn: "Jan 15, 2025",
-    lastModified: "Feb 10, 2025",
-    status: "Completed",
-  },
-  {
-    name: "Farm Land Measurement",
-    createdOn: "Jan 15, 2025",
-    lastModified: "Feb 10, 2025",
-    status: "Pending",
-  },
-  {
-    name: "Farm Land Measurement",
-    createdOn: "Jan 15, 2025",
-    lastModified: "Feb 10, 2025",
-    status: "Completed",
-  },
-  {
-    name: "Farm Land Measurement",
-    createdOn: "Jan 15, 2025",
-    lastModified: "Feb 10, 2025",
-    status: "Completed",
-  },
-];
+// const projects = [
+//   {
+//     name: "Road Layout Survey",
+//     createdOn: "Jan 15, 2025",
+//     lastModified: "Feb 10, 2025",
+//     status: "In Progress",
+//   },
+//   {
+//     name: "Building Site Mapping",
+//     createdOn: "Jan 15, 2025",
+//     lastModified: "Feb 10, 2025",
+//     status: "Completed",
+//   },
+//   {
+//     name: "Farm Land Measurement",
+//     createdOn: "Jan 15, 2025",
+//     lastModified: "Feb 10, 2025",
+//     status: "Completed",
+//   },
+//   {
+//     name: "Farm Land Measurement",
+//     createdOn: "Jan 15, 2025",
+//     lastModified: "Feb 10, 2025",
+//     status: "Pending",
+//   },
+//   {
+//     name: "Farm Land Measurement",
+//     createdOn: "Jan 15, 2025",
+//     lastModified: "Feb 10, 2025",
+//     status: "Completed",
+//   },
+//   {
+//     name: "Farm Land Measurement",
+//     createdOn: "Jan 15, 2025",
+//     lastModified: "Feb 10, 2025",
+//     status: "Completed",
+//   },
+// ];
 
 const Projects = () => {
-  const { navigate } = useContext(Context);
+  const { navigate, projects } = useContext(Context);
 
   return (
     <div>
@@ -92,29 +93,43 @@ const Projects = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {projects.map((project, index) => (
-                    <tr
-                      key={index}
-                      style={{ backgroundColor: "rgba(197,197,198,1)" }}
-                    >
-                      <td className="px-6 py-4 rounded-l-lg">{project.name}</td>
-                      <td className="px-6 py-4">{project.createdOn}</td>
-                      <td className="px-6 py-4">{project.lastModified}</td>
-                      <td className="px-6 py-4 rounded-r-lg">
-                        <span
-                          className={`px-3 py-1 text-sm font-semibold ${
-                            project.status === "In Progress"
-                              ? "text-blue-700"
-                              : project.status === "Pending"
-                              ? "text-orange-500"
-                              : "text-green-700"
-                          }`}
-                        >
-                          {project.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
+                  {projects.map((project, index) => {
+                    // Declare variables here
+                    const createdOn = dayjs(project.Created_On).format(
+                      "MMM D, YYYY"
+                    );
+                    const lastModified = dayjs(project.Last_Modified).format(
+                      "MMM D, YYYY"
+                    );
+
+                    // Return JSX
+                    return (
+                      <tr
+                        key={index}
+                        style={{ backgroundColor: "rgba(197,197,198,1)" }}
+                      >
+                        <td className="px-6 py-4 rounded-l-lg">
+                          {project.Name}
+                        </td>
+                        <td className="px-6 py-4">{createdOn}</td>
+                        <td className="px-6 py-4">{lastModified}</td>
+
+                        <td className="px-8 py-4 rounded-r-lg">
+                          <span
+                            className={`px-3 py-1 text-sm font-semibold ${
+                              project.Status === "Active"
+                                ? "text-blue-700"
+                                : project.Status === "Pending"
+                                ? "text-orange-500"
+                                : "text-green-700"
+                            }`}
+                          >
+                            {project.Status}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

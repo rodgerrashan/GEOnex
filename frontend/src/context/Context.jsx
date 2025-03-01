@@ -22,8 +22,8 @@ const ContextProvider = (props) => {
     
       if(response.data.success){
         setProjects(response.data.projects);
-        toast.success('yeah!');
       }else{
+        toast.error(response.data.message)
 
       }
       
@@ -44,7 +44,8 @@ const ContextProvider = (props) => {
     setShowPointRecorded,
     showConfirmDiscard,
     setShowConfirmDiscard,
-    backendUrl
+    backendUrl,
+    projects
   }
   
   return (
