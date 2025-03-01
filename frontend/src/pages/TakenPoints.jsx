@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Context } from "../context/Context";
 import { assets } from "../assets/assets";
+import { useParams } from "react-router-dom";
 
 const points = [
   {
@@ -47,6 +48,8 @@ const points = [
 
 const TakenPoints = () => {
   const { navigate } = useContext(Context);
+  const { projectId } = useParams();  
+
   return (
     <div>
       <div
@@ -61,7 +64,7 @@ const TakenPoints = () => {
             <button
               className="text-2xl"
                 onClick={() => {
-                  navigate("/pointsurvey");
+                  navigate(`/pointsurvey/${projectId}`);
                 }}
             >
               <img className="w-8 h-8" src={assets.arrow} alt="Go back" />

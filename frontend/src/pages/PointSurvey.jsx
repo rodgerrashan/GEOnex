@@ -2,10 +2,12 @@ import React, { useContext }  from "react";
 import { assets } from "../assets/assets";
 import { Context } from "../context/Context";
 import MapSection from "../components/MapSection";
+import { useParams } from "react-router-dom";
 import SensorData from "../components/SensorData";
 
 const PointSurvey = () => {
   const { navigate } = useContext(Context);
+  const { projectId } = useParams();   
 
   return (
     <div>
@@ -35,7 +37,7 @@ const PointSurvey = () => {
           <button
             className="flex items-center gap-1 text-s px-10 py-2 bg-black text-white rounded-xl"
             onClick={() => {
-              navigate("/takenpoints");
+              navigate(`/takenpoints/${projectId}`);
             }}
           >
             Proceed <span>→</span>
