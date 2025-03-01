@@ -10,7 +10,7 @@ GPSData processGPS()
   gpsModule.processGPSData();
   Serial.println("[INFO] Processing GPS data...");
 
-  GPSData gpsdata = {0.0, 0.0, 0, false};
+  GPSData gpsdata = {0.0, 0.0, 0, "null", false};
 
   if (gpsModule.hasNewLocation())
   {
@@ -18,16 +18,20 @@ GPSData processGPS()
     gpsdata.latitude = gpsModule.getLatitude();
     gpsdata.longitude = gpsModule.getLongitude();
     gpsdata.satellites = gpsModule.getSatellites();
+    gpsdata.time = gpsModule.getLocalTime(UTCOFFSETHOURS, UTCOFFSETMINS);
     gpsdata.isValid = true;
 
     Serial.print("\nLatitude: ");
     Serial.print(gpsdata.latitude, 6);
 
     Serial.print(", Longitude: ");
-    Serial.println(gpsdata.longitude, 6);
+    Serial.print(gpsdata.longitude, 6);
 
-    Serial.print("Satellites: ");
-    Serial.println(gpsdata.satellites);
+    Serial.print(" Satellites: ");
+    Serial.print(gpsdata.satellites);
+
+    Serial.print(" Time: ");
+    Serial.println(gpsdata.time);
 
     handleGPSLED(gpsdata.satellites);
   }

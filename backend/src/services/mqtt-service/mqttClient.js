@@ -1,8 +1,7 @@
 const awsIot = require("aws-iot-device-sdk");
 const path = require("path");
 require("dotenv").config();
-
-let sendToClients = null;
+const { sendToClients } = require("../socket-service/socketServer");
 
 
 const device = awsIot.device({
@@ -54,9 +53,10 @@ const init = () => {
         console.log('Value:', value);
         console.log('status:', status);
 
-        if (sendToClients) {
-            sendToClients(deviceName, deviceType, action, value, status);
-        }
+
+        sendToClients(deviceName, deviceType, action, value, status);
+
+    
 
     });
     

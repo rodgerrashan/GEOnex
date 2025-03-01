@@ -74,7 +74,7 @@ void mqttLoop()
     client.loop();
 }
 
-void publishGPSData(float latitude, float longitude, int satellites)
+void publishGPSData(float latitude, float longitude, int satellites, String time)
 
 {
     if (!mqttConnected())
@@ -87,6 +87,7 @@ void publishGPSData(float latitude, float longitude, int satellites)
     jsonDoc["latitude"] = latitude;
     jsonDoc["longitude"] = longitude;
     jsonDoc["Satellites"] = satellites;
+    jsonDoc["timestamp"] = time;
 
     char jsonBuffer[256];
     serializeJson(jsonDoc, jsonBuffer);
@@ -107,13 +108,14 @@ void mockPublishGPSData()
     float baseLatitude = 37.7749;
     float baseLongitude = -122.4194;
     int baseSatellites = 10;
+    String basetime = "20.20.20";
 
     float randomLatitude = baseLatitude + ((rand() % 100 - 50) * 0.0001);
     float randomLongitude = baseLongitude + ((rand() % 100 - 50) * 0.0001);
     int randomSatellites = baseSatellites + (rand() % 5 - 2);
 
     delay(MQTT_PUBLISH_DELAY_MOCK);
-    publishGPSData(randomLatitude, randomLongitude, randomSatellites);
+    publishGPSData(randomLatitude, randomLongitude, randomSatellites, basetime);
 }
 
 void handleMQTTLED()

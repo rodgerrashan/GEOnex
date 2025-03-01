@@ -34,7 +34,7 @@ void loop()
   GPSData gpsInfo = processGPS();
   if (gpsInfo.isValid)
   {
-    publishGPSData(gpsInfo.latitude, gpsInfo.longitude, gpsInfo.satellites);
+    publishGPSData(gpsInfo.latitude, gpsInfo.longitude, gpsInfo.satellites, gpsInfo.time);
   }
 
   mqttLoop();

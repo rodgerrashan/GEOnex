@@ -47,6 +47,7 @@ const PointSurvey = () => {
         <div className="col-span-2 row-span-6 bg-white rounded-lg flex flex-col gap-4">
           <MapSection />
         </div>
+        <SensorData/>
       </div>
     </div>
   );
