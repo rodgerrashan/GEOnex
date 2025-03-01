@@ -2,57 +2,66 @@
 
 ![Logo](docs/images/device.png "This is the logo")
 
-The Smart Surveying Device is an innovative solution addressing the inefficiencies in land surveying, boundary marking, and construction layout tasks. It automates stake placement with high precision, reducing both manual labor and project costs.
+## Overview
+This project is a **Smart Land Survey System** that integrates IoT devices, a backend, and a frontend application. It provides real-time GNSS-based positioning and mapping functionalities, leveraging AWS IoT Core, MQTT, and a microservices-based backend.
 
-### Enable GitHub Pages
-
-You can put the things to be shown in GitHub pages into the _docs/_ folder. Both html and md file formats are supported. You need to go to settings and enable GitHub pages and select _main_ branch and _docs_ folder from the dropdowns, as shown in the below image.
-
-
-### Special Configurations
-
-These projects will be automatically added into [https://projects.ce.pdn.ac.lk](). If you like to show more details about your project on this site, you can fill the parameters in the file, _/docs/index.json_
-
+## Project Structure
 ```
-{
-  "title": "Smart Surveying Device",
-  "team": [
-    {
-      "name": "Jayasingha B.V.R.R",
-      "email": "e20168@eng.pdn.ac.lk",
-      "eNumber": "E/20/168"
-    },
-    {
-      "name": "Malinga G.A.I",
-      "email": "e20242@eng.pdn.ac.lk",
-      "eNumber": "E/20/242"
-    },
-    {
-      "name": "Padeniya S.M.N.N",
-      "email": "e20276@eng.pdn.ac.lk",
-      "eNumber": "E/20/276"
-    },
-    {
-      "name": "Seneviratne G.S",
-      "email": "e20369@eng.pdn.ac.lk",
-      "eNumber": "E/20/369"
-     }
-  ],
-  "supervisors": [
-    {
-      "name": "Dr. Isuru Nawinne",
-      "email": "isurunawinne@eng.pdn.ac.lk"
-    }
-  ],
-  "tags": ["Web", "Embedded Systems"]
-}
+📂 Project-Root
+├── 📂 frontend       # React/MERN-based web application
+├── 📂 backend        # Node.js server with microservices and MQTT integration
+├── 📂 utils          # C++ code for ESP32/ESP8266 IoT devices
+├── 📂 docs           # Documentation and reports
+└── README.md        # Project overview
 ```
 
-Once you filled this _index.json_ file, please verify the syntax is correct. (You can use [this](https://jsonlint.com/) tool).
+---
 
-### Page Theme
+## Frontend
 
-A custom theme integrated with this GitHub Page, which is based on [github.com/cepdnaclk/eYY-project-theme](https://github.com/cepdnaclk/eYY-project-theme). If you like to remove this default theme, you can remove the file, _docs/\_config.yml_ and use HTML based website.
+### Technologies Used
+- React.js (or MERN stack)
+- Tailwind CSS
+- Recharts for data visualization
+- Leaflet.js for live tracking
+- Axios for API requests
+
+### Setup
+```sh
+cd frontend
+npm install
+npm start
+```
+
+### Features
+- Live GPS tracking on a map
+- User authentication
+- Real-time updates from IoT devices
+
+---
+
+## Backend
+
+### Technologies Used
+- Node.js (Express.js)
+- MongoDB (Atlas)
+- AWS IoT Core (MQTT Broker)
+- Microservices Architecture
+- Docker for deployment
+
+### Setup
+```sh
+cd backend
+npm install
+node server.js
+```
+
+### Features
+- Manages IoT data (positioning, sensor logs, etc.)
+- Provides API for frontend communication
+- Secure authentication and authorization
+
+---
 
 
 ## Database Structure - MongoDB ER Model
@@ -139,3 +148,107 @@ Devices are embedded inside Projects because they are tightly coupled with them,
 ```
 ### Entity-Relationship Diagram (ERD)
 
+
+
+## IoT Device Code (C++)
+
+### Hardware Used
+- ESP32 / ESP8266
+- NEO-M8N GPS Module
+- nRF24L01 (for RF communication)
+- Sensors (IMU, etc.)
+
+### Dependencies
+- PlatformIO
+- Libraries: **TinyGPS++**, **PubSubClient**, **WiFiClientSecure**
+
+
+---
+
+## Documentation
+- **System Architecture**: Explains system components and interactions
+- **API Reference**: Lists backend API endpoints
+- **IoT Communication Flow**: Details MQTT topics and message formats
+- **Deployment Guide**: Steps for setting up frontend, backend, and IoT devices
+
+---
+
+## Deployment
+### Backend Deployment (EC2)
+```sh
+# Install dependencies
+npm install
+
+# Run server
+node server.js
+```
+
+### Frontend Deployment (EC2)
+```sh
+npm run build
+# Deploy static files
+```
+
+### IoT Device Setup
+- Flash firmware to ESP32
+- Connect to AWS IoT Core
+- Subscribe to MQTT topics
+
+---
+
+
+### Special Configurations
+
+These projects will be automatically added into [https://projects.ce.pdn.ac.lk](). If you like to show more details about your project on this site, you can fill the parameters in the file, _/docs/index.json_
+
+```
+{
+  "title": "Smart Surveying Device",
+  "team": [
+    {
+      "name": "Jayasingha B.V.R.R",
+      "email": "e20168@eng.pdn.ac.lk",
+      "eNumber": "E/20/168"
+    },
+    {
+      "name": "Malinga G.A.I",
+      "email": "e20242@eng.pdn.ac.lk",
+      "eNumber": "E/20/242"
+    },
+    {
+      "name": "Padeniya S.M.N.N",
+      "email": "e20276@eng.pdn.ac.lk",
+      "eNumber": "E/20/276"
+    },
+    {
+      "name": "Seneviratne G.S",
+      "email": "e20369@eng.pdn.ac.lk",
+      "eNumber": "E/20/369"
+     }
+  ],
+  "supervisors": [
+    {
+      "name": "Dr. Isuru Nawinne",
+      "email": "isurunawinne@eng.pdn.ac.lk"
+    }
+  ],
+  "tags": ["Web", "Embedded Systems"]
+}
+```
+
+Once you filled this _index.json_ file, please verify the syntax is correct. (You can use [this](https://jsonlint.com/) tool).
+
+
+### Page Theme
+
+A custom theme integrated with this GitHub Page, which is based on [github.com/cepdnaclk/eYY-project-theme](https://github.com/cepdnaclk/eYY-project-theme). If you like to remove this default theme, you can remove the file, _docs/\_config.yml_ and use HTML based website.
+
+
+
+## Contributing
+- Fork the repository
+- Create a new branch (`feature-xyz`)
+- Submit a pull request
+
+## License
+NaN
