@@ -38,9 +38,9 @@ const getProjects = async (req, res) => {
     const db = getDb();
     try {
         const projects = await db.collection('projects').find().toArray();
-        res.json(projects);
+        res.json({success:true,projects});
     } catch (error) {
-        res.status(500).json({message: 'Error fetching projects', error});
+        res.status(500).json({success:false , message: 'Error fetching projects', error});
     }
 };
 
