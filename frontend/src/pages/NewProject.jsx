@@ -1,9 +1,35 @@
-import React, { useContext } from "react";
+import React, { useContext, useState} from "react";
 import { assets } from "../assets/assets";
 import { Context } from "../context/Context";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const NewProject = () => {
-  const { navigate } = useContext(Context);
+  const { navigate, backendUrl } = useContext(Context);
+  const [projectName, setProjectName] = useState("");
+  const [description, setDescription] = useState("");
+
+  const handleSubmit = async () => {
+    try {
+      // Create payload with project name and description
+      const payload = {
+        Name: projectName,
+        Description: description,
+      };
+
+      // POST to your create project endpoint
+      const response = await axios.post( backendUrl + '/api/projects/', payload);
+      console.log("Project created:", response.data);
+      // On success, navigate to the survey page.
+      navigate("/pointsurvey");
+    } catch (error) {
+      toast.error(
+        `Error creating project: ${
+          error.response?.data?.message || error.message
+        }`
+      );
+    }
+  };
 
   return (
     <div>
@@ -38,7 +64,9 @@ const NewProject = () => {
               type="text"
               className="flex-1 rounded-xl p-1  pl-5 text-sm "
               style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
-              defaultValue="tmp_project_01"
+              value={projectName}
+              placeholder="Enter project name"
+              onChange={(e) => setProjectName(e.target.value)}
             />
           </div>
 
@@ -119,15 +147,15 @@ const NewProject = () => {
               className="mt-1 w-full h-32 rounded-lg p-2 text-sm"
               placeholder="Short description of the project"
               style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
           </div>
 
           {/* Start Survey Button */}
           <button
             className="mt-auto w-full bg-black text-white py-2 rounded-md text-sm font-semibold"
-            onClick={() => {
-                navigate("/pointsurvey");
-            }}
+            onClick={handleSubmit}
           >
             Start Survey
           </button>

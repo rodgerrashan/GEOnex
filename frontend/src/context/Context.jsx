@@ -45,7 +45,8 @@ const ContextProvider = (props) => {
     showConfirmDiscard,
     setShowConfirmDiscard,
     backendUrl,
-    projects
+    projects,
+    getProjectsData
   }
   
   return (

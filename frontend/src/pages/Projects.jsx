@@ -1,9 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Context } from "../context/Context";
 import dayjs from "dayjs";
 
 const Projects = () => {
-  const { navigate, projects } = useContext(Context);
+  const { navigate, projects, getProjectsData } = useContext(Context);
+
+  useEffect(() => {
+    getProjectsData();
+  }, [getProjectsData]);
 
   return (
     <div>

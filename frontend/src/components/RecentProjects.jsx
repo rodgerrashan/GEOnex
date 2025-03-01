@@ -1,9 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Context } from "../context/Context";
 import dayjs from "dayjs";
 
 const RecentProjects = () => {
-  const { navigate, projects } = useContext(Context);
+  const { navigate, projects, getProjectsData } = useContext(Context);
+
+  useEffect(() => {
+    getProjectsData();
+  }, [getProjectsData]);
 
   const recentProjects = [...projects]
     .sort((a, b) => new Date(b.Last_Modified) - new Date(a.Last_Modified))
