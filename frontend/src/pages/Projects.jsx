@@ -6,23 +6,7 @@ import axios from 'axios';
 import { toast } from "react-toastify";
 
 const Projects = () => {
-  const { navigate, projects, getProjectsData, backendUrl } = useContext(Context);
-
-  const removeProject = async (projectId) => {
-    try {
-      const response = await axios.delete(`${backendUrl}/api/projects/${projectId}`);
-      if (response.data.success) {
-        toast.success(response.data.message);
-        getProjectsData();
-
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error(error.message);
-    }
-  };
+  const { navigate, projects, getProjectsData, removeProject } = useContext(Context);
 
   useEffect(() => {
     getProjectsData();
@@ -86,11 +70,12 @@ const Projects = () => {
                       "MMM D, YYYY"
                     );
 
-                    // Return JSX
                     return (
                       <tr
                         key={index}
                         style={{ backgroundColor: "rgba(197,197,198,1)" }}
+                        onClick={() => navigate(`/project/${project._id}`)}
+                        className="cursor-pointer"
                       >
                         <td className="px-6 py-4 rounded-l-lg">
                           {project.Name}
@@ -115,7 +100,10 @@ const Projects = () => {
                               src={assets.bin} 
                               alt="Delete Project"
                               className="w-5 h-5 cursor-pointer"
-                              onClick={() => removeProject(project._id)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                removeProject(project._id);
+                              }}
                             />
                           </div>
                         </td>

@@ -43,6 +43,8 @@ const App = () => {
 
             <Route path="/takenpoints" element={<TakenPoints />} />
 
+            <Route path="/project/:projectId" element={<ProjectDetails />} />
+
           </Routes>
         </div>
       </div>

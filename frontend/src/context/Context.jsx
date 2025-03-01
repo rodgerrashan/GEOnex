@@ -32,6 +32,22 @@ const ContextProvider = (props) => {
     }
   }
 
+  const removeProject = async (projectId) => {
+      try {
+        const response = await axios.delete(`${backendUrl}/api/projects/${projectId}`);
+        if (response.data.success) {
+          toast.success(response.data.message);
+          getProjectsData();
+  
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error(error.message);
+      }
+    };
+
   useEffect(()=>{
     getProjectsData()
   },[])
@@ -46,7 +62,8 @@ const ContextProvider = (props) => {
     setShowConfirmDiscard,
     backendUrl,
     projects,
-    getProjectsData
+    getProjectsData,
+    removeProject
   }
   
   return (

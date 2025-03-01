@@ -36,19 +36,19 @@ const getProjects = async (req, res) => {
 
 const getProjectById = async (req, res) => {
     const db = getDb();
-    const id = Number(req.params.id);  
+    const id = req.params.id; 
 
     try {
-        const project = await db.collection('projects').findOne({ Project_Id: id });
+        const project = await db.collection('projects').findOne({ _id: new ObjectId(id) });
 
         if (!project) {
             return res.status(404).json({ message: 'Project not found' });
         }
 
-        res.json(project);
+        res.json({success:true, project});
     } catch (error) {
         console.error("Error fetching project:", error);
-        res.status(500).json({ message: 'Error fetching project', error });
+        res.status(500).json({success:false , message: 'Error fetching project', error: error.message });
     }
 };
 

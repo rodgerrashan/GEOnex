@@ -61,6 +61,8 @@ const RecentProjects = () => {
                 <tr
                   key={index}
                   style={{ backgroundColor: "rgba(197,197,198,1)" }}
+                  onClick={() => navigate(`/project/${project._id}`)}
+                  className="cursor-pointer"
                 >
                   <td className="px-6 py-4 rounded-l-lg">{project.Name}</td>
                   <td className="px-6 py-4">{createdOn}</td>
