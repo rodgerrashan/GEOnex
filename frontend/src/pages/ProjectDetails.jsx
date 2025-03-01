@@ -66,8 +66,11 @@ const ProjectDetails = () => {
         <div className="col-span-1 row-span-6 bg-white p-4 rounded-lg flex flex-col gap-4">
           <h2 className="text-lg font-semibold">Actions</h2>
           <div
-            className="flex items-center gap-3 p-3 rounded-lg"
+            className="flex items-center gap-3 p-3 rounded-lg cursor-pointer"
             style={{ backgroundColor: "rgba(217, 217, 217, 1)" }}
+            onClick={() => {
+              navigate(`/pointsurvey/${projectId}`);
+            }}
           >
             <img className="w-8 h-8" src={assets.map} alt="View on Map" />
             <div>
@@ -80,8 +83,11 @@ const ProjectDetails = () => {
 
           {/* Points */}
           <div
-            className="flex items-center gap-3 p-3 rounded-lg"
+            className="flex items-center gap-3 p-3 rounded-lg cursor-pointer"
             style={{ backgroundColor: "rgba(217, 217, 217, 1)" }}
+            onClick={() => {
+              navigate(`/pointsurvey/${projectId}`);
+            }}
           >
             <img className="w-8 h-8" src={assets.points} alt="Points" />
             <div>

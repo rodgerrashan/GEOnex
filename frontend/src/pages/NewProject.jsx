@@ -20,8 +20,15 @@ const NewProject = () => {
       // POST to your create project endpoint
       const response = await axios.post( backendUrl + '/api/projects/', payload);
       console.log("Project created:", response.data);
-      // On success, navigate to the survey page.
-      navigate("/pointsurvey");
+
+      // Extract the newly created project ID from response data
+      const newProjectId = response.data._id;
+      if (newProjectId) {
+        // Navigate to the survey page with the new project's id in the URL
+        navigate(`/pointsurvey/${newProjectId}`);
+      } else {
+        toast.error("Project created, but no project id returned.");
+      }
     } catch (error) {
       toast.error(
         `Error creating project: ${

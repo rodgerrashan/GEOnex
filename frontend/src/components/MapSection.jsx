@@ -20,7 +20,7 @@ const MapSection = () => {
   } = useContext(Context);
 
   return (
-    <div className="w-full h-[500px] relative">
+    <div className="w-full h-full relative">
       <MapContainer
         center={center}
         zoom={ZOOM_LEVEL}
