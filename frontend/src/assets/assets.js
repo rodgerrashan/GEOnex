@@ -15,6 +15,9 @@ import filter from './filter.png'
 import reverse from './reverse.png'
 import add_location from './add_location.png'
 import delete_icon from './delete.png'
+import device_point from './device_point.png'
+import base_point from './base_point.png'
+import location_point from './location_point.png'
 
 export const assets = {
     home,
@@ -33,5 +36,8 @@ export const assets = {
     filter,
     reverse,
     add_location,
-    delete_icon
+    delete_icon,
+    device_point,
+    base_point,
+    location_point
 }
