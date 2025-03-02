@@ -66,6 +66,22 @@ const ContextProvider = (props) => {
     }
   };
 
+  const deletePoint = async (projectId, pointId) => {
+    try {
+      const response = await axios.delete(`${backendUrl}/api/points/${projectId}/${pointId}`);
+      if (response.data.message) {
+        toast.success(response.data.message);
+        // Remove the deleted point from the local state
+        setPoints((prevPoints) => prevPoints.filter((point) => point._id !== pointId));
+      } else {
+        toast.error("Failed to delete point.");
+      }
+    } catch (error) {
+      console.error("Error deleting point:", error);
+      toast.error("Failed to delete point.");
+    }
+  }; 
+
   useEffect(() => {
     getProjectsData();
   }, []);
@@ -84,6 +100,7 @@ const ContextProvider = (props) => {
     loadingPoints,
     fetchPoints,
     setPoints,
+    deletePoint,
   };
 
   return <Context.Provider value={value}>{props.children}</Context.Provider>;
