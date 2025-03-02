@@ -1,54 +1,53 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect} from "react";
 import { Context } from "../context/Context";
 import { assets } from "../assets/assets";
 import { useParams } from "react-router-dom";
-
-const points = [
-  {
-    id: 1,
-    latitude: "12.345678",
-    longitude: "78.910111",
-    altitude: "50m",
-    accuracy: "±1.2m",
-    timestamp: "12:30:45",
-  },
-  {
-    id: 2,
-    latitude: "12.345678",
-    longitude: "78.910111",
-    altitude: "50m",
-    accuracy: "±1.2m",
-    timestamp: "12:30:45",
-  },
-  {
-    id: 3,
-    latitude: "12.345678",
-    longitude: "78.910111",
-    altitude: "50m",
-    accuracy: "±1.2m",
-    timestamp: "12:30:45",
-  },
-  {
-    id: 4,
-    latitude: "12.345678",
-    longitude: "78.910111",
-    altitude: "50m",
-    accuracy: "±1.2m",
-    timestamp: "12:30:45",
-  },
-  {
-    id: 5,
-    latitude: "12.345678",
-    longitude: "78.910111",
-    altitude: "50m",
-    accuracy: "±1.2m",
-    timestamp: "12:30:45",
-  },
-];
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const TakenPoints = () => {
-  const { navigate } = useContext(Context);
-  const { projectId } = useParams();  
+  const { navigate, backendUrl } = useContext(Context);
+  const { projectId } = useParams();
+  const [points, setPoints] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch points for the given project id when component mounts or projectId changes
+  useEffect(() => {
+    const fetchPoints = async () => {
+      try {
+        const response = await axios.get(
+          `${backendUrl}/api/points/${projectId}`
+        );
+        if (response.data.success) {
+          setPoints(response.data.points);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching project details:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPoints();
+  }, [projectId]);
+
+  const handleDeletePoint = async (pointId) => {
+    if (!window.confirm("Are you sure you want to delete this point?")) return;
+    try {
+      const response = await axios.delete(
+        `${backendUrl}/api/points/${projectId}/${pointId}`
+      );
+      // Assuming a successful deletion returns a message in response.data.message
+      toast.success(response.data.message || "Point deleted successfully");
+      // Remove the deleted point from the local state
+      setPoints((prevPoints) => prevPoints.filter((point) => point._id !== pointId));
+    } catch (error) {
+      console.error("Error deleting point:", error);
+      toast.error("Failed to delete point");
+    }
+  };  
 
   return (
     <div>
@@ -63,9 +62,9 @@ const TakenPoints = () => {
             {/* Left arrow button */}
             <button
               className="text-2xl"
-                onClick={() => {
-                  navigate(`/pointsurvey/${projectId}`);
-                }}
+              onClick={() => {
+                navigate(`/pointsurvey/${projectId}`);
+              }}
             >
               <img className="w-8 h-8" src={assets.arrow} alt="Go back" />
             </button>
@@ -90,9 +89,9 @@ const TakenPoints = () => {
 
             <button
               className="flex items-center gap-1 text-s px-10 py-2 bg-black text-white rounded-xl"
-            //   onClick={() => {
-            //     navigate("/newproject");
-            //   }}
+              //   onClick={() => {
+              //     navigate("/newproject");
+              //   }}
             >
               Save Changes
             </button>
@@ -102,60 +101,62 @@ const TakenPoints = () => {
         <div className="col-span-4">
           <div className=" p-4 ">
             <div className="overflow-x-auto"></div>
-            <table
-              className="w-full text-sm text-left border-separate border-spacing-y-2"
-              style={{ borderCollapse: "separate" }}
-            >
-              <thead className="text-xs text-gray-700 uppercase">
-                <tr>
-                  <th scope="col" className="px-6 py-3">
-                    Point
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Latitude
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Longitude
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Altitude
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Accuracy
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Timestamp
-                  </th>
-                  <th scope="col" className="px-10 py-3">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {points.map((point) => (
-                  <tr
-                    key={point.id}
-                    style={{ backgroundColor: "rgba(217,217,217,1)" }}
-                  >
-                    <td className="px-6 py-4 rounded-l-lg">{`Point ${point.id}`}</td>
-                    <td className="px-6 py-4">{point.latitude}</td>
-                    <td className="px-6 py-4">{point.longitude}</td>
-                    <td className="px-6 py-4">{point.altitude}</td>
-                    <td className="px-6 py-4">{point.accuracy}</td>
-                    <td className="px-6 py-4">{point.timestamp}</td>
-
-                    <td className="px-6 py-4 rounded-r-lg">
-                      <button className="text-white text-xs bg-black hover:text-blue-700 mr-2 px-2 py-1 rounded-lg">
-                        Rename
-                      </button>
-                      <button className="text-white text-xs bg-red-500 hover:text-red-700 px-2 py-1 rounded-lg">
-                        Delete
-                      </button>
-                    </td>
+            {loading && <p>Loading points...</p>}
+            {!loading  && (
+              <table
+                className="w-full text-sm text-left border-separate border-spacing-y-2"
+                style={{ borderCollapse: "separate" }}
+              >
+                <thead className="text-xs text-gray-700 uppercase">
+                  <tr>
+                    <th scope="col" className="px-6 py-3">
+                      Point
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Latitude
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Longitude
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Accuracy
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Timestamp
+                    </th>
+                    <th scope="col" className="px-10 py-3">
+                      Actions
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {points.map((point,index) => (
+                    <tr
+                      key={point._id || index}
+                      style={{ backgroundColor: "rgba(217,217,217,1)" }}
+                    >
+                      <td className="px-6 py-4 rounded-l-lg">{point.Name}</td>
+                      <td className="px-6 py-4">{point.Latitude}</td>
+                      <td className="px-6 py-4">{point.Longitude}</td>
+
+                      <td className="px-8 py-4">N/A</td>
+                      <td className="px-6 py-4">{new Date(point.Timestamp).toLocaleString()}</td>
+
+                      <td className="px-6 py-4 rounded-r-lg">
+                        <button className="text-white text-xs bg-black hover:text-blue-700 mr-2 px-2 py-1 rounded-lg">
+                          Rename
+                        </button>
+                        <button className="text-white text-xs bg-red-500 hover:text-red-700 px-2 py-1 rounded-lg"
+                        onClick={() => handleDeletePoint(point._id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
       </div>
