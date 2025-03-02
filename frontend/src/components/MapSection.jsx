@@ -36,6 +36,7 @@ const MapSection = () => {
     points,
     fetchPoints,
     setPoints,
+    loadingPoints,
     showPointRecorded,
     setShowPointRecorded,
     showConfirmDiscard,
@@ -62,7 +63,7 @@ const MapSection = () => {
     if (projectId) {
       fetchPoints(projectId);
     }
-  }, [projectId, fetchPoints]);
+  }, [projectId]);
 
   // Recenter the map when center state changes
   const RecenterAutomatically = ({ center }) => {
@@ -98,18 +99,26 @@ const MapSection = () => {
         </Marker>
 
         {/* Recorded Points Markers (from Context) */}
-        {points.map((point) => (
-          <Marker
-            key={point._id}
-            position={[point.Latitude, point.Longitude]}
-            icon={markerIconDevice}
-          >
-            <Popup>
-              <b>{point.Name}</b>
-            </Popup>
-          </Marker>
-        ))}
+        {!loadingPoints &&
+          points.map((point) => (
+            <Marker
+              key={point._id}
+              position={[point.Latitude, point.Longitude]}
+              icon={markerIconDevice}
+            >
+              <Popup>
+                <b>{point.Name}</b>
+              </Popup>
+            </Marker>
+          ))}
 
+        {/* Loading Overlay */}
+        {loadingPoints && (
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[1500]">
+            <p>Loading recorded points...</p>
+            {/* Replace with a spinner or skeleton loader if desired */}
+          </div>
+        )}
       </MapContainer>
 
       {/* Display connection status (optional for debugging) */}

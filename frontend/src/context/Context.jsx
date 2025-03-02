@@ -51,6 +51,7 @@ const ContextProvider = (props) => {
   // Function to fetch points by project id
   const fetchPoints = async (projectId) => {
     setLoadingPoints(true);
+    setPoints([]);
     try {
       const response = await axios.get(`${backendUrl}/api/points/${projectId}`);
       if (response.data.success) {
