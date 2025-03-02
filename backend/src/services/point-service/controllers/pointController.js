@@ -6,61 +6,82 @@ const {ObjectId} = require('mongodb');
 // Create new point
 const createPoint = async (req, res) => {
     try {
-        const {Point_Id, Project_Id, Name, Type, Latitude, Longitude, Survey_Id, Accuracy, Timestamp } = req.body;
+        const {ProjectId, Name, Type, Latitude, Longitude, Accuracy, Timestamp } = req.body;
         
-        // Check if the Point_Id already exists
-        const existingPoint = await Point.findOne({ Point_Id });
-        if (existingPoint) {
-            return res.status(400).json({ message: "Point_Id already exists" });
+        // Validate required fields (adjust based on your business logic)
+        if (!Name || Latitude == null || Longitude == null || !Timestamp || !ProjectId) {
+            return res.status(400).json({ error: "Missing required fields" });
         }
         
         const newPoint = new Point({
-            Point_Id,
-            Project_Id,
+            
+            ProjectId,
             Name,
-            Type,
+            Type: Type || "recorded",
             Latitude,
             Longitude,
-            Survey_Id,
-            Accuracy,
+            Accuracy: Accuracy || null,
             Timestamp,
         });
 
+        // Save the new point to the database
         const savedPoint = await newPoint.save();
-        res.status(201).json(savedPoint);
+
+        // Return the saved point in the response
+        return res.status(201).json(savedPoint);
+
     } catch (error) {
-        res.status(500).json({ message: "Server error", error: error.message });
+        console.error("Error creating point:", error);
+        return res.status(500).json({ message: "Server error", error: error.message });
     }
 };
 
 // Get all points by project id
 const getPointsByProjectId = async (req, res) => {
-    const db = getDb();
-    const projectId = Number(req.params.projectId); 
-    try {
-        const points = await db.collection('points').find({Project_Id: projectId}).toArray();
 
-        console.log(points);
-        res.json(points);
+    const db = getDb();
+
+    try {
+        const { projectId } = req.params;
+
+        if (!projectId) {
+            return res.status(400).json({ error: "Missing project id" });
+        }
+
+        const points = await db.collection('points').find({ ProjectId: new ObjectId(projectId) }).toArray();
+
+        return res.status(200).json({success: true,points});
 
     } catch (error) {
-        res.status(500).json({message: 'Error fetching points', error});
+        console.error("Error retrieving points:", error);
+        return res.status(500).json({ error: "Server error", message: error.message });
     }
 };
 
 // Delete point by ID and project ID
 const deletePoint = async (req, res) => {
     const db = getDb();
-    const projectId = Number(req.params.projectId); 
-    const id = Number(req.params.id);
+    
     try {
-        const result = await db.collection('points').deleteOne({Project_Id: projectId, Point_Id: id});
-        if (!result.deletedCount) {
-            return res.status(404).json({message: 'Point not found'});
+        const { projectId, id } = req.params;
+
+        // Validate that both IDs are provided
+        if (!projectId || !id) {
+            return res.status(400).json({ error: "Missing project id or point id" });
         }
-        res.json({message: 'Point deleted successfully'});
+
+        const result = await db.collection('points').deleteOne({
+            ProjectId: new ObjectId(projectId), 
+            _id: new ObjectId(id)
+        });
+
+        if (!result.deletedCount) {
+            return res.status(404).json({ error: 'Point not found'});
+        }
+        return res.status(200).json({ message: "Point deleted successfully" });
     } catch (error) {
-        res.status(500).json({message: 'Error deleting point', error});
+        console.error("Error deleting point:", error);
+        return res.status(500).json({ error: "Server error", message: error.message });
     }
 
 };
