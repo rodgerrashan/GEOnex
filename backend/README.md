@@ -83,7 +83,7 @@ e.g.: Payload of `POST +/api/points`
 
 ```bash
 {
-  "Point_Id": 5106,
+  # "Point_Id": 5106,  # removed this field 
   "Project_Id": 102,
   "Name": "New Location",
   "Type": "Survey Data",
