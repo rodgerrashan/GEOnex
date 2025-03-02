@@ -34,14 +34,14 @@
 #define GPS_TX 17
 
 // LED Pins
-#define LED_POWER 2 // Power Indicator (Always ON)
-#define LED_WIFI 4  // WiFi Status (ON if connected, blinks if connecting)
+#define LED_POWER 4 // Power Indicator (Always ON)
+#define LED_WIFI 2  // WiFi Status (ON if connected, blinks if connecting)
 #define LED_MQTT 5 // MQTT Publish Indicator (Blinks on publish)
 #define LED_GPS 18   // GPS RTK Fix Indicator (ON when fix, blinks in float mode)
 
 // BUTTON Pins
-#define BUTTON_RESET_WIFI 19 // Reset WiFi
-#define BUTTON_SEND_GPS 23   // Manually Send GPS Data
+#define BUTTON_RESET_WIFI 13 // Reset WiFi
+#define BUTTON_SEND_GPS 14   // Manually Send GPS Data
 
 // Publishing Intervals (ms)
 #define PUBLISH_INTERVAL 2000  

@@ -7,14 +7,17 @@
 
 
 // WiFi Credentials
-#define WIFI_SSID "Ministry Of Wifi"
-#define WIFI_PASS "ExpectoRouter"
+// #define WIFI_SSID "Ministry Of Wifi"
+// #define WIFI_PASS "ExpectoRouter"
 
 // #define WIFI_SSID "Samuditha's iPhone"
 // #define WIFI_PASS "Gnpss2001"
 
 // #define WIFI_SSID "Eng-Student"
 // #define WIFI_PASS "3nG5tuDt"
+
+#define WIFI_SSID "Malinga' internet"
+#define WIFI_PASS "tgfb6053"
 
 // MQTT Broker
 #define MQTT_HOST "a1qulasp0wzg24-ats.iot.eu-north-1.amazonaws.com"
