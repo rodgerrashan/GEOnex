@@ -7,6 +7,7 @@ import PointRecorded from "./PointRecorded";
 import ConfirmDiscard from "./ConfirmDiscard";
 import { Context } from "../context/Context";
 import useSensorData from "./useSensorData";
+import { useParams } from "react-router-dom";
 
 const markerIcon = new L.Icon({
   iconUrl: assets.location_point,
@@ -23,12 +24,19 @@ const markerIconDevice = new L.Icon({
 });
 
 const MapSection = () => {
+  const { projectId } = useParams();
+
   const [center, setCenter] = useState({ lat: 7.254822, lng: 80.59215 });
   const ZOOM_LEVEL = 24;
   const mapRef = useRef();
 
   const {
     navigate,
+    backendUrl,
+    points,
+    fetchPoints,
+    setPoints,
+    loadingPoints,
     showPointRecorded,
     setShowPointRecorded,
     showConfirmDiscard,
@@ -50,6 +58,14 @@ const MapSection = () => {
     }
   }, [sensorData.latitude, sensorData.longitude]);
 
+  // Fetch previously recorded points from Context when projectId changes
+  useEffect(() => {
+    if (projectId) {
+      fetchPoints(projectId);
+    }
+  }, [projectId]);
+
+  // Recenter the map when center state changes
   const RecenterAutomatically = ({ center }) => {
     const map = useMap();
     useEffect(() => {
@@ -57,7 +73,6 @@ const MapSection = () => {
     }, [center, map]);
     return null;
   };
-  
 
   return (
     <div className="w-full h-full relative">
@@ -74,6 +89,7 @@ const MapSection = () => {
         />
         <RecenterAutomatically center={center} />
         <MapFix />
+        {/* Live Device Marker */}
         <Marker position={[center.lat, center.lng]} icon={markerIcon}>
           <Popup>
             <b>Device</b>
@@ -81,6 +97,28 @@ const MapSection = () => {
             {sensorData.deviceId || "Unknown Device"}
           </Popup>
         </Marker>
+
+        {/* Recorded Points Markers (from Context) */}
+        {!loadingPoints &&
+          points.map((point) => (
+            <Marker
+              key={point._id}
+              position={[point.Latitude, point.Longitude]}
+              icon={markerIconDevice}
+            >
+              <Popup>
+                <b>{point.Name}</b>
+              </Popup>
+            </Marker>
+          ))}
+
+        {/* Loading Overlay */}
+        {loadingPoints && (
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[1500]">
+            <p>Loading recorded points...</p>
+            {/* Replace with a spinner or skeleton loader if desired */}
+          </div>
+        )}
       </MapContainer>
 
       {/* Display connection status (optional for debugging) */}
@@ -94,7 +132,7 @@ const MapSection = () => {
         <button
           className="bg-black p-3 rounded-full shadow-md w-12 h-12 flex items-center justify-center "
           onClick={() => {
-            navigate("/takenpoints");
+            navigate(`/takenpoints/${projectId}`);
           }}
         >
           <img src={assets.filter} alt="Button 1" className="w-6 h-6" />
@@ -120,14 +158,14 @@ const MapSection = () => {
       {/* Show Point Recorded Popup */}
       {showPointRecorded && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[5px] z-[2000]">
-          <PointRecorded />
+          <PointRecorded sensorData={sensorData} projectId={projectId} />
         </div>
       )}
 
       {/* Show Confirm Discard Popup */}
       {showConfirmDiscard && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[5px] z-[2000]">
-          <ConfirmDiscard />
+          <ConfirmDiscard projectId={projectId}/>
         </div>
       )}
     </div>

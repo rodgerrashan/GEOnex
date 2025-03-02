@@ -2,52 +2,24 @@ import React, { useContext, useState, useEffect} from "react";
 import { Context } from "../context/Context";
 import { assets } from "../assets/assets";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 
 const TakenPoints = () => {
-  const { navigate, backendUrl } = useContext(Context);
+  const { navigate, points, setPoints, fetchPoints, loadingPoints, deletePoint } = useContext(Context);
   const { projectId } = useParams();
-  const [points, setPoints] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  // Fetch points for the given project id when component mounts or projectId changes
+  // Fetch points from context when component mounts or projectId changes
   useEffect(() => {
-    const fetchPoints = async () => {
-      try {
-        const response = await axios.get(
-          `${backendUrl}/api/points/${projectId}`
-        );
-        if (response.data.success) {
-          setPoints(response.data.points);
-        } else {
-          toast.error(response.data.message);
-        }
-      } catch (error) {
-        console.error("Error fetching project details:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPoints();
+    if (projectId) {
+      fetchPoints(projectId);
+    }
   }, [projectId]);
-
+ 
+  // Use the context's deletePoint function
   const handleDeletePoint = async (pointId) => {
     if (!window.confirm("Are you sure you want to delete this point?")) return;
-    try {
-      const response = await axios.delete(
-        `${backendUrl}/api/points/${projectId}/${pointId}`
-      );
-      // Assuming a successful deletion returns a message in response.data.message
-      toast.success(response.data.message || "Point deleted successfully");
-      // Remove the deleted point from the local state
-      setPoints((prevPoints) => prevPoints.filter((point) => point._id !== pointId));
-    } catch (error) {
-      console.error("Error deleting point:", error);
-      toast.error("Failed to delete point");
-    }
-  };  
+    await deletePoint(projectId, pointId);
+  };
 
   return (
     <div>
@@ -101,8 +73,8 @@ const TakenPoints = () => {
         <div className="col-span-4">
           <div className=" p-4 ">
             <div className="overflow-x-auto"></div>
-            {loading && <p>Loading points...</p>}
-            {!loading  && (
+            {loadingPoints && <p>Loading points...</p>}
+            {!loadingPoints  && (
               <table
                 className="w-full text-sm text-left border-separate border-spacing-y-2"
                 style={{ borderCollapse: "separate" }}
