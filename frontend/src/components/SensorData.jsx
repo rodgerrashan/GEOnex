@@ -16,6 +16,7 @@ const SensorData = () => {
     
     // Set WebSocket URL (adjust for production)
     const WS_URL =  "http://13.61.32.218:5000";
+
     
     useEffect(() => {
         console.log("Connecting to WebSocket at:", WS_URL);

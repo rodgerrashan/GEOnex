@@ -86,7 +86,7 @@ const ProjectDetails = () => {
             className="flex items-center gap-3 p-3 rounded-lg cursor-pointer"
             style={{ backgroundColor: "rgba(217, 217, 217, 1)" }}
             onClick={() => {
-              navigate(`/pointsurvey/${projectId}`);
+              navigate(`/takenpoints/${projectId}`);
             }}
           >
             <img className="w-8 h-8" src={assets.points} alt="Points" />
