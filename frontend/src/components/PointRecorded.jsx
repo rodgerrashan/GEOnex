@@ -1,8 +1,48 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { Context } from "../context/Context";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-const PointRecorded = () => {
-  const { setShowPointRecorded } = useContext(Context);
+const PointRecorded = ({ sensorData, projectId }) => {
+  const { backendUrl, setShowPointRecorded, fetchPoints  } = useContext(Context);
+
+  const [pointName, setPointName] = useState("New Point");
+  const [loading, setLoading] = useState(false);
+
+  const handleSave = async () => {
+    // Ensure sensor data is available
+    if (!sensorData.latitude || !sensorData.longitude) {
+      toast.error("No sensor data available to record a point.");
+      return;
+    }
+    setLoading(true);
+    const payload = {
+      ProjectId: projectId,
+      Name: pointName,
+      Type: "recorded",
+      Latitude: sensorData.latitude,
+      Longitude: sensorData.longitude,
+      Accuracy: sensorData.accuracy || null,
+      Timestamp: new Date().toISOString(),
+    };
+
+    try {
+      const response = await axios.post(`${backendUrl}/api/points`, payload);
+      if (response.data._id) {
+        toast.success("Point recorded successfully.");
+        // Refresh the points list so the new point appears on the map
+        await fetchPoints(projectId);
+        setShowPointRecorded(false);
+      } else {
+        toast.error("Failed to record point.");
+      }
+    } catch (error) {
+      console.error("Error recording point:", error);
+      toast.error("Error recording point.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div>
@@ -22,24 +62,28 @@ const PointRecorded = () => {
           </label>
           <input
             type="text"
-            value="Point 4"
+            value={pointName}
+            onChange={(e) => setPointName(e.target.value)}
             className="w-full  mt-1 p-1 border rounded-xl text-sm text-center"
             style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
-            readOnly
           />
         </div>
 
 
         {/* Buttons */}
         <div className="mt-4 px-4 flex flex-col gap-2 ">
-          <button className="bg-black text-white p-2 rounded-xl text-sm">
-            Rename & Save
+          <button className="bg-black text-white p-2 rounded-xl text-sm"
+          onClick={handleSave}
+          disabled={loading}
+          >
+            {loading ? "Saving..." : "Rename & Save"}
           </button>
 
           <button
             className="border border-black p-1 rounded-xl text-sm mb-2"
             style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
             onClick={() => setShowPointRecorded(false)}
+            disabled={loading}
           >
             Discard
           </button>

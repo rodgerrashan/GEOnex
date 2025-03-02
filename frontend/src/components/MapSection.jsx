@@ -158,7 +158,7 @@ const MapSection = () => {
       {/* Show Point Recorded Popup */}
       {showPointRecorded && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[5px] z-[2000]">
-          <PointRecorded />
+          <PointRecorded sensorData={sensorData} projectId={projectId} />
         </div>
       )}
 
