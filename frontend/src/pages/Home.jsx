@@ -66,11 +66,11 @@ const Home = () => {
 
         <div className="col-span-1 bg-white rounded-lg flex gap-2 p-2">
           <div>
-            <p className="font-semi-bold text-3xl">2</p>
+            <p className="font-semi-bold text-3xl">1</p>
           </div>
           <div>
-            <p className="font-semi-bold text-lg">Clients Connected</p>
-            <p className="text-xs mt-1">RC002, RC059</p>
+            <p className="font-semi-bold text-lg">Client Connected</p>
+            <p className="text-xs mt-1">RC002</p>
           </div>
         </div>
 
