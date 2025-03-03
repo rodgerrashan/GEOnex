@@ -175,7 +175,8 @@ const ProjectDetails = () => {
               className="px-3 py-1 rounded-xl text-xs w-24 text-center"
               style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
             >
-              {project.Total_Points || 0}
+              {/* {project.Total_Points || 0} */}
+              2
             </span>
           </div>
 

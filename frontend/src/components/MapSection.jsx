@@ -23,12 +23,21 @@ const markerIconDevice = new L.Icon({
   popupAnchor: [0, -46], //[left/right, top/bottom]
 });
 
+const markerIconBase = new L.Icon({
+  iconUrl: assets.base_point,
+  iconSize: [40, 40],
+  iconAnchor: [17, 46], //[left/right, top/bottom]
+  popupAnchor: [0, -46], //[left/right, top/bottom]
+});
+
 const MapSection = () => {
   const { projectId } = useParams();
 
   const [center, setCenter] = useState({ lat: 7.254822, lng: 80.59215 });
   const ZOOM_LEVEL = 24;
   const mapRef = useRef();
+
+  const [base, setBase] = useState({ lat: 7.254822, lng: 80.59252 });
 
   const {
     navigate,
@@ -95,6 +104,13 @@ const MapSection = () => {
             <b>Device</b>
             <br />
             {sensorData.deviceId || "Unknown Device"}
+          </Popup>
+        </Marker>
+
+        {/* Base Device Marker */}
+        <Marker position={[base.lat, base.lng]} icon={markerIconBase}>
+          <Popup>
+            <b>Base</b>
           </Popup>
         </Marker>
 

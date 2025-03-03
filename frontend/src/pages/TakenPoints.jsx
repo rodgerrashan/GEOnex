@@ -61,9 +61,9 @@ const TakenPoints = () => {
 
             <button
               className="flex items-center gap-1 text-s px-10 py-2 bg-black text-white rounded-xl"
-              //   onClick={() => {
-              //     navigate("/newproject");
-              //   }}
+                onClick={() => {
+                  navigate(`/project/${projectId}`);
+                }}
             >
               Save Changes
             </button>
