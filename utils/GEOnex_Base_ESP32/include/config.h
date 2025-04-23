@@ -73,7 +73,7 @@
 #define MQTT_TIMEOUT 30000          // Timeout for MQTT connection (in milliseconds)
 
 //Base Calibration
-#define BUFFER_SIZE 10
+#define BUFFER_SIZE 500
 
 //GPS time Settings
 #define UTCOFFSETHOURS 5

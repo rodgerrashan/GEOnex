@@ -20,7 +20,7 @@ void setup()
   // Configures pin modes for LEDs and buttons
   setupPins();
 
-  // Initialize WiFi and connect to network
+  //Initialize WiFi and connect to network
   connectWiFi();
 
   // Initialize MQTT
