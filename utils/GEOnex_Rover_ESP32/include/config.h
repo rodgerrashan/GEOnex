@@ -16,8 +16,11 @@
 // #define WIFI_SSID "Eng-Student"
 // #define WIFI_PASS "3nG5tuDt"
 
-#define WIFI_SSID "Malinga' internet"
-#define WIFI_PASS "tgfb6053"
+// #define WIFI_SSID "Malinga' internet"
+// #define WIFI_PASS "tgfb6053"
+
+#define WIFI_SSID "Lord of the Ping"
+#define WIFI_PASS "GS200123"
 
 // MQTT Broker
 #define MQTT_HOST "a1qulasp0wzg24-ats.iot.eu-north-1.amazonaws.com"
@@ -45,6 +48,19 @@
 // BUTTON Pins
 #define BUTTON_RESET_WIFI 13 // Reset WiFi
 #define BUTTON_SEND_GPS 14   // Manually Send GPS Data
+
+// MPU9250 Pins
+#define SDA 21 
+#define SCL 22
+
+// Angle Convertions 
+#define RAD_TO_DEG 57.295779513082320876798154814105
+#define DEG_TO_RAD 0.017453292519943295769236907684886
+#define RAD_TO_MIL 3437.746775
+#define MIL_TO_RAD 0.0002908882086657216
+
+// poleHeight (in meters)
+#define POLE_HEIGHT 1.5 // Height of the GPS pole in meters
 
 // Publishing Intervals (ms)
 #define PUBLISH_INTERVAL 2000  

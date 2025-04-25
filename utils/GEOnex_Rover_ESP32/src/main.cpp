@@ -8,6 +8,8 @@
 #include "gnss_esp.h"
 #include "config.h"
 #include "button_manager.h"
+#include "mpu_manager.h"
+#include "mpu_correction.h"
 
 // Function prototype declaration
 void setupPins();
@@ -32,9 +34,28 @@ void loop()
 {
   // Process GPS Data
   GPSData gpsInfo = processGPS();
+  IMUManager mpu;
+
+  mpu.update(); // Update MPU data
+
   if (gpsInfo.isValid)
   {
+    double lat = gpsInfo.latitude;
+    double lon = gpsInfo.longitude;
+
     publishGPSData(gpsInfo.latitude, gpsInfo.longitude, gpsInfo.satellites, gpsInfo.time);
+
+    // Get pitch and roll from MPU9250
+    float pitch = mpu.getPitch();
+    float roll = mpu.getRoll();
+    
+    correctGPSCoordinates(lat, lon, pitch, roll, POLE_HEIGHT);
+
+    Serial.print("Corrected GPS: ");
+    Serial.print(lat, 6);
+    Serial.print(", ");
+    Serial.println(lon, 6);
+
   }
 
   mqttLoop();
