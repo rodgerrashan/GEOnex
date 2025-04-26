@@ -1,24 +1,49 @@
+// MPU9250Tilt.h
 #ifndef MPU_MANAGER_H
 #define MPU_MANAGER_H
 
+#include <Arduino.h>
 #include <Wire.h>
-#include "MPU9250.h"
+#include <MPU9250_asukiaaa.h>
 
 class IMUManager
 {
 public:
-    IMUManager();
+    IMUManager(uint8_t sdaPin, uint8_t sclPin);
     void begin();
     void update();
     float getPitch();
     float getRoll();
 
 private:
-    MPU9250 mpu;
-    float pitch, roll;
+    MPU9250_asukiaaa sensor;
+    float pitch;
+    float roll;
 };
 
 #endif
+
+// #ifndef MPU_MANAGER_H
+// #define MPU_MANAGER_H
+
+// #include <Wire.h>
+// #include "MPU9250.h"
+
+// class IMUManager
+// {
+// public:
+//     IMUManager();
+//     void begin();
+//     void update();
+//     float getPitch();
+//     float getRoll();
+
+// private:
+//     MPU9250 mpu;
+//     float pitch, roll;
+// };
+
+// #endif
 
 // #ifndef MPU_MANAGER_H
 // #define MPU_MANAGER_H

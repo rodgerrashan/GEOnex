@@ -14,6 +14,8 @@
 // Function prototype declaration
 void setupPins();
 
+IMUManager mpu(SDA, SCL);
+
 void setup()
 {
   Serial.begin(SERIAL_BAUD_RATE);
@@ -27,6 +29,9 @@ void setup()
   // Initialize MQTT
   connectMQTT();
 
+  // Initialize MPU module
+  mpu.begin();
+
   Serial.println("[INFO]  ESP32 Setup complete");
 }
 
@@ -34,9 +39,8 @@ void loop()
 {
   // Process GPS Data
   GPSData gpsInfo = processGPS();
-  IMUManager mpu;
-
-  mpu.update(); // Update MPU data
+  // Update MPU data test
+  mpu.update();
 
   if (gpsInfo.isValid)
   {
