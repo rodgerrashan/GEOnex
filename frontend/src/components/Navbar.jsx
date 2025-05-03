@@ -87,7 +87,7 @@ const Navbar = ({ mobileOpen = false, onClose = () => {} }) => {
             }
           >
             <img src={icon} alt={label} className="w-5 h-5" />
-            <p className="truncate text-lg">{label}</p>
+            <p className="truncate text-[20px] md:text-lg lg:text-xl">{label}</p>
           </NavLink>
         ))}
       </nav>
