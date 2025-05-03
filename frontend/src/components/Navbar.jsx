@@ -17,9 +17,16 @@ const Navbar = () => {
   // When scrolled, the navbar height shrinks (e.g., 80vh), otherwise it fills the viewport.
   const navbarHeightClass = isScrolled ? "min-h-[80vh]" : "min-h-screen";
 
+  // build the logout class once, so we can swap `mt-auto` */
+  const logoutBtnClass = [
+    isScrolled ? 'mt-auto' : 'mt-48',   // only change is here
+    'font-bold text-red-500 px-4 py-2 mb-10 mx-auto rounded-md',
+    'hover:bg-red-500 hover:text-white transition'
+  ].join(' ');
+
   return (
     <div
-      className={`w-full md:w-[15%]  ${navbarHeightClass} flex flex-col justify-between transition-all duration-300`}
+      className={`w-full md:w-[15%]  ${navbarHeightClass} flex flex-col transition-all duration-300`}
       style={{ backgroundColor: 'rgba(197, 197, 198, 1)' }}
     >
       <Link to="/">
@@ -32,7 +39,7 @@ const Navbar = () => {
       
 
       {/* Navigation Frame */}
-      <div className="flex flex-col gap-3 md:gap-4 pt-4 md:pt-20 text-[13px] md:text-[15px]">
+      <div className="flex flex-col gap-3 md:gap-4 pt-4 md:pt-20 text-[13px] md:text-[15px] mt-12">
         <NavLink
           className={({ isActive }) =>
             `flex items-center gap-3 px-10 py-2 rounded transition ${
@@ -83,9 +90,11 @@ const Navbar = () => {
       </div>
 
       {/* Logout Button */}
-      <button className="text-red-500 px-4 py-2 mb-2 mx-auto rounded-md hover:bg-red-500 hover:text-white transition">
+      {/* <button className="mt-auto font-bold text-red-500 px-4 py-2 mb-10 mx-auto rounded-md hover:bg-red-500 hover:text-white transition">
         Log out
-      </button>
+      </button> */}
+
+      <button className={logoutBtnClass}>Log out</button>
       
     </div>
   );
