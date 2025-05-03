@@ -18,6 +18,7 @@ import delete_icon from './delete.png'
 import device_point from './device_point.png'
 import base_point from './base_point.png'
 import location_point from './location_point.png'
+import hamburger_icon from './hamburger.png'
 
 export const assets = {
     home,
@@ -39,5 +40,6 @@ export const assets = {
     delete_icon,
     device_point,
     base_point,
-    location_point
+    location_point,
+    hamburger_icon
 }
