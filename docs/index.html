@@ -1,207 +1,361 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Smart Surveying Device</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <!--Navbar-->
-    <header>
-      <ul class="navbar">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#scope">Overview</a></li>
-        <li><a href="#budget">Budget</a></li>
-        <li><a href="#team">Our Team</a></li>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeoNex | Smart Surveying</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Header / Navigation -->
+  <header class="navbar">
+    <div class="logo">
+      <i class="fas fa-globe-americas"></i>
+      Geo<span>Nex</span>
+    </div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#comparison">Comparison</a></li>
+        <li><a href="#team">Team</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
-    </header>
+    </nav>
+    <button class="mobile-menu-btn">
+      <i class="fas fa-bars"></i>
+    </button>
+  </header>
 
-    <!--Home-->
-    <section class="home" id="home">
-      <!-- Cover Image -->
-      <img src="images/cover.jpg" class="cover-img" alt="Cover Image" />
-      <div class="home-container">
-        <div class="home-text">
-          <h1>
-            Smart Surveying Device 
-          </h1>
-          <p>
-            The Smart Surveying Device is an innovative solution addressing the inefficiencies in land surveying,
-           boundary marking, and construction layout tasks. It automates stake placement with high precision, 
-           reducing both manual labor and project costs.
-          </p>
-        </div>
-        <div class="home-img">
-          <img src="images/device.png" alt="" />
-        </div>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Smart Surveying Redefined</h1>
+      <p>Next-Gen, Cost-Effective Solution for Precise Land Mapping</p>
+      <div class="cta-buttons">
+        <a href="#demo" class="btn">Watch Demo</a>
+        <a href="#brochure" class="btn secondary">Documentation</a>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!--Vision-->
-    <section class="vision" id="vision">
-      <div class="vision-text">
-        <h2>Vision</h2>
-        <p>
-          To revolutionize land surveying by providing an affordable, automated 
-          solution that enhances accuracy and efficiency in surveying and stake out process.
-        </p>
-      </div>
-    </section>
+  <!-- what is section -->
+   <section id = "about" class="section about-section">
+    <h2>What is GEOnex?</h2>
+    <p> <span>GEOnex </span> is a smart and affordable surveying tool that helps people measure land and plan construction projects easily. It works<span>like a traditional total station </span>  but uses modern technology like GPS, sensors, and wireless communication to make the process <span>faster, cheaper, and more accurate.</span> </p>
+    <p>Whether you're a student, a startup, or a professional, GEOnex gives you the tools to do land surveys without needing expensive equipment. It's easy to use, works with a mobile app or website, and helps you get accurate location data for your projects.</p>
 
-    <!-- Overview -->
-    <section class="scope" id="scope">
-      <div class="scope-img">
-        <img src="images/overview.png" alt="" />
-      </div>
-      <div class="scope-text">
-        <h2>Project Overview</h2>
-        <p>
-          The objective of the Smart Surveying Device is to develop an automated system that takes land coordinates, mapping and places stakes precisely 
-          according to preloaded survey data. By addressing the challenges of manual surveying and staking, the device minimizes human error,
-           speeds up layout marking, and reduces overall project costs.
-        </p>
-        <h2>Key Features</h2>
-        <ul>
-          <li>
-            <strong>Automated Stake Placement:</strong> Precisely positions stakes based on survey data.
-          </li>
-          <li>
-            <strong>Digital Mapping and Reports:</strong> Generates detailed reports compatible with CAD, PDF, and other formats.
-          </li>
-          <li>
-            <strong>Real-Time Data Visualization:</strong> Provides dynamic monitoring of progress and mapped areas.
-          </li>
-          <li>
-            <strong>Land Measurments</strong> Area calulations and other basic cad funtionality.
-          </li>
-        </ul>
-      </div>
-    </section>
+   </section>
 
-    <!--Budget-->
-    <section class="budget" id="budget">
-      <div class="budget-container">
-        <h2>Budget Overview</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Component</th>
-              <th>Unit Price (Rs)</th>
-              <th>Quantity</th>
-              <th>Total (Rs)</th>             
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>NEO-M8N GPS Module (Base &amp; Rover)</td>
-              <td>3150</td>
-              <td>2</td>
-              <td>6300</td>
-            </tr>
-            <tr>
-              <td>ESP32 Dev Board</td>
-              <td>1690</td>
-              <td>2</td>
-              <td>3380</td>
-            </tr>
-            <tr>
-              <td>LoRa SX1278 Module</td>
-              <td>1720</td>
-              <td>2</td>
-              <td>3440</td>
-            </tr>
-            <tr>
-              <td>Power Supply (Li-ion Battery/Power Bank)</td>
-              <td>890</td>
-              <td>2</td>
-              <td>1780</td>
-            </tr>
-            <tr>
-              <td>Enclosure (3D Printed/Acrylic Case)</td>
-              <td>2000</td>
-              <td>2</td>
-              <td>4000</td>
-            </tr>
-            <tr>
-              <td>MPU-6050 IMU Sensor</td>
-              <td>1700</td>
-              <td>1</td>
-              <td>1700</td>
-            </tr>
-            <tr>
-              <td>Buzzer</td>
-              <td>120</td>
-              <td>2</td>
-              <td>240</td>
-            </tr>
-            <tr>
-              <td><strong>Total</strong></td>
-              <td colspan="3"><strong>20840</strong></td>
-            </tr>     
-          </tbody>
-        </table>
-      </div>
-    </section>
 
-    <!--Team-->
-    <section class="team" id="team">
-      <div class="heading">
-        <h2>Our Team</h2>
+  <!-- Features Section -->
+  <section id="features" class="section dark">
+    <h2>How It Works</h2>
+    <div class="features">
+      <div class="feature">
+        <i class="fas fa-map-marker-alt"></i>
+        <h3>1. Initialization</h3>
+        <p>The base station is placed at a fixed, known location and starts generating GNSS correction data in real-time.</p>
       </div>
-      <!--container-->
-      <div class="team-container">
-        <div class="box">
-          <img src="images/Rodger.jpg" alt="" />
-          <h3>Jayasinghe B.V.R.R</h3>
-          <div class="content">
-            <span>E/20/168</span>
-            <a href="mailto:e20168@eng.pdn.ac.lk">e20168@eng.pdn.ac.lk</a>
+      <div class="feature">
+        <i class="fas fa-broadcast-tower"></i>
+        <h3>2. RTK Signal Transmission</h3>
+        <p>Correction signals are transmitted via Wi-Fi or LoRa from the base to the rover, reducing GPS error to a few centimeters.</p>
+      </div>
+      <div class="feature">
+        <i class="fas fa-satellite-dish"></i>
+        <h3>3. Rover Data Collection</h3>
+        <p>The mobile rover collects GPS data enhanced by RTK and uses an IMU for improved precision in all terrains.</p>
+      </div>
+      <div class="feature">
+        <i class="fas fa-route"></i>
+        <h3>4. Dead Reckoning & Filtering</h3>
+        <p>When GPS signals drop, the system switches to IMU-based dead reckoning with Kalman filtering to maintain accuracy.</p>
+      </div>
+      <div class="feature">
+        <i class="fas fa-brain"></i>
+        <h3>5. Kalman Filter Fusion</h3>
+        <p>Data is smoothed and corrected through Kalman filters, combining GPS and IMU inputs for accuracy.</p>
+      </div>
+      <div class="feature">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <h3>6. MQTT Cloud Communication</h3>
+        <p>The rover sends GPS data to the cloud through MQTT protocol for real-time processing and storage.</p>
+      </div>
+      <div class="feature">
+        <i class="fas fa-database"></i>
+        <h3>7. Cloud Database Storage</h3>
+        <p>All data points are securely stored in MongoDB Atlas, enabling scalable and fast access for web dashboards.</p>
+      </div>
+      <div class="feature">
+        <i class="fas fa-chart-line"></i>
+        <h3>8. Web Dashboard Interface</h3>
+        <p>The GeoNex web app shows live rover movement, lets users capture points, and export survey files.</p>
+      </div>
+      <div class="feature">
+        <i class="fas fa-file-export"></i>
+        <h3>9. Export & CAD Integration</h3>
+        <p>Export surveyed points in JSON, CSV, or DXF format for seamless integration with CAD and GIS tools.</p>
+      </div>
+    </div>
+  </section>
+  
+
+  <!-- Comparison Section -->
+  <section id="comparison" class="section">
+    <h2>GeoNex vs Total Station</h2>
+    <table class="comparison-table">
+      <tr>
+        <th>Feature</th>
+        <th>GeoNex</th>
+        <th>Total Station</th>
+      </tr>
+      <tr>
+        <td>Price</td>
+        <td>$150–200</td>
+        <td>$3,000+</td>
+      </tr>
+      <tr>
+        <td>RTK Accuracy</td>
+        <td><i class="fas fa-check" style="color: #2ecc71;"></i></td>
+        <td><i class="fas fa-check" style="color: #2ecc71;"></i></td>
+      </tr>
+      <tr>
+        <td>Live Sync</td>
+        <td><i class="fas fa-check" style="color: #2ecc71;"></i></td>
+        <td><i class="fas fa-times" style="color: #e74c3c;"></i></td>
+      </tr>
+      <tr>
+        <td>Portability</td>
+        <td><i class="fas fa-check" style="color: #2ecc71;"></i></td>
+        <td><i class="fas fa-times" style="color: #e74c3c;"></i></td>
+      </tr>
+      <tr>
+        <td>Setup Time</td>
+        <td>2-5 minutes</td>
+        <td>15-30 minutes</td>
+      </tr>
+      <tr>
+        <td>User Training</td>
+        <td>Minimal</td>
+        <td>Extensive</td>
+      </tr>
+    </table>
+  </section>
+
+
+  <!-- Gallery section -->
+<section id="gallery" class="section">
+  <h2>Project Gallery</h2>
+  <div class="gallery-container">
+    <div class="gallery-item">
+      <img src="./images/gallery/3D.PNG" alt="3D image of the model" class="gallery-img">
+      <div class="gallery-overlay">
+        <h3>GEOnex Rover</h3>
+        <p>Side view</p>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img src="./images/gallery//device.png" alt="Rover & Base" class="gallery-img">
+      <div class="gallery-overlay">
+        <h3>Rover and Base</h3>
+        <p>Base sends correction data</p>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img src="./images/gallery/explode.png" alt="Exploded View" class="gallery-img">
+      <div class="gallery-overlay">
+        <h3>Exploded</h3>
+        <p>View of rover</p>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img src="./images/gallery/prototype.jpg" alt="Prototype" class="gallery-img">
+      <div class="gallery-overlay">
+        <h3>Prototype model</h3>
+        <p>Very first prototype model of GEOnex</p>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img src="./images/gallery/measuring.jpg" alt="Testing on Site" class="gallery-img">
+      <div class="gallery-overlay">
+        <h3>Testing on Site</h3>
+        <p>Check functionalities in university premises</p>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img src="./images/gallery/grop.jpg" alt="team" class="gallery-img">
+      <div class="gallery-overlay">
+        <h3>Project Team</h3>
+        <p>After exhausting presentation session</p>
+      </div>
+    </div>
+  </div>
+  <div class="gallery-modal">
+    <span class="close-modal">&times;</span>
+    <img class="modal-content">
+    <div class="modal-caption"></div>
+  </div>
+</section>
+
+  <!-- Team Section -->
+  <section id="team" class="section dark">
+    <h2>Our Team</h2>
+    <div class="team-members">
+      <div class="member">
+        <img src="./images/Rodger.jpg" alt="Rodger" class="member-img">
+        <div class="member-info">
+          <h3>Rodger Jay</h3>
+          <p>C++ Firmware, Figma UI, Backend MS, Fusion 3D Modeling</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
           </div>
         </div>
-        <div class="box">
-          <img src="images/Malinga.jpg" alt="" />
-          <h3>Malinga G.A.I</h3>
-          <div class="content">
-            <span>E/20/242</span>
-            <a href="mailto:e20242@eng.pdn.ac.lk">e20242@eng.pdn.ac.lk</a>
-          </div>
-        </div>
-        <div class="box">
-          <img src="images/Nishitha1.jpg" alt="" />
-          <h3>Padeniya S.M.N.N</h3>
-          <div class="content">
-            <span>E/20/276</span>
-            <a href="mailto:e20276@eng.pdn.ac.lk">e20276@eng.pdn.ac.lk</a>
-          </div>
-        </div>
-        <div class="box">
-          <img src="images/Samuditha.JPG" alt="" />
-          <h3>Seneviratne G.S</h3>
-          <div class="content">
-            <span>E/20/369</span>
-            <a href="mailto:e20369@eng.pdn.ac.lk">e20369@eng.pdn.ac.lk</a>
+      </div>
+      <div class="member">
+        <img src="./images/Malinga.jpg" alt="Malinga" class="member-img">
+        <div class="member-info">
+          <h3>Imesha Malinga</h3>
+          <p>Backend Auth , MongoDB, </p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-      <div class="footer-container">
-        <div class="footer-left">
-          <h3>Smart Surveying Device</h3>
-        </div>
-        <div class="footer-right">
-          <h3>Contact Us</h3>
-          <p>Email: e20168@eng.pdn.ac.lk</p>
-          <p>Phone: +94 77 123 4567</p>
+      <div class="member">
+        <img src="./images/Nishitha.jpg" alt="Nisitha" class="member-img">
+        <div class="member-info">
+          <h3>Nisitha Padeniya</h3>
+          <p>Frontend, React</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+          </div>
         </div>
       </div>
-    </footer>
 
-    <script>
-      src = "script.js";
-    </script>
-  </body>
+      <div class="member">
+        <img src="./images/Samuditha.JPG" alt="Samuditha" class="member-img">
+        <div class="member-info">
+          <h3>Samuditha Senavirathne</h3>
+          <p>C++ Firmware dev, RTK </p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="section">
+    <h2>Contact Us</h2>
+    <div class="contact-info">
+      <div class="contact-item">
+        <i class="fas fa-envelope"></i>
+        <p>e20(168/242/276/369)@eng.pdn.ac.lk</p>
+      </div>
+      <div class="contact-item">
+        <i class="fab fa-github"></i>
+        <p>github.com/cepdnaclk/e20-3yp-GEOnex</p>
+      </div>
+      <div class="contact-item">
+        <i class="fas fa-map-marker-alt"></i>
+        <p>University of Peradeniya, Sri Lanka</p>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2025 GeoNex. All rights reserved.</p>
+  </footer>
+
+  <!-- Scroll to top button -->
+  <div class="scroll-to-top">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      
+      // Change hamburger icon to X when menu is open
+      const icon = mobileMenuBtn.querySelector('i');
+      if (navLinks.classList.contains('active')) {
+        icon.classList.remove('fa-bars');
+        icon.classList.add('fa-times');
+      } else {
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+      }
+    });
+
+    // Close mobile menu when a nav link is clicked
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        const icon = mobileMenuBtn.querySelector('i');
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+      });
+    });
+
+    // Scroll to top button
+    const scrollToTopBtn = document.querySelector('.scroll-to-top');
+    
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        scrollToTopBtn.classList.add('active');
+      } else {
+        scrollToTopBtn.classList.remove('active');
+      }
+    });
+    
+    scrollToTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Navbar shrink on scroll
+    window.addEventListener('scroll', () => {
+      const navbar = document.querySelector('.navbar');
+      if (window.pageYOffset > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    // Animate elements on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animated');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    // Observe elements to animate
+    document.querySelectorAll('#about p, .feature, .comparison-table, .member, .contact-info').forEach(el => {
+      observer.observe(el);
+    });
+  </script>
+</body>
+
 </html>
