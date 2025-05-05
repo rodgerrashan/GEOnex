@@ -24,7 +24,7 @@ export default function Layout() {
       {open && (
         <div
           onClick={() => setOpen(false)}
-          className="fixed inset-0 bg-black/40 md:hidden z-30"
+          className="fixed inset-0 bg-black/40 md:hidden z-4000"
         />
       )}
       {/* ───── sidebar ───── */}
