@@ -3,7 +3,7 @@ const deviceSchema = require("../../device-service/models/Device");
 
 
 const projectSchema = new mongoose.Schema({
-    User_Id: { type: Number, ref: "User",required: false },
+    User_Id: { type: mongoose.Schema.Types.ObjectId, ref: "User",required: false },
     Name: { type: String, required: true },
     Created_On: { type: Date, required: true },
     Last_Modified: { type: Date, required: true },
