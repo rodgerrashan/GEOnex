@@ -16,9 +16,9 @@ const RecentProjects = () => {
   return (
     <div className="bg-white p-4 rounded-lg">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Recent Projects</h2>
+        <h2 className="text-lg md:text-xl lg:text-2xl font-semibold">Recent Projects</h2>
         <button
-          className="text-xs px-4 py-2"
+          className="text-sm md:text-base lg:text-lg px-4 py-2"
           style={{ color: "blue" }}
           onClick={() => {
             navigate("/projects");
@@ -32,7 +32,7 @@ const RecentProjects = () => {
           className="w-full text-sm text-left border-separate border-spacing-y-2"
           style={{ borderCollapse: "separate" }}
         >
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+          <thead className="text-xs md:text-sm lg:text-base text-gray-700 uppercase bg-gray-50">
             <tr>
               <th scope="col" className="px-6 py-3">
                 Project
@@ -62,7 +62,7 @@ const RecentProjects = () => {
                   key={index}
                   style={{ backgroundColor: "rgba(197,197,198,1)" }}
                   onClick={() => navigate(`/project/${project._id}`)}
-                  className="cursor-pointer"
+                  className="cursor-pointer text-xs md:text-sm lg:text-base"
                 >
                   <td className="px-6 py-4 rounded-l-lg">{project.Name}</td>
                   <td className="px-6 py-4">{createdOn}</td>
@@ -70,7 +70,7 @@ const RecentProjects = () => {
 
                   <td className="px-6 py-4 rounded-r-lg">
                     <span
-                      className={`px-1 py-1 text-sm font-semibold ${
+                      className={`px-1 py-1 text-xs md:text-sm lg:text-base font-semibold ${
                         project.Status === "Active"
                           ? "text-blue-700"
                           : project.Status === "Pending"

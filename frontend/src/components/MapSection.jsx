@@ -9,26 +9,38 @@ import { Context } from "../context/Context";
 import useSensorData from "./useSensorData";
 import { useParams } from "react-router-dom";
 
-const markerIcon = new L.Icon({
-  iconUrl: assets.location_point,
-  iconSize: [40, 40],
-  iconAnchor: [17, 46], //[left/right, top/bottom]
-  popupAnchor: [0, -46], //[left/right, top/bottom]
-});
+// const markerIcon = new L.Icon({
+//   iconUrl: assets.location_point,
+//   iconSize: [40, 40],
+//   iconAnchor: [17, 46], //[left/right, top/bottom]
+//   popupAnchor: [0, -46], //[left/right, top/bottom]
+// });
 
-const markerIconDevice = new L.Icon({
-  iconUrl: assets.device_point,
-  iconSize: [40, 40],
-  iconAnchor: [17, 46], //[left/right, top/bottom]
-  popupAnchor: [0, -46], //[left/right, top/bottom]
-});
+// const markerIconDevice = new L.Icon({
+//   iconUrl: assets.device_point,
+//   iconSize: [40, 40],
+//   iconAnchor: [17, 46], //[left/right, top/bottom]
+//   popupAnchor: [0, -46], //[left/right, top/bottom]
+// });
 
-const markerIconBase = new L.Icon({
-  iconUrl: assets.base_point,
-  iconSize: [40, 40],
-  iconAnchor: [17, 46], //[left/right, top/bottom]
-  popupAnchor: [0, -46], //[left/right, top/bottom]
-});
+// const markerIconBase = new L.Icon({
+//   iconUrl: assets.base_point,
+//   iconSize: [40, 40],
+//   iconAnchor: [17, 46], //[left/right, top/bottom]
+//   popupAnchor: [0, -46], //[left/right, top/bottom]
+// });
+
+// Hook to track window width
+function useWindowSize() {
+  const [size, setSize] = useState({ width: window.innerWidth });
+  useEffect(() => {
+    const handle = () =>
+      setSize({ width: window.innerWidth });
+    window.addEventListener("resize", handle);
+    return () => window.removeEventListener("resize", handle);
+  }, []);
+  return size;
+}
 
 const MapSection = () => {
   const { projectId } = useParams();
@@ -36,6 +48,8 @@ const MapSection = () => {
   const [center, setCenter] = useState({ lat: 7.254822, lng: 80.59215 });
   const ZOOM_LEVEL = 24;
   const mapRef = useRef();
+
+  const { width } = useWindowSize();
 
   const [base, setBase] = useState({ lat: 7.254822, lng: 80.59252 });
 
@@ -82,6 +96,39 @@ const MapSection = () => {
     }, [center, map]);
     return null;
   };
+
+  // Choose marker size based on width
+  const getSize = () => {
+    if (width < 640) return [30, 30];
+    if (width < 768) return [35, 35];
+    return [40, 40];
+  };
+  const [iconSize, setIconSize] = useState(getSize());
+
+  // Update iconSize on resize
+  useEffect(() => {
+    setIconSize(getSize());
+  }, [width]);
+
+  // Create icons with responsive size
+  const markerIcon = new L.Icon({
+    iconUrl: assets.location_point,
+    iconSize,
+    iconAnchor: [iconSize[0] / 2, iconSize[1]],
+    popupAnchor: [0, -iconSize[1]],
+  });
+  const markerIconDevice = new L.Icon({
+    iconUrl: assets.device_point,
+    iconSize,
+    iconAnchor: [iconSize[0] / 2, iconSize[1]],
+    popupAnchor: [0, -iconSize[1]],
+  });
+  const markerIconBase = new L.Icon({
+    iconUrl: assets.base_point,
+    iconSize,
+    iconAnchor: [iconSize[0] / 2, iconSize[1]],
+    popupAnchor: [0, -iconSize[1]],
+  });
 
   return (
     <div className="w-full h-full relative">
@@ -143,31 +190,31 @@ const MapSection = () => {
       </div>
 
       {/* Buttons on the bottom right */}
-      <div className="absolute bottom-4 right-2 flex flex-col gap-2 z-[1000] items-center">
+      <div className="absolute bottom-4 right-2 flex flex-col gap-1 md:gap-2 z-[1000] items-center">
         {/* Button 1 */}
         <button
-          className="bg-black p-3 rounded-full shadow-md w-12 h-12 flex items-center justify-center "
+          className="bg-black p-2 md:p-3 rounded-full shadow-md w-8 h-8 md:w-12 md:h-12 flex items-center justify-center "
           onClick={() => {
             navigate(`/takenpoints/${projectId}`);
           }}
         >
-          <img src={assets.filter} alt="Button 1" className="w-6 h-6" />
+          <img src={assets.filter} alt="Button 1" className="w-4 h-4 md:w-6 md:h-6" />
         </button>
 
         {/* Button 2 */}
         <button
-          className="bg-orange-500 p-3 rounded-full shadow-md w-12 h-12 flex items-center "
+          className="bg-orange-500 p-2 md:p-3 rounded-full shadow-md w-8 h-8 md:w-12 md:h-12 flex items-center "
           onClick={() => setShowConfirmDiscard(true)}
         >
-          <img src={assets.reverse} alt="Button 2" className="w-6 h-6" />
+          <img src={assets.reverse} alt="Button 2" className="w-4 h-4 md:w-6 md:h-6" />
         </button>
 
         {/* Button 3 */}
         <button
-          className="bg-blue-500 p-4 rounded-full shadow-md w-16 h-16 flex items-center "
+          className="bg-blue-500 p-3 md:p-4 rounded-full shadow-md w-10 h-10 md:w-16 md:h-16 flex items-center "
           onClick={() => setShowPointRecorded(true)}
         >
-          <img src={assets.add_location} alt="Button 3" className="w-8 h-8" />
+          <img src={assets.add_location} alt="Button 3" className="w-4 h-4 md:w-8 md:h-8" />
         </button>
       </div>
 
