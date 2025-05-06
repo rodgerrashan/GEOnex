@@ -50,7 +50,7 @@ const register = async(req,res)=>{
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const user = new User({name,email,password:hashedPassword,role:"customer"});
+        const user = new User({name,email,password:hashedPassword,role:"surveyor"});
         await user.save();
 
         const token= jwt.sign({id: user._id},process.env.JWT_SECRET,{expiresIn: '7d'});
