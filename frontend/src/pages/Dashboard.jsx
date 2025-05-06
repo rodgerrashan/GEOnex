@@ -3,7 +3,7 @@ import { assets } from "../assets/assets";
 import RecentProjects from "../components/RecentProjects";
 import { Context } from "../context/Context";
 
-const Home = () => {
+const Dashboard = () => {
 
   const { navigate } = useContext(Context);
 
@@ -89,4 +89,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Dashboard;

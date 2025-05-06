@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
+import Dashboard from "./pages/Dashboard";
 import Devices from "./pages/Devices";
 import Projects from "./pages/Projects";
 import Settings from "./pages/Settings";
@@ -14,6 +14,7 @@ import Layout from "./components/Layout";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+
 const App = () => {
   return (
     <div>
@@ -21,7 +22,9 @@ const App = () => {
 
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
+          {/* <Route path="/" element={<Home />} /> */}
+
+          <Route path="/dashboard" element={<Dashboard />} />
 
           <Route path="/devices" element={<Devices />} />
 

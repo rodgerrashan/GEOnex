@@ -54,7 +54,7 @@ const Navbar = ({ mobileOpen = false, onClose = () => {} }) => {
         ✕
       </button>
 
-      <Link to="/" onClick={handleNavClick}>
+      <Link to="/dashboard" onClick={handleNavClick}>
         {/* ───── GEOnex Logo ───── */}
         <div className="w-full flex justify-center pt-6 sm:pt-8 md:pt-10 items-end space-x-1 whitespace-nowrap">
           <span className="font-bold text-[48px] md:text-3xl lg:text-5xl leading-none text-black">
@@ -69,7 +69,7 @@ const Navbar = ({ mobileOpen = false, onClose = () => {} }) => {
       {/* Navigation Frame */}
       <nav className="flex flex-col gap-3 md:gap-4 pt-4 md:pt-20 text-base md:text-base lg:text-lg mt-12 w-full">
         {[
-          { to: '/',   icon: assets.home,    label: 'Home'    },
+          { to: '/dashboard',   icon: assets.home,    label: 'Home'    },
           { to: '/devices', icon: assets.devices, label: 'Devices' },
           { to: '/projects', icon: assets.projects, label: 'Projects' },
           { to: '/settings', icon: assets.settings, label: 'Settings' },
