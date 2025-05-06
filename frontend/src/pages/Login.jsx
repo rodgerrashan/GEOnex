@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const Login = () => {
-  const { navigate, backendUrl, setIsLoggedin } = useContext(Context);
+  const { navigate, backendUrl, setIsLoggedin, getUserData } = useContext(Context);
 
   const [state, setState] = useState("Log In");
 
@@ -27,6 +27,7 @@ const Login = () => {
 
         if (data.success) {
           setIsLoggedin(true);
+          getUserData()
           navigate("/dashboard");
         } else {
           toast.error(data.message);
@@ -40,6 +41,7 @@ const Login = () => {
 
         if (data.success) {
           setIsLoggedin(true);
+          getUserData()
           navigate("/dashboard");
         } else {
           toast.error(data.message);

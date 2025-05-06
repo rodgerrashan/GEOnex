@@ -5,7 +5,7 @@ import { Context } from "../context/Context";
 
 const Dashboard = () => {
 
-  const { navigate } = useContext(Context);
+  const { navigate, userData } = useContext(Context);
 
   return (
     <div>
@@ -18,7 +18,7 @@ const Dashboard = () => {
           {/* Left side: Title & Subtitle */}
           <div>
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-semi-bold">
-              Hello User
+              Hello {userData ? userData.name : 'User'}
               </h1>
             <p className="text-sm md:text-base lg:text-lg mt-1">
               Welcome to Site Measurement IoT
