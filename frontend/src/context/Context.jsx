@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+axios.defaults.withCredentials = true;
 import { toast } from "react-toastify";
 
 export const Context = createContext();
@@ -18,6 +19,18 @@ const ContextProvider = (props) => {
 
   const [isLoggedin, setIsLoggedin] = useState(false);
   const [userData, setUserData] = useState(false);
+
+  const getAuthState = async () => {
+    try {
+      const { data } = await axios.get(backendUrl + "/api/auth/is-auth");
+      if (data.success) {
+        setIsLoggedin(true);
+        getUserData();
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   const getProjectsData = async () => {
     try {
@@ -89,18 +102,19 @@ const ContextProvider = (props) => {
     }
   };
 
-  useEffect(() => {
-    getProjectsData();
-  }, []);
-
   const getUserData = async () => {
     try {
       const { data } = await axios.get(backendUrl + "/api/user/data");
       data.success ? setUserData(data.userData) : toast.error(data.message);
     } catch (error) {
-      toast.error(data.message);
+      toast.error(error.message);
     }
   };
+
+  useEffect(() => {
+    getProjectsData();
+    getAuthState();
+  }, []);
 
   const value = {
     navigate,
@@ -121,7 +135,7 @@ const ContextProvider = (props) => {
     setIsLoggedin,
     userData,
     setUserData,
-    getUserData
+    getUserData,
   };
 
   return <Context.Provider value={value}>{props.children}</Context.Provider>;
