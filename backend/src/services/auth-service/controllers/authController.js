@@ -66,8 +66,8 @@ const register = async(req,res)=>{
         const mailOptions = {
             from: process.env.SENDER_EMAIL,
             to: email,
-            subject: 'Welcome to Malinga',
-            text:`Welcome.Your account has been created with email id: ${email}`
+            subject: 'Welcome to GEOnex',
+            text:`Welcome to GEOnex. Your account has been created with email id: ${email}`
         }
 
         await transporter.sendMail(mailOptions);
@@ -80,7 +80,8 @@ const register = async(req,res)=>{
 }
 
 const login = async(req,res)=>{
-    const {email, password}=req.body;
+
+    const {email, password} = req.body;
 
     if(!email || !password){
         return res.json({success:false, message:'email and password are required'})
@@ -133,14 +134,17 @@ const logout= async (req,res)=>{
 //Send verification OTP to the User's Email
 const sendVerifyOtp = async(req,res)=>{
     try {
-        
-        const userId=req.userId;
+    
+        const userId = req.userId;
+
         const user = await User.findById(userId);
+
         if (user.isAccountVerified) {
             return res.json({success:false, message:"Account Already verified"})
         }
 
         const otp=String(Math.floor(100000+ Math.random()*900000));
+
         user.verifyOtp = otp;
         user.verifyOtpExpireAt=Date.now()+24*60*60*1000;
 
@@ -154,6 +158,7 @@ const sendVerifyOtp = async(req,res)=>{
         };
 
         await transporter.sendMail(mailOptions);
+
         res.json({success:true, message:'Verification OTP sent to the email'}); 
 
     } catch (error) {
@@ -164,6 +169,7 @@ const sendVerifyOtp = async(req,res)=>{
 
 //verify the email using otp
 const verifyEmail = async (req,res) => {
+
     const userId=req.userId;
     const {otp}=req.body;
 
@@ -192,6 +198,7 @@ const verifyEmail = async (req,res) => {
         user.verifyOtpExpireAt=0;
 
         await user.save();
+
         return res.json({success:true, message:'Email verified successfully'});
 
     } catch (error) {
@@ -230,11 +237,13 @@ const sendResetOtp = async (req,res) => {
             from: process.env.SENDER_EMAIL,
             to: user.email,
             subject: 'Password Reset OTP',
-            text:`Your OTP for resting your password is ${otp}.`
+            text:`Your OTP for resting your password is ${otp}.
+            Use this OTP to proceed with resetting your password.`
         };
         await transporter.sendMail(mailOptions);
 
         return res.json({success:true, message:'OTP send to your email'});
+
     } catch (error) {
         return res.json({success:false, message:error.message})
     } 
@@ -263,17 +272,17 @@ const resetPassword = async (req,res) => {
         }
 
         const hashedPassword=await bcrypt.hash(newPassword, 10);
+
         user.password = hashedPassword;
         user.resetOtp ='';
         user.resetOtpExpiredAt=0;
 
         await user.save();
-        return res.json({success:true, message:'password has been reset successfully'});
+        return res.json({success:true, message:'Password has been reset successfully'});
 
     } catch (error) {
         return res.json({success:false, message:error.message});
     }
 }
-//module.exports = { registerUser, loginUser };
 
 module.exports = {register,login,logout,sendVerifyOtp,verifyEmail,resetPassword,sendResetOtp,isAuthenticated};

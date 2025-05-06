@@ -11,6 +11,7 @@ const socketService = require('./src/services/socket-service/socketServer');
 
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const authRouter = require('./src/services/auth-service/routes/authRoutes');
+const userRouter = require('./src/services/auth-service/routes/userRoutes');
 
 connectDB();
 
@@ -27,6 +28,7 @@ app.use(cookieParser());
 app.use('/api/projects', projectRoutes);
 app.use('/api/points', pointRoutes);
 app.use('/api/auth',authRouter);
+app.use('/api/user',userRouter);
 
 // Initialize socket server with the HTTP server instance
 socketService.init(server);
