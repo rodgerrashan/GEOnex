@@ -1,9 +1,10 @@
 import React from 'react'
+import Loading from '../components/Loading'
 
 const EmailVerify = () => {
   return (
     <div>
-      <h1>email verify Page</h1>
+      <Loading/>
     </div>
   )
 }
