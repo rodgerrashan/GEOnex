@@ -16,6 +16,10 @@ const ContextProvider = (props) => {
   const [points, setPoints] = useState([]);
   const [loadingPoints, setLoadingPoints] = useState(false);
 
+  const [isLoggedin, setIsLoggedin] = useState(false)
+  const [userData, setUserData] = useState(false)
+
+
   const getProjectsData = async () => {
     try {
       const response = await axios.get(backendUrl + "/api/projects");
@@ -101,6 +105,8 @@ const ContextProvider = (props) => {
     fetchPoints,
     setPoints,
     deletePoint,
+    isLoggedin, setIsLoggedin,
+    userData, setUserData
   };
 
   return <Context.Provider value={value}>{props.children}</Context.Provider>;

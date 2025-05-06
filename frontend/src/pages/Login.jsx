@@ -1,14 +1,54 @@
 import React, { useState, useContext } from "react";
 import { Context } from "../context/Context";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Login = () => {
-  const { navigate } = useContext(Context);
+  const { navigate, backendUrl, setIsLoggedin } = useContext(Context);
 
   const [state, setState] = useState("Log In");
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const onSubmitHandler = async (e) => {
+    try {
+      e.preventDefault();
+
+      axios.defaults.withCredentials = true;
+
+      if (state === "Sign Up") {
+        const { data } = await axios.post(backendUrl + "/api/auth/register", {
+          name,
+          email,
+          password,
+        });
+
+        if (data.success) {
+          setIsLoggedin(true);
+          navigate("/dashboard");
+        } else {
+          toast.error(data.message);
+        }
+
+      } else {
+        const { data } = await axios.post(backendUrl + "/api/auth/login", {
+          email,
+          password,
+        });
+
+        if (data.success) {
+          setIsLoggedin(true);
+          navigate("/dashboard");
+        } else {
+          toast.error(data.message);
+        }
+      }
+    } catch (error) {
+      toast.error(data.message);
+    }
+  };
 
   return (
     <div
@@ -39,7 +79,7 @@ const Login = () => {
         </p>
 
         {/* Form */}
-        <form className="mt-8 space-y-5">
+        <form onSubmit={onSubmitHandler} className="mt-8 space-y-5">
           {/* Full Name */}
           {state === "Sign Up" && (
             <div>

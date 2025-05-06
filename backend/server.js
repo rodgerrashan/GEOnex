@@ -20,7 +20,10 @@ const app = express();
 // Create a single HTTP server instance
 const server = require('http').createServer(app);
 
-app.use(cors({credentials:true}));
+const allowedOrigins = ['http://localhost:5173']
+
+app.use(cors({origin: allowedOrigins, credentials:true}));
+
 app.use(express.json());
 app.use(cookieParser());
 
