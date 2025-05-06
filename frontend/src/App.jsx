@@ -4,7 +4,6 @@ import Dashboard from "./pages/Dashboard";
 import Devices from "./pages/Devices";
 import Projects from "./pages/Projects";
 import Settings from "./pages/Settings";
-import Login from "./pages/Login";
 import NewProject from "./pages/NewProject";
 import PointSurvey from "./pages/PointSurvey";
 import ProjectDetails from "./pages/ProjectDetails";
@@ -14,6 +13,10 @@ import Layout from "./components/Layout";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import EmailVerify from "./pages/EmailVerify";
+import ResetPassword from "./pages/ResetPassword";
 
 const App = () => {
   return (
@@ -22,8 +25,6 @@ const App = () => {
 
       <Routes>
         <Route element={<Layout />}>
-          {/* <Route path="/" element={<Home />} /> */}
-
           <Route path="/dashboard" element={<Dashboard />} />
 
           <Route path="/devices" element={<Devices />} />
@@ -43,7 +44,10 @@ const App = () => {
           <Route path="/project/:projectId" element={<ProjectDetails />} />
         </Route>
         {/* routes **outside** the sidebar  */}
-        + <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/email-verify" element={<EmailVerify />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
     </div>
   );
