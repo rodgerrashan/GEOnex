@@ -4,7 +4,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const Login = () => {
-  const { navigate, backendUrl, setIsLoggedin, getUserData } = useContext(Context);
+  const { navigate, backendUrl, setIsLoggedin, getUserData } =
+    useContext(Context);
 
   const [state, setState] = useState("Log In");
 
@@ -12,10 +13,15 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const onSubmitHandler = async (e) => {
-    try {
-      e.preventDefault();
+  // prevent double-clicks / rapid re-submits
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
+    try {
       axios.defaults.withCredentials = true;
 
       if (state === "Sign Up") {
@@ -27,12 +33,11 @@ const Login = () => {
 
         if (data.success) {
           setIsLoggedin(true);
-          getUserData()
+          getUserData();
           navigate("/dashboard");
         } else {
           toast.error(data.message);
         }
-
       } else {
         const { data } = await axios.post(backendUrl + "/api/auth/login", {
           email,
@@ -41,7 +46,7 @@ const Login = () => {
 
         if (data.success) {
           setIsLoggedin(true);
-          getUserData()
+          getUserData();
           navigate("/dashboard");
         } else {
           toast.error(data.message);
@@ -49,6 +54,8 @@ const Login = () => {
       }
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -152,9 +159,10 @@ const Login = () => {
           {/* Submit */}
           <button
             type="submit"
+            disabled={isSubmitting}
             className="w-full rounded-md bg-gray-900 py-2 text-base font-medium text-white hover:bg-gray-800 transition"
           >
-            {state}
+            {isSubmitting ? "Please wait…" : state}
           </button>
         </form>
 

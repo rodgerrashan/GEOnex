@@ -116,6 +116,15 @@ const ContextProvider = (props) => {
     getAuthState();
   }, []);
 
+  // 🔍 watch auth state change
+  useEffect(() => {
+    console.log("userData changed ➜", userData);
+  }, [userData]);
+
+  useEffect(() => {
+    console.log("isLoggedin changed ➜", isLoggedin);
+  }, [isLoggedin]);
+
   const value = {
     navigate,
     showPointRecorded,
