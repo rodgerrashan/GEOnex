@@ -1,11 +1,25 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { Context } from "../context/Context";
 
 const EmailVerify = () => {
+  axios.defaults.withCredentials = true;
+
   const [otp, setOtp] = useState(Array(6).fill(""));
   const [submitting, setSubmitting] = useState(false);
   const inputsRef = useRef([]);
+
+  const [cooldown, setCooldown] = useState(0);
+
+  const {
+    navigate,
+    backendUrl,
+    isLoggedin,
+    setIsLoggedin,
+    getUserData,
+    userData,
+  } = useContext(Context);
 
   // Move focus as the user types
   const handleChange = (value, idx) => {
@@ -24,17 +38,49 @@ const EmailVerify = () => {
     }
   };
 
+  /* paste handler that works for 1-6 digits */
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const raw = e.clipboardData.getData("text").replace(/\D/g, ""); // digits only
+    if (!raw) return;
+
+    const activeIndex = inputsRef.current.findIndex(
+      (input) => input === document.activeElement
+    );
+    const start = activeIndex === -1 ? 0 : activeIndex; // fallback first box
+    const digits = raw.slice(0, 6 - start).split("");
+
+    const newOtp = [...otp];
+    digits.forEach((d, i) => (newOtp[start + i] = d));
+    setOtp(newOtp);
+
+    // reflect visually
+    digits.forEach((d, i) => {
+      inputsRef.current[start + i].value = d;
+    });
+
+    const nextPos = Math.min(start + digits.length, 5);
+    inputsRef.current[nextPos].focus();
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (otp.some((d) => d === "")) return toast.error("Enter all six digits");
     const code = otp.join("");
     try {
       setSubmitting(true);
-      // 👉 swap URL with your backend endpoint
-      const { data } = await axios.post("/api/auth/verify-email", { code });
-      data.success
-        ? toast.success("Email verified!")
-        : toast.error(data.message);
+
+      const { data } = await axios.post(backendUrl + "/api/auth/verify-email", {
+        otp: code,
+      });
+      if (data.success) {
+        toast.success(data.message);
+        setIsLoggedin(true);
+        getUserData();
+        navigate("/dashboard");
+      } else {
+        toast.error(data.message);
+      }
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -43,13 +89,40 @@ const EmailVerify = () => {
   };
 
   const handleResend = async () => {
+    if (cooldown > 0) return; // prevent spam
     try {
-      await axios.post("/api/auth/resend-otp");
-      toast.success("OTP sent again");
+      const { data } = await axios.get(backendUrl + "/api/auth/sendverifyotp", {
+        withCredentials: true,
+      });
+
+      if (data.success) {
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
+
+      // Start cooldown (e.g., 60s)
+      setCooldown(60);
+      const timer = setInterval(() => {
+        setCooldown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
     } catch (err) {
-      toast.error(err.message);
+      toast.error("Failed to resend OTP");
     }
   };
+
+  useEffect(() => {
+    isLoggedin &&
+      userData &&
+      userData.isAccountVerified &&
+      navigate("/dashboard");
+  }, [isLoggedin, userData]);
 
   return (
     <div
@@ -80,6 +153,7 @@ const EmailVerify = () => {
         {/* OTP inputs */}
         <form
           onSubmit={handleSubmit}
+          onPaste={handlePaste}
           className="mt-6 flex flex-col items-center"
         >
           <div className="flex gap-2">
@@ -108,14 +182,18 @@ const EmailVerify = () => {
           </button>
         </form>
 
-        {/* resend */}
+        {/* Resend option with cooldown */}
         <p className="mt-4 text-center text-sm text-gray-600">
-          Don’t you receive the OTP?{" "}
+          Didn't receive the OTP?{" "}
           <span
             onClick={handleResend}
-            className="font-semibold text-indigo-600 hover:underline cursor-pointer"
+            className={`font-semibold ${
+              cooldown
+                ? "text-gray-400 cursor-not-allowed"
+                : "text-indigo-600 hover:underline cursor-pointer"
+            }`}
           >
-            Resend
+            {cooldown ? `Resend in ${cooldown}s` : "Resend"}
           </span>
         </p>
       </div>

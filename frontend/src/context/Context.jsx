@@ -32,6 +32,15 @@ const ContextProvider = (props) => {
     }
   };
 
+  const getUserData = async () => {
+    try {
+      const { data } = await axios.get(backendUrl + "/api/user/data");
+      data.success ? setUserData(data.userData) : toast.error(data.message);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   const getProjectsData = async () => {
     try {
       const response = await axios.get(backendUrl + "/api/projects");
@@ -99,15 +108,6 @@ const ContextProvider = (props) => {
     } catch (error) {
       console.error("Error deleting point:", error);
       toast.error("Failed to delete point.");
-    }
-  };
-
-  const getUserData = async () => {
-    try {
-      const { data } = await axios.get(backendUrl + "/api/user/data");
-      data.success ? setUserData(data.userData) : toast.error(data.message);
-    } catch (error) {
-      toast.error(error.message);
     }
   };
 

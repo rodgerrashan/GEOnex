@@ -9,10 +9,10 @@ const authRouter = express.Router();
 
 authRouter.post('/register',register);
 authRouter.post('/login',login);
-authRouter.post('/logout',logout);
+authRouter.post('/logout',userAuth, logout);
 
-authRouter.post('/sendverifyotp',userAuth,sendVerifyOtp);
-authRouter.post('/verifyEmail',userAuth,verifyEmail);
+authRouter.get('/sendverifyotp',userAuth,sendVerifyOtp);
+authRouter.post('/verify-email',userAuth,verifyEmail);
 
 authRouter.get('/is-auth',userAuth,isAuthenticated);
 

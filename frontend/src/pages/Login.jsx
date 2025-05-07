@@ -25,31 +25,50 @@ const Login = () => {
       axios.defaults.withCredentials = true;
 
       if (state === "Sign Up") {
-        const { data } = await axios.post(backendUrl + "/api/auth/register", {
-          name,
-          email,
-          password,
-        });
+        /* create the user */
+        const { data: signRes } = await axios.post(
+          backendUrl + "/api/auth/register",
+          {
+            name,
+            email,
+            password,
+          }
+        );
 
-        if (data.success) {
-          setIsLoggedin(true);
-          getUserData();
-          navigate("/dashboard");
-        } else {
-          toast.error(data.message);
+        if (!signRes.success) {
+          toast.error(signRes.message);
+          return;
         }
-      } else {
-        const { data } = await axios.post(backendUrl + "/api/auth/login", {
-          email,
-          password,
-        });
 
-        if (data.success) {
+        /* ask server to generate & send OTP */
+        const { data: otpRes } = await axios.get(
+          `${backendUrl}/api/auth/sendverifyotp`,
+          { withCredentials: true } 
+        );
+
+        if (otpRes.success) {
+          toast.success("Registered! We've emailed an OTP for verification.");
+          navigate("/email-verify");
+        } else {
+          toast.error(otpRes.message || "Failed to send verification OTP.");
+        }
+
+      } else {
+        /* Log-in branch */
+        const { data: loginRes } = await axios.post(
+          backendUrl + "/api/auth/login",
+          {
+            email,
+            password,
+          }
+        );
+
+        if (loginRes.success) {
           setIsLoggedin(true);
           getUserData();
           navigate("/dashboard");
         } else {
-          toast.error(data.message);
+          toast.error(loginRes.message);
         }
       }
     } catch (error) {
