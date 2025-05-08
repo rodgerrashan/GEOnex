@@ -11,6 +11,7 @@ const socketService = require('./src/services/socket-service/socketServer');
 
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const authRouter = require('./src/services/auth-service/routes/authRoutes');
+const userRouter = require('./src/services/auth-service/routes/userRoutes');
 
 connectDB();
 
@@ -19,7 +20,10 @@ const app = express();
 // Create a single HTTP server instance
 const server = require('http').createServer(app);
 
-app.use(cors({credentials:true}));
+const allowedOrigins = ['http://localhost:5173']
+
+app.use(cors({origin: allowedOrigins, credentials:true}));
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -27,6 +31,7 @@ app.use(cookieParser());
 app.use('/api/projects', projectRoutes);
 app.use('/api/points', pointRoutes);
 app.use('/api/auth',authRouter);
+app.use('/api/user',userRouter);
 
 // Initialize socket server with the HTTP server instance
 socketService.init(server);

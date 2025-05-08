@@ -1,8 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { assets } from "../assets/assets";
+import { Context } from "../context/Context";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Navbar = ({ mobileOpen = false, onClose = () => {} }) => {
+  const { navigate, backendUrl, setUserData, setIsLoggedin } =
+    useContext(Context);
+
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -23,6 +29,18 @@ const Navbar = ({ mobileOpen = false, onClose = () => {} }) => {
     "font-bold text-red-500 mx-auto px-6 py-2 mb-10 rounded-md border",
     "hover:bg-red-500 hover:text-white transition",
   ].join(" ");
+
+  const logout = async () => {
+    try {
+      axios.defaults.withCredentials = true;
+      const { data } = await axios.post(backendUrl + "/api/auth/logout");
+      data.success && setIsLoggedin(false);
+      data.success && setUserData(false);
+      navigate("/");
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   // fires only on screens < 768 px
   const handleNavClick = () => {
@@ -54,7 +72,7 @@ const Navbar = ({ mobileOpen = false, onClose = () => {} }) => {
         ✕
       </button>
 
-      <Link to="/" onClick={handleNavClick}>
+      <Link to="/dashboard" onClick={handleNavClick}>
         {/* ───── GEOnex Logo ───── */}
         <div className="w-full flex justify-center pt-6 sm:pt-8 md:pt-10 items-end space-x-1 whitespace-nowrap">
           <span className="font-bold text-[48px] md:text-3xl lg:text-5xl leading-none text-black">
@@ -69,10 +87,10 @@ const Navbar = ({ mobileOpen = false, onClose = () => {} }) => {
       {/* Navigation Frame */}
       <nav className="flex flex-col gap-3 md:gap-4 pt-4 md:pt-20 text-base md:text-base lg:text-lg mt-12 w-full">
         {[
-          { to: '/',   icon: assets.home,    label: 'Home'    },
-          { to: '/devices', icon: assets.devices, label: 'Devices' },
-          { to: '/projects', icon: assets.projects, label: 'Projects' },
-          { to: '/settings', icon: assets.settings, label: 'Settings' },
+          { to: "/dashboard", icon: assets.home, label: "Home" },
+          { to: "/devices", icon: assets.devices, label: "Devices" },
+          { to: "/projects", icon: assets.projects, label: "Projects" },
+          { to: "/settings", icon: assets.settings, label: "Settings" },
         ].map(({ to, icon, label }) => (
           <NavLink
             key={to}
@@ -81,20 +99,24 @@ const Navbar = ({ mobileOpen = false, onClose = () => {} }) => {
             className={({ isActive }) =>
               `block w-full flex items-center justify-center md:justify-start gap-3 px-4 lg:px-10 py-2 rounded transition ${
                 isActive
-                  ? 'bg-white shadow-md font-semibold'
-                  : 'hover:bg-gray-300'
+                  ? "bg-white shadow-md font-semibold"
+                  : "hover:bg-gray-300"
               }`
             }
           >
             <img src={icon} alt={label} className="w-5 h-5" />
-            <p className="truncate text-[20px] md:text-lg lg:text-xl">{label}</p>
+            <p className="truncate text-[20px] md:text-lg lg:text-xl">
+              {label}
+            </p>
           </NavLink>
         ))}
       </nav>
 
       {/* Logout Button */}
 
-      <button className={logoutBtnClass}>Log out</button>
+      <button onClick={logout} className={logoutBtnClass}>
+        Log out
+      </button>
     </div>
   );
 };
