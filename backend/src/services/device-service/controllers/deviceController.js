@@ -90,6 +90,25 @@ const updateDevice = async (req, res) => {
 };
 
 
+const checkDeviceInUse = async (req, res) => {
+    const db = getDb();
+    const deviceCode = req.params.deviceCode; 
+
+    try {
+        const device = await db.collection('devices').findOne({ DeviceCode: deviceCode });
+
+        if (!device) {
+            return res.status(404).json({ message: 'Device not found' });
+        }
+
+        // Check if the device is in use by checking the Active_Project field
+        const isInUse = device.Status === 'Active' || device.Active_Project !== null;
+        res.json({ isInUse });
+    } catch (error) {
+        console.error("Error checking device in use:", error);
+        res.status(500).json({ message: 'Error checking device in use', error });
+    }
+}
 
 
-module.exports = {createDevice, getDeviceById, updateDevice};
+module.exports = {createDevice, getDeviceById, updateDevice, checkDeviceInUse};

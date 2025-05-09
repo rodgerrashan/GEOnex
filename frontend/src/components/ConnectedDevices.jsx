@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 export default function ConnectedDevices() {
     const [devices, setDevices] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [deviceId, setDeviceId] = useState("");
+    const [DeviceCode, setDeviceCode] = useState("");
     const [connectingDevice, setConnectingDevice] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
@@ -36,7 +36,7 @@ export default function ConnectedDevices() {
 
     const handleConnectDevice = async (e) => {
         e.preventDefault();
-        if (!deviceId.trim()) {
+        if (!DeviceCode.trim()) {
             setError("Please enter a device ID");
             return;
         }
@@ -47,14 +47,14 @@ export default function ConnectedDevices() {
 
         try {
             // First check if device exists and is not connected to a project
-            const checkResponse = await fetch(`/api/devices/${deviceId}/check`);
+            const checkResponse = await fetch(`/api/devices/${DeviceCode}/check`);
             if (!checkResponse.ok) {
                 const errorData = await checkResponse.json();
                 throw new Error(errorData.message || "Device not found");
             }
 
             const deviceData = await checkResponse.json();
-            if (deviceData.isConnectedToProject) {
+            if (deviceData.isInUse) {
                 throw new Error("This device is already connected to a project");
             }
 
@@ -64,7 +64,7 @@ export default function ConnectedDevices() {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ deviceId }),
+                body: JSON.stringify({ DeviceCode }),
             });
 
             if (!connectResponse.ok) {
@@ -73,7 +73,7 @@ export default function ConnectedDevices() {
             }
 
             setSuccess("Device connected successfully!");
-            setDeviceId("");
+            setDeviceCode("");
             // Refresh the device list
             fetchUserDevices();
         } catch (error) {
@@ -178,8 +178,8 @@ export default function ConnectedDevices() {
                         <input
                             type="text"
                             placeholder="Enter Device ID"
-                            value={deviceId}
-                            onChange={(e) => setDeviceId(e.target.value)}
+                            value={DeviceCode}
+                            onChange={(e) => setDeviceCode(e.target.value)}
                             className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         <button
