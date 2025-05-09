@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const deviceSchema = new mongoose.Schema({
     Device_Id: { type: mongoose.Schema.Types.ObjectId, ref: "Device",required: false },
+    DeviceCode: { type: String, required: true, unique: true },
     Name: { type: String, required: true },
     Status: { type: String, enum: ["Online", "Offline", "Active", "Registered"], required: true, default: "Registered" },
     Type: { type: String, required: true },

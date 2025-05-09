@@ -10,7 +10,7 @@ export default function ConnectedDevices() {
     const [success, setSuccess] = useState("");
 
     // Mock user ID (in real app, this would come from auth context)
-    const userId = "user123";
+    const userId = "681e012572b69cef1e2c116b";
 
     useEffect(() => {
         fetchUserDevices();

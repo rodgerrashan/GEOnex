@@ -2,7 +2,6 @@ import React, {useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 import axios from "axios";
-import { Context } from "../context/Context";
 import { toast } from "react-toastify";
 
 
@@ -15,11 +14,12 @@ const RegisterNewDevice = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-const { backendUrl } = useContext(Context);
   const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   
   const { userId } = useParams(); 
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,50 +42,20 @@ const { backendUrl } = useContext(Context);
     
     try {
 
-        const payload = {
-          deviceId,
-        }
-        const response =  await axios.post(backendUrl + "/api/devices/is-registered", payload);
-      
-      
-      if (response.status !== 200) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Invalid device ID");
-      }
-
-        const isRegistered = response.data.isRegistered;
-        if (isRegistered) {
-            setError("Device ID is already registered. Please use a different ID.");
-            return;
-        }
-
-      
-      // Register the device
-      const registerResponse = await fetch(backendUrl + `/api/devices/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          deviceId,
-          deviceName,
-          deviceType,
-          userId
-        }),
-      });
-      
-      if (!registerResponse.ok) {
-        const errorData = await registerResponse.json();
-        throw new Error(errorData.message || "Failed to register device");
-      }
-      
-      setSuccess("Device registered successfully!");
-      
-      // Wait a moment then navigate back
-      setTimeout(() => {
-        navigate("/", { state: { refresh: true } });
-      }, 1500);
-      
+    // Register the device
+    const response = await axios.post(`${backendUrl}/api/devices/`, {
+      DeviceCode: deviceId,
+      Name: deviceName,
+      Type: deviceType,
+      Registered_User_Id: userId
+    });
+    
+    setSuccess("Device registered successfully!");
+    
+    // Wait a moment then navigate back
+    setTimeout(() => {
+      navigate(-1, { state: { refresh: true } });
+    }, 1500);
     } catch (error) {
       console.error("Error registering device:", error);
       setError(error.message);
