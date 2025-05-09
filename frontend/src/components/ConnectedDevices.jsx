@@ -164,7 +164,7 @@ export default function ConnectedDevices() {
                     <div className="flex items-center justify-between">
                         <h1 className="text-xl font-bold">Connected Devices</h1>
                         <button 
-                            onClick={() => window.location.href = '/register-device'}
+                            onClick={() => window.location.href = `/devices/register-device/${userId}`}
                             className="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 transition-colors"
                         >
                             Register New Device
