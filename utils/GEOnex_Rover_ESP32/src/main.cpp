@@ -62,6 +62,8 @@ void loop()
 
   }
 
+  publish_wifi_strength();
+
   mqttLoop();
 
   checkButtonPresses();

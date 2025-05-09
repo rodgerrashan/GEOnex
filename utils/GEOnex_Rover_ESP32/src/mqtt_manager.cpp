@@ -1,6 +1,7 @@
 #include <PubSubClient.h>
 #include "mqtt_manager.h"
 #include "wifi_manager.h"
+#include "wifi_strength.h"
 #include <ArduinoJson.h>
 #include <WiFi.h>
 #include "env.h"
@@ -100,6 +101,28 @@ void publishGPSData(float latitude, float longitude, int satellites, String time
     else
     {
         Serial.println("[FAILED]    Failed to publish GPS data");
+    }
+}
+
+// Function to publish RSSI and signal quality
+void publish_wifi_strength()
+{
+    int rssi = get_wifi_rssi();
+    int quality = get_signal_quality();
+
+    JsonDocument jsonDoc;
+    jsonDoc["device_id"] = DEVICE_ID;
+    jsonDoc["rssi"] = rssi;
+    jsonDoc["quality"] = quality;
+
+    char jsonBuffer[128];
+    serializeJson(jsonDoc, jsonBuffer);
+
+    if (client.publish(MQTT_TOPIC_DATA_LIVE, jsonBuffer))
+    {
+        Serial.printf("[INFO]  Device ID: %s, RSSI: %d, Quality: %d\n", DEVICE_ID, rssi, quality);
+        Serial.println("[INFO]  WiFi strength published successfully");
+        handleMQTTLED();
     }
 }
 

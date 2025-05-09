@@ -5,6 +5,7 @@
 
 void connectMQTT();
 void publishGPSData(float latitude, float longitude, int satellites, String time);
+void publish_wifi_strength();
 
 bool mqttConnected();
 void mqttLoop();
