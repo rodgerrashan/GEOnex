@@ -102,7 +102,7 @@ const checkDeviceInUse = async (req, res) => {
         }
 
         // Check if the device is in use by checking the Active_Project field
-        const isInUse = device.Status === 'Active' || device.Active_Project !== null;
+        const isInUse = device.Status === 'Active';
         res.json({ isInUse });
     } catch (error) {
         console.error("Error checking device in use:", error);

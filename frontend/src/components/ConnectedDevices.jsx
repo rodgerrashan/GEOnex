@@ -84,7 +84,7 @@ export default function ConnectedDevices() {
 
         try {
             // First check if device exists and is not connected to a project
-            const checkResponse = await fetch(`/api/devices/${DeviceCode}/check`);
+            const checkResponse = await fetch(`${backendUrl}/api/devices/${DeviceCode}/check`);
             if (!checkResponse.ok) {
                 throw new Error("Device not found");
             }
@@ -95,7 +95,7 @@ export default function ConnectedDevices() {
             }
 
             // Connect device to user
-            const connectResponse = await fetch(`/api/user/${userId}/add-device`, {
+            const connectResponse = await fetch(`${backendUrl}/api/user/${userId}/add-device`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
