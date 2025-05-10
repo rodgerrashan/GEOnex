@@ -11,6 +11,7 @@
 #include "mpu_manager.h"
 #include "mpu_correction.h"
 #include "pin_manager.h"
+#include "battery_manager.h"
 
 
 IMUManager mpu(SDA, SCL);
@@ -30,6 +31,9 @@ void setup()
 
   // Initialize MPU module
   mpu.begin();
+
+  // Initialize Battery monitor
+  initBatteryMonitor(); 
 
   Serial.println("[INFO]  ESP32 Setup complete");
 }
@@ -67,6 +71,12 @@ void loop()
   mqttLoop();
 
   checkButtonPresses();
+
+  // Read battery voltage
+  // Uncomment the next line to enable battery voltage reading
+  // float batteryVoltage = readBatteryVoltage();
+  // int batteryPercentage = getBatteryPercentage(batteryVoltage);
+  // Serial.printf("[INFO]  Battery Voltage: %.2fV, Percentage: %d%%\n", batteryVoltage, batteryPercentage);
 
   //Main loop delay
   delay(MAIN_LOOP_DELAY);

@@ -53,6 +53,9 @@
 #define SDA 21 
 #define SCL 22
 
+// Battery Monitor Pin
+#define BATTERY_PIN 35 // ADC pin for battery voltage monitoring
+
 // Angle Convertions 
 #define RAD_TO_DEG 57.295779513082320876798154814105
 #define DEG_TO_RAD 0.017453292519943295769236907684886

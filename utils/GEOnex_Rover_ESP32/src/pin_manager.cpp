@@ -13,8 +13,9 @@ void setupPins()
     pinMode(LED_MQTT, OUTPUT);
 
     // Set button pins as inputs with pull-up resistors
-    pinMode(BUTTON_RESET_WIFI, INPUT_PULLUP);
-    pinMode(BUTTON_SEND_GPS, INPUT_PULLUP);
+    pinMode(BUTTON_RESET_WIFI, INPUT_PULLDOWN);  // Note: INPUT_PULLDOWN is used for ESP32
+    // pinMode(BUTTON_RESET_WIFI, INPUT_PULLUP);  // Uncomment this line if using INPUT_PULLUP
+    pinMode(BUTTON_SEND_GPS, INPUT_PULLDOWN);
 
     // Power LED always ON
     digitalWrite(LED_POWER, HIGH);
