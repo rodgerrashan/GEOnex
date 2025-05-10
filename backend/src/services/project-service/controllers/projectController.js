@@ -4,21 +4,26 @@ const {ObjectId} = require('mongodb');
 
 // Create new project
 const createProject = async (req, res) => {
+    
     try {
-        const { Name, Description } = req.body;
+        const { UserId, Name, Description, BaseStation, ClientDevices } = req.body;
         
         const newProject = new Project({
-            // User_Id,
+            User_Id:UserId,
             Name,
             Description,
-            // Devices,
+            BaseStation,
+            ClientDevices,
             Created_On: new Date(),      
             Last_Modified: new Date() 
+
+
         });
 
         const savedProject = await newProject.save();
         res.status(201).json(savedProject);
     } catch (error) {
+        console.error("Error creating project:", error);
         res.status(500).json({ message: "Server error", error: error.message });
     }
 };

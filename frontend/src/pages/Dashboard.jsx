@@ -7,6 +7,9 @@ const Dashboard = () => {
 
   const { navigate, userData } = useContext(Context);
 
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const userId = '681e012572b69cef1e2c116b'; // Replace with actual user ID
+
   return (
     <div>
       <div
@@ -30,7 +33,7 @@ const Dashboard = () => {
             className="flex text-sm md:text-lg lg:text-xl
             items-center gap-1 text-s px-4 py-2 bg-black text-white rounded-lg"
             onClick={() => {
-              navigate('/newproject')
+              navigate(`/${userId}/newproject`)
             }}
           >
             <span>+</span>

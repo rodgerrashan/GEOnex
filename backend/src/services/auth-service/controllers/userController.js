@@ -114,6 +114,7 @@ const removeDeviceFromUser = async (req, res) => {
 const getUserBases = async( req, res) => {
     const userId = req.params.userId;
 
+
     try {
         const user = await User.findById(userId).populate('connectedDevices');
 
@@ -122,13 +123,7 @@ const getUserBases = async( req, res) => {
         }
 
         // Filter the devices to get only base stations
-        const baseStations = user.connectedDevices.filter(device => device.DeviceType === 'base');
-
-        if (baseStations.length === 0) {
-            console.log('No base stations found for this user');
-            return res.status(404).json({ message: 'No base stations found for this user' });
-        }
-
+        const baseStations = user.connectedDevices.filter(device => device.Type === "base");
         console.log('User base stations:', baseStations);
         res.status(200).json({ connectedDevices: baseStations });
     } catch (error) {
@@ -138,6 +133,25 @@ const getUserBases = async( req, res) => {
 }
 
 
+const getUserClientDevices = async( req, res) => {
+    const userId = req.params.userId;
+    try {
+        const user = await User.findById(userId).populate('connectedDevices');
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Filter the devices to get only base stations
+        const clientDevices = user.connectedDevices.filter(device => device.Type === "rover");
+        console.log('User base stations:', clientDevices);
+        res.status(200).json({ connectedDevices: clientDevices });
+    } catch (error) {
+        console.error('Error fetching user client Devices:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
 
 
-module.exports = {getUserData,addDeviceToUser,getUserDevices, removeDeviceFromUser, getUserBases}
+
+module.exports = {getUserData,addDeviceToUser,getUserDevices, removeDeviceFromUser, getUserBases, getUserClientDevices}
