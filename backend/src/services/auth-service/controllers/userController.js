@@ -27,6 +27,7 @@ const getUserData = async (req, res) => {
 
 
 const Device = require('../../device-service/models/Device'); 
+const { get } = require('mongoose');
 
 const addDeviceToUser = async (req, res) => {
     const userId = req.params.userId;
@@ -108,4 +109,35 @@ const removeDeviceFromUser = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 }
-module.exports = {getUserData,addDeviceToUser,getUserDevices, removeDeviceFromUser}
+
+
+const getUserBases = async( req, res) => {
+    const userId = req.params.userId;
+
+    try {
+        const user = await User.findById(userId).populate('connectedDevices');
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Filter the devices to get only base stations
+        const baseStations = user.connectedDevices.filter(device => device.DeviceType === 'base');
+
+        if (baseStations.length === 0) {
+            console.log('No base stations found for this user');
+            return res.status(404).json({ message: 'No base stations found for this user' });
+        }
+
+        console.log('User base stations:', baseStations);
+        res.status(200).json({ connectedDevices: baseStations });
+    } catch (error) {
+        console.error('Error fetching user base stations:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+
+
+
+module.exports = {getUserData,addDeviceToUser,getUserDevices, removeDeviceFromUser, getUserBases}

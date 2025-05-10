@@ -9,6 +9,16 @@ const NewProject = () => {
   const [projectName, setProjectName] = useState("");
   const [description, setDescription] = useState("");
 
+
+  const fetchAssignedBaseStations = async () => {
+    try {
+      const response = await axios.get(backendUrl + `/api/user/${userId}/devices/base-stations`);
+      console.log("Assigned Base Stations:", response.data);
+    } catch (error) {
+      console.error("Error fetching assigned base stations:", error);
+    }
+  }
+
   const handleSubmit = async () => {
     try {
       // Create payload with project name and description
