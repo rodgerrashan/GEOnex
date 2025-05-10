@@ -11,28 +11,65 @@ export default function ConnectedDevices() {
 
     // Mock user ID (in real app, this would come from auth context)
     const userId = "681e012572b69cef1e2c116b";
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
 
     useEffect(() => {
         fetchUserDevices();
     }, []);
 
-    const fetchUserDevices = async () => {
-        setLoading(true);
+
+    const handleDeleteDevice = async (deviceId, userId) => {
+        setError("");
+        setSuccess("");
         try {
-            // Replace with your actual API endpoint
-            const response = await fetch(`/api/users/${userId}/devices`);
+            const response = await fetch(`${backendUrl}/api/user/${userId}/remove-device`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ deviceId }),
+            });
+
             if (!response.ok) {
-                throw new Error("Failed to fetch devices");
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Failed to delete device");
             }
-            const data = await response.json();
-            setDevices(data);
-        } catch (error) {
-            console.error("Error fetching devices:", error);
-            setError("Failed to load connected devices");
-        } finally {
-            setLoading(false);
+
+            setSuccess("Device removed successfully!");
+            fetchUserDevices();
+
+
         }
-    };
+    catch(error){
+        console.error("Error deleting device:", error);
+        setError(error.message);
+    } finally {
+        setConnectingDevice(false);
+    }
+};
+
+    const fetchUserDevices = async () => {
+    setLoading(true);
+    try {
+        const response = await fetch(`${backendUrl}/api/user/${userId}/devices`);
+        if (!response.ok) {
+            throw new Error("Failed to fetch devices");
+        }
+
+        const data = await response.json();
+        console.log("Full response:", data);
+
+        // Access the connectedDevices array from the response
+        setDevices(data.connectedDevices || []);
+    } catch (error) {
+        console.error("Error fetching devices:", error);
+        setError("Failed to load connected devices");
+    } finally {
+        setLoading(false);
+    }
+};
+
 
     const handleConnectDevice = async (e) => {
         e.preventDefault();
@@ -49,8 +86,7 @@ export default function ConnectedDevices() {
             // First check if device exists and is not connected to a project
             const checkResponse = await fetch(`/api/devices/${DeviceCode}/check`);
             if (!checkResponse.ok) {
-                const errorData = await checkResponse.json();
-                throw new Error(errorData.message || "Device not found");
+                throw new Error("Device not found");
             }
 
             const deviceData = await checkResponse.json();
@@ -59,7 +95,7 @@ export default function ConnectedDevices() {
             }
 
             // Connect device to user
-            const connectResponse = await fetch(`/api/users/${userId}/devices`, {
+            const connectResponse = await fetch(`/api/user/${userId}/add-device`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -200,11 +236,12 @@ export default function ConnectedDevices() {
                             <span className="text-sm font-semibold">Battery</span>
                             <span className="text-sm font-semibold">Signal</span>
                             <span className="text-sm font-semibold">Status</span>
+                            <span className="text-sm font-semibold">Actions</span>
                         </div>
                     </div>
 
                     {loading ? (
-                        <div className="flex items-center justify-center w-full py-8">
+                        <div className="flex items-center justify-center w-full py-8 max-h-96">
                             <LoadingSpinner />
                         </div>
                     ) : (
@@ -212,24 +249,40 @@ export default function ConnectedDevices() {
                             <p className="text-gray-600 py-4 text-center">No devices connected yet.</p>
                         ) : (
                             devices.map((device) => (
-                                <div key={device.id} className="flex items-center justify-between bg-white p-3 rounded-lg shadow-sm border border-gray-100">
-                                    <span className="text-sm font-medium">{device.id}</span>
+                                <div key={device._id} className="flex items-center justify-between bg-white p-3 rounded-lg shadow-sm border border-gray-100">
+                                    <div className="flex flex-col">
+                                        <span className="text-sm font-medium">{device.Name}</span>
+                                        <span className="text-xs font-small">{device.DeviceCode}</span>
+                                    </div>
+                                    
                                     <div className="flex items-center gap-6">
                                         <div className="flex items-center gap-1 w-12">
-                                            {getDeviceTypeIcon(device.type)}
-                                            <span className="text-xs">{device.type}</span>
+                                            {getDeviceTypeIcon(device.Type)}
+                                            <span className="text-xs">{device.Type}</span>
                                         </div>
                                         <div className="flex items-center w-8">
-                                            {getBatteryIcon(device.batteryLevel)}
+                                            {getBatteryIcon(device.Battery_Percentage)}
                                         </div>
                                         <div className="flex items-center w-8">
-                                            {getSignalIcon(device.signalStrength)}
+                                            {getSignalIcon(device.Signal_Strength)}
                                         </div>
                                         <div className="w-16 flex justify-end">
                                             <span className={`text-xs px-2 py-1 rounded-full ${device.isOnline ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                                                 {device.isOnline ? 'Online' : 'Offline'}
                                             </span>
                                         </div>
+                                        <div>
+                                            <button 
+                                                onClick={() => handleDeleteDevice(device._id, userId)}
+                                                disabled={connectingDevice}     
+                                                className="text-red-500 hover:text-red-700"
+                                            >
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    
                                     </div>
                                 </div>
                             ))

@@ -43,6 +43,10 @@ const addDeviceToUser = async (req, res) => {
             return res.status(404).json({ message: 'Device not found' });
         }
 
+        // Check if the device is already assigned to the user
+        if (user.connectedDevices.includes(device._id)) {
+            return res.status(400).json({ message: 'Device is already assigned to this user' });
+        }
 
         // Add device to user's connectedDevices
         user.connectedDevices.push(device._id);
@@ -56,4 +60,25 @@ const addDeviceToUser = async (req, res) => {
 };
 
 
-module.exports = {getUserData,addDeviceToUser}
+const getUserDevices = async(req,res)=>{
+    const userId = req.params.userId;
+
+    try {
+        const user = await User.findById(userId).populate('connectedDevices');
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        if (user.connectedDevices.length === 0) {
+            console.log('No devices found for this user');
+            return res.status(404).json({ message: 'No devices found for this user' });
+        }
+        console.log('User devices:', user.connectedDevices);
+        res.status(200).json({ connectedDevices: user.connectedDevices });
+    } catch (error) {
+        console.error('Error fetching user devices:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+module.exports = {getUserData,addDeviceToUser,getUserDevices}
