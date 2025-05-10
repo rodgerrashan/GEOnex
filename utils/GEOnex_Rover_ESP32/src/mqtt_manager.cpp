@@ -112,16 +112,16 @@ void publish_wifi_strength()
 
     JsonDocument jsonDoc;
     jsonDoc["device_id"] = DEVICE_ID;
-    jsonDoc["rssi"] = rssi;
-    jsonDoc["quality"] = quality;
+    //jsonDoc["rssi"] = rssi;
+    jsonDoc["wifi quality"] = quality;
 
     char jsonBuffer[128];
     serializeJson(jsonDoc, jsonBuffer);
 
     if (client.publish(MQTT_TOPIC_DATA_LIVE, jsonBuffer))
     {
-        Serial.printf("[INFO]  Device ID: %s, RSSI: %d, Quality: %d\n", DEVICE_ID, rssi, quality);
-        Serial.println("[INFO]  WiFi strength published successfully");
+        Serial.printf("[INFO]  Device ID: %s, Wifi_Quality: %d\n", DEVICE_ID, quality);
+        //Serial.println("[INFO]  WiFi strength published successfully");
         handleMQTTLED();
     }
 }

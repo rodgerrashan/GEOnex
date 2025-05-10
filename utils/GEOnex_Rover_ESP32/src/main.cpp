@@ -36,29 +36,30 @@ void setup()
 
 void loop()
 {
-  // Process GPS Data
-  GPSData gpsInfo = processGPS();
-  // Update MPU data test
-  mpu.update();
+  GPSData gpsInfo = processGPS();  // Process GPS Data
+
+  mpu.update(); // Update MPU data test
 
   if (gpsInfo.isValid)
   {
     double lat = gpsInfo.latitude;
     double lon = gpsInfo.longitude;
+    int satellites = gpsInfo.satellites;
+    String time = gpsInfo.time;
 
-    publishGPSData(gpsInfo.latitude, gpsInfo.longitude, gpsInfo.satellites, gpsInfo.time);
-
+    // Correct GPS coordinates using MPU data
     // Get pitch and roll from MPU9250
     float pitch = mpu.getPitch();
     float roll = mpu.getRoll();
     
     correctGPSCoordinates(lat, lon, pitch, roll, POLE_HEIGHT);
 
-    Serial.print("Corrected GPS: ");
+    publishGPSData(lat, lon, satellites, time);
+
+    Serial.print("[Test]  Corrected GPS: ");
     Serial.print(lat, 6);
     Serial.print(", ");
     Serial.println(lon, 6);
-
   }
 
   publish_wifi_strength();

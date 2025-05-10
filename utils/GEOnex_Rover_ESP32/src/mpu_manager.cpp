@@ -27,7 +27,7 @@ void IMUManager::update()
     float az = sensor.accelZ();
 
     pitch = atan2(-ax, sqrt(ay * ay + az * az)) * 180.0 / PI;
-    Serial.print("Pitch: ");
+    Serial.print("[Test] Pitch: ");
     Serial.print(pitch);
     roll = atan2(ay, az) * 180.0 / PI; 
     Serial.print(" | Roll: ");
