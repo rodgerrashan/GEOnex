@@ -6,8 +6,29 @@ import { assets } from "../assets/assets";
 import PointRecorded from "./PointRecorded";
 import ConfirmDiscard from "./ConfirmDiscard";
 import { Context } from "../context/Context";
+import useSensorData from "./useSensorData";
 import { useParams } from "react-router-dom";
-import mqtt from "mqtt"; 
+
+// const markerIcon = new L.Icon({
+//   iconUrl: assets.location_point,
+//   iconSize: [40, 40],
+//   iconAnchor: [17, 46], //[left/right, top/bottom]
+//   popupAnchor: [0, -46], //[left/right, top/bottom]
+// });
+
+// const markerIconDevice = new L.Icon({
+//   iconUrl: assets.device_point,
+//   iconSize: [40, 40],
+//   iconAnchor: [17, 46], //[left/right, top/bottom]
+//   popupAnchor: [0, -46], //[left/right, top/bottom]
+// });
+
+// const markerIconBase = new L.Icon({
+//   iconUrl: assets.base_point,
+//   iconSize: [40, 40],
+//   iconAnchor: [17, 46], //[left/right, top/bottom]
+//   popupAnchor: [0, -46], //[left/right, top/bottom]
+// });
 
 // Hook to track window width
 function useWindowSize() {
@@ -19,96 +40,6 @@ function useWindowSize() {
     return () => window.removeEventListener("resize", handle);
   }, []);
   return size;
-}
-
-// Custom hook for MQTT data
-function useMQTTData(brokerUrl, topics) {
-  const [mqttData, setMqttData] = useState({
-    latitude: null,
-    longitude: null,
-    deviceId: null,
-    timestamp: null,
-    connectionStatus: "Disconnected"
-  });
-  const clientRef = useRef(null);
-
-  useEffect(() => {
-    // Initialize and connect MQTT client
-    const client = mqtt.connect(brokerUrl, {
-      clientId: `react_${Math.random().toString(16).slice(2, 8)}`,
-      clean: true,
-      reconnectPeriod: 3000
-    });
-
-    clientRef.current = client;
-
-    // Handle connection events
-    client.on('connect', () => {
-      console.log('Connected to MQTT broker');
-      setMqttData(prev => ({ ...prev, connectionStatus: "Connected" }));
-      
-      // Subscribe to provided topics
-      if (Array.isArray(topics)) {
-        topics.forEach(topic => {
-          client.subscribe(topic, (err) => {
-            if (err) console.error(`Error subscribing to ${topic}:`, err);
-            else console.log(`Subscribed to ${topic}`);
-          });
-        });
-      } else if (typeof topics === 'string') {
-        client.subscribe(topics, (err) => {
-          if (err) console.error(`Error subscribing to ${topics}:`, err);
-          else console.log(`Subscribed to ${topics}`);
-        });
-      }
-    });
-
-    client.on('message', (topic, message) => {
-      console.log(`Message received on ${topic}:`, message.toString());
-      try {
-        const payload = JSON.parse(message.toString());
-        
-        // Process and update state based on the message
-        // Adjust this part based on your actual MQTT message format
-        if (payload.lat !== undefined && payload.lng !== undefined) {
-          setMqttData(prev => ({
-            ...prev,
-            latitude: payload.lat,
-            longitude: payload.lng,
-            deviceId: payload.deviceId || prev.deviceId,
-            timestamp: payload.timestamp || new Date().toISOString()
-          }));
-        }
-      } catch (e) {
-        console.error("Error parsing MQTT message:", e);
-      }
-    });
-
-    client.on('error', (err) => {
-      console.error('MQTT connection error:', err);
-      setMqttData(prev => ({ ...prev, connectionStatus: "Error" }));
-    });
-
-    client.on('reconnect', () => {
-      console.log('Attempting to reconnect to MQTT broker');
-      setMqttData(prev => ({ ...prev, connectionStatus: "Reconnecting" }));
-    });
-
-    client.on('disconnect', () => {
-      console.log('Disconnected from MQTT broker');
-      setMqttData(prev => ({ ...prev, connectionStatus: "Disconnected" }));
-    });
-
-    // Cleanup function
-    return () => {
-      if (client) {
-        console.log('Cleaning up MQTT connection');
-        client.end(true);
-      }
-    };
-  }, [brokerUrl]); // Re-initialize if broker URL changes
-
-  return mqttData;
 }
 
 const MapSection = () => {
@@ -135,22 +66,20 @@ const MapSection = () => {
     setShowConfirmDiscard,
   } = useContext(Context);
 
-  // Define your MQTT broker URL and topics here
-  const MQTT_BROKER_URL = "mqtt://broker.example.com:1883"; // Replace with your broker URL
-  const MQTT_TOPICS = ["device/location", "device/status"]; // Replace with your topics
-  
-  // Use our custom hook to get MQTT data and connection status
-  const mqttData = useMQTTData(MQTT_BROKER_URL, MQTT_TOPICS);
+  // Define your WebSocket URL here
+  const WS_URL = "http://16.171.134.131:5000";
+  // Use our custom hook to get sensor data and connection status
+  const { sensorData, connectionStatus } = useSensorData(WS_URL);
 
-  // Update the map center when MQTT data updates
+  // Update the map center when sensor data updates
   useEffect(() => {
-    if (mqttData.latitude && mqttData.longitude) {
+    if (sensorData.latitude && sensorData.longitude) {
       setCenter({
-        lat: mqttData.latitude,
-        lng: mqttData.longitude,
+        lat: sensorData.latitude,
+        lng: sensorData.longitude,
       });
     }
-  }, [mqttData.latitude, mqttData.longitude]);
+  }, [sensorData.latitude, sensorData.longitude]);
 
   // Fetch previously recorded points from Context when projectId changes
   useEffect(() => {
@@ -211,23 +140,19 @@ const MapSection = () => {
       >
         <TileLayer
           url="https://api.maptiler.com/maps/basic-v2/256/{z}/{x}/{y}.png?key=adWhcNjZozsvPpfwl4Zo"
+          //https://api.maptiler.com/maps/outdoor-v2/256/{z}/{x}/{y}.png?key=adWhcNjZozsvPpfwl4Zo
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         <RecenterAutomatically center={center} />
         <MapFix />
-        
-        {/* Live Device Marker from MQTT */}
-        {mqttData.latitude && mqttData.longitude && (
-          <Marker position={[mqttData.latitude, mqttData.longitude]} icon={markerIcon}>
-            <Popup>
-              <b>Device</b>
-              <br />
-              {mqttData.deviceId || "Unknown Device"}
-              <br />
-              Last update: {new Date(mqttData.timestamp).toLocaleTimeString()}
-            </Popup>
-          </Marker>
-        )}
+        {/* Live Device Marker */}
+        <Marker position={[center.lat, center.lng]} icon={markerIcon}>
+          <Popup>
+            <b>Device</b>
+            <br />
+            {sensorData.deviceId || "Unknown Device"}
+          </Popup>
+        </Marker>
 
         {/* Base Device Marker */}
         <Marker position={[base.lat, base.lng]} icon={markerIconBase}>
@@ -254,13 +179,14 @@ const MapSection = () => {
         {loadingPoints && (
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[1500]">
             <p>Loading recorded points...</p>
+            {/* Replace with a spinner or skeleton loader if desired */}
           </div>
         )}
       </MapContainer>
 
-      {/* Display connection status */}
-      <div className="absolute top-4 left-4 bg-white p-2 rounded shadow z-[1000]">
-        <p>MQTT Status: {mqttData.connectionStatus}</p>
+      {/* Display connection status (optional for debugging) */}
+      <div className="absolute top-4 left-4 bg-white p-2 rounded shadow">
+        <p>Status: {connectionStatus}</p>
       </div>
 
       {/* Buttons on the bottom right */}
@@ -295,7 +221,7 @@ const MapSection = () => {
       {/* Show Point Recorded Popup */}
       {showPointRecorded && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[5px] z-[2000]">
-          <PointRecorded sensorData={mqttData} projectId={projectId} />
+          <PointRecorded sensorData={sensorData} projectId={projectId} />
         </div>
       )}
 
