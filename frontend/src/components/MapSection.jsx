@@ -54,7 +54,8 @@ const MapSection = () => {
   const { width } = useWindowSize();
 
   const [base, setBase] = useState({ lat: 7.254822, lng: 80.59252 });
-  const [rover, setRover] = useState({ lat: 7.254822, lng: 80.59215 });
+  
+
 
   const {
     navigate,
@@ -80,20 +81,23 @@ const MapSection = () => {
   const { baseSensorData, baseconnectionStatus } = useBaseSensorData(WS_URL, baseStation);
 
 
-  // Update rover and base positions based on sensor data
+  // Update rover positions based on sensor data
   useEffect(() => {
-    if (sensorData && sensorData.deviceId === baseStation) {
-      setBase({
-        lat: sensorData.latitude,
-        lng: sensorData.longitude,
-      });
-    } else if (rovers.includes(sensorData.deviceId)) {
+    console.log("Sensor Data:", sensorData);
+    if (sensorData && sensorData[rovers[0]] && sensorData[rovers[0]].latitude && sensorData[rovers[0]].longitude) {
       setRover({
-        lat: sensorData.latitude,
-        lng: sensorData.longitude,
-      }); 
+        lat: sensorData[rovers[0]].latitude,
+        lng: sensorData[rovers[0]].longitude,
+      });
+    }
+    if (sensorData && sensorData[rovers[1]] && sensorData[rovers[1]].latitude && sensorData[rovers[1]].longitude) {
+      setBase({
+        lat: sensorData[rovers[1]].latitude,
+        lng: sensorData[rovers[1]].longitude,
+      });
     }
   }, [sensorData, rovers]);
+
  
 
   // Update the base position when base sensor data updates
@@ -109,9 +113,35 @@ const MapSection = () => {
     }
   }, [baseSensorData, baseStation]);
 
+
+  useEffect(() => {
+    if (rover.lat && rover.lng && base.lat && base.lng) {
+      // Calculate the center point between rover and base
+      const centerLat = (rover.lat + base.lat) / 2;
+      const centerLng = (rover.lng + base.lng) / 2;
+      
+      setCenter({
+        lat: centerLat,
+        lng: centerLng
+      });
+    } else if (rover.lat && rover.lng) {
+      // If only rover position is available
+      setCenter({
+        lat: rover.lat,
+        lng: rover.lng
+      });
+    } else if (base.lat && base.lng) {
+      // If only base position is available
+      setCenter({
+        lat: base.lat,
+        lng: base.lng
+      });
+    }
+  }, [rover, base]);
+
   
 
-  // Update the map center when sensor data updates
+  
   useEffect(() => {
     console.log("Sensor Data:", sensorData);
     if (sensorData && 

@@ -2,22 +2,49 @@ import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 
 const useSensorData = (WS_URL, deviceIds = []) => {
-  const [sensorData, setSensorData] = useState(
-    
-      {
-        deviceName: "N/A",
-        deviceType: "N/A",
-        action: "N/A",
-        status: "N/A",
-        timestamp: new Date().toISOString(),
-        latitude: "N/A",
-        longitude: "N/A",
-      },
-    
-  );
+  const [sensorData, setSensorDataList] = useState([]);
  
   const [connectionStatus, setConnectionStatus] = useState("Disconnected ❌");
   const socketRef = useRef(null);
+
+
+  const updateSensorDataList = (newData) => {
+    console.log("Updating sensor data list with:", newData);
+    setSensorDataList(prevList => {
+      // Find if an entry with the same deviceName exists
+      const existingDeviceIndex = prevList.findIndex(
+        entry => entry.deviceName === newData.deviceName
+      );
+
+      // if deviceName: 'N/A is true do not add device
+      if (newData.deviceName === 'N/A') {
+        return prevList;
+      }
+      
+
+      if (existingDeviceIndex !== -1) {
+        // Update existing entry
+        const updatedList = [...prevList];
+        updatedList[existingDeviceIndex] = {
+          ...updatedList[existingDeviceIndex],
+          ...newData,
+          timestamp: newData.timestamp || new Date().toISOString()
+        };
+        return updatedList;
+      } else {
+        // Add new entry
+        return [...prevList, {
+          deviceName: newData.deviceName || 'Unknown Device',
+          deviceType: newData.deviceType || 'N/A',
+          action: newData.action || 'N/A',
+          status: newData.status || 'N/A',
+          timestamp: newData.timestamp || new Date().toISOString(),
+          latitude: newData.latitude || 'N/A',
+          longitude: newData.longitude || 'N/A'
+        }];
+      }
+    });
+  };
 
   useEffect(() => {
     console.log("Connecting to WebSocket at:", WS_URL);
@@ -59,21 +86,10 @@ const useSensorData = (WS_URL, deviceIds = []) => {
 
       // Try to parse value if it's a JSON string
       let parsedData = data;
+      updateSensorDataList(parsedData);
       
 
-    // Replace sensor data with new data
-    setSensorData(
-    {
-      deviceName: parsedData.deviceName || 'N/A',
-      deviceType: parsedData.deviceType || 'N/A',
-      action: parsedData.action || 'N/A',
-      status: parsedData.status || 'N/A',
-      timestamp: parsedData.timestamp || new Date().toISOString(),
-      latitude: parsedData.latitude || 6.6150,
-      longitude: parsedData.longitude || 79.968074
-    }
-    );
-    console.log("Updated sensorData:", sensorData);
+   
     };
 
     // Listen for room-based events for each device
