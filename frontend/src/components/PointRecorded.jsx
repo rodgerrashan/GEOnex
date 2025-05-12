@@ -22,6 +22,10 @@ const PointRecorded = ({ sensorData, baseData, projectId }) => {
     }
   }, [sensorData]);
 
+
+  
+
+
   const handleSave = async () => {
     // Ensure sensor data is available
     if (!clientDevice.latitude || !clientDevice.longitude) {
@@ -126,7 +130,8 @@ const PointRecorded = ({ sensorData, baseData, projectId }) => {
         <div className="mt-4 px-4 flex flex-col gap-2 ">
           <button className="bg-black text-white p-2 rounded-xl text-sm md:text-base"
           onClick={handleSave}
-          disabled={loading && !isTakePoint}
+          disabled={loading || !isTakePoint}
+          style={{ backgroundColor: (loading || !isTakePoint) ? "grey" : "black" }}
           >
             {loading ? "Saving..." : "Rename & Save"}
           </button>

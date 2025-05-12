@@ -8,6 +8,7 @@ import ConfirmDiscard from "./ConfirmDiscard";
 import { Context } from "../context/Context";
 import useSensorData from "./useSensorData";
 import useBaseSensorData from "./useBaseSensorData";
+import LoadingSpinner from "./LoadingSpinner";
 
 import { useParams } from "react-router-dom";
 
@@ -72,31 +73,7 @@ const MapSection = () => {
   const { sensorData, connectionStatus } = useSensorData(WS_URL, rovers);
   const { baseSensorData, baseconnectionStatus } = useBaseSensorData(WS_URL, baseStation);
 
-  // 
 
-
-  // // Update rover positions based on sensor data
-  // useEffect(() => {
-  //   console.log("Sensor Data:", sensorData);
-  //   if (Array.isArray(sensorData)) {
-  //     sensorData.forEach(data => {
-  //       if (data && 
-  //           data.deviceName && 
-  //           typeof data.latitude === 'number' && 
-  //           typeof data.longitude === 'number') {
-  //         // Update center position if it's the first rover
-  //         if (data.deviceName === rovers[0]) {
-  //           setCenter({
-  //             lat: data.latitude,
-  //             lng: data.longitude
-  //           });
-  //         }
-  //       }
-  //     });
-  //   }
-  // }, [sensorData, rovers]);
-
- 
 
   // Update the base position when base sensor data updates
   useEffect(() => {
@@ -115,35 +92,45 @@ const MapSection = () => {
 
   // Update the center position based on rover and base positions
   useEffect(() => {
-    // If we have valid sensor data from at least one rover
+    // If we have valid sensor data from rovers
     if (Array.isArray(sensorData) && sensorData.length > 0) {
-      const validRoverData = sensorData.find(data => 
-        data && typeof data.latitude === 'number' && typeof data.longitude === 'number'
+      const validRoverData = sensorData.filter(data => 
+      data && typeof data.latitude === 'number' && typeof data.longitude === 'number'
       );
 
-      if (validRoverData && base) {
-        // Calculate the midpoint between the first rover and base station
-        const centerLat = (validRoverData.latitude + base.lat) / 2;
-        const centerLng = (validRoverData.longitude + base.lng) / 2;
-        
+      if (validRoverData.length > 0) {
+      // Calculate average of all valid rover positions
+      const avgLat = validRoverData.reduce((sum, data) => sum + data.latitude, 0) / validRoverData.length;
+      const avgLng = validRoverData.reduce((sum, data) => sum + data.longitude, 0) / validRoverData.length;
+
+      if (base) {
+        // Include base station in the center calculation
         setCenter({
-          lat: centerLat,
-          lng: centerLng
+        lat: (avgLat + base.lat) / 2,
+        lng: (avgLng + base.lng) / 2
         });
-      }else if (base) {
+      } else {
+        // Use just the rover average if no base
+        setCenter({
+        lat: avgLat,
+        lng: avgLng
+        });
+      }
+      } else if (base) {
+      // Fallback to base position if no valid rovers
+      setCenter({
+        lat: base.lat,
+        lng: base.lng
+      });
+      }
+    } else if (base) {
         // If no valid rover data, set center to base position
         setCenter({
           lat: base.lat,
           lng: base.lng
         });
-      }else if (validRoverData){
-        // If no base data, set center to first rover position
-        setCenter({
-          lat: validRoverData.latitude,
-          lng: validRoverData.longitude
-        });
       }
-    }
+    
   }, [sensorData, base]);
 
   // Fetch previously recorded points from Context when projectId changes
@@ -233,25 +220,12 @@ const MapSection = () => {
 
           </Popup>
         </Marker>
-
-        {/* Recorded Points Markers (from Context)
-        {!loadingPoints &&
-          points.map((point) => (
-            <Marker
-              key={point._id}
-              position={[point.Latitude, point.Longitude]}
-              icon={markerIconDevice}
-            >
-              <Popup>
-                <b>{point.Name}</b>
-              </Popup>
-            </Marker>
-          ))} */}
+        
 
         {/* Loading Overlay */}
         {loadingPoints && (
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[1500]">
-            <p>Loading recorded points...</p>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[1500] backdrop-blur-0">
+            <LoadingSpinner size={10}/>
             {/* Replace with a spinner or skeleton loader if desired */}
           </div>
         )}
