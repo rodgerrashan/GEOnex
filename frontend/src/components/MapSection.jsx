@@ -151,7 +151,7 @@ const MapSection = () => {
   const pulseIcon = L.divIcon({
   className: '',
   html: `
-    <div class="relative w-5 h-5">
+    <div class="relative w-10 h-10">
       <div class="absolute w-full h-full bg-blue-500 rounded-full opacity-60 animate-pulse-signal"></div>
       <div class="absolute w-2.5 h-2.5 bg-blue-600 rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"></div>
     </div>
@@ -160,25 +160,19 @@ const MapSection = () => {
   iconAnchor: [10, 10],
 });
 
+const baseIcon = L.divIcon({
+  className: '',
+  html: `
+    <div class="relative w-12 h-12">
+      <div class="absolute w-full h-full bg-green-500 rounded-full opacity-60 animate-wave"></div>
+      <div class="absolute w-full h-full bg-green-500 rounded-full opacity-60 animate-wave-delay"></div>
+      <div class="absolute w-3 h-3 bg-green-600 rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"></div>
+    </div>
+  `,
+  iconSize: [24, 24],
+  iconAnchor: [12, 12],
+});
 
-  const markerIcon = new L.Icon({
-    iconUrl: assets.location_point,
-    iconSize,
-    iconAnchor: [iconSize[0] / 2, iconSize[1]],
-    popupAnchor: [0, -iconSize[1]],
-  });
-  const markerIconDevice = new L.Icon({
-    iconUrl: assets.device_point,
-    iconSize,
-    iconAnchor: [iconSize[0] / 2, iconSize[1]],
-    popupAnchor: [0, -iconSize[1]],
-  });
-  const markerIconBase = new L.Icon({
-    iconUrl: assets.base_point,
-    iconSize,
-    iconAnchor: [iconSize[0] / 2, iconSize[1]],
-    popupAnchor: [0, -iconSize[1]],
-  });
 
   return (
     <div className="w-full h-full relative ">
@@ -211,7 +205,7 @@ const MapSection = () => {
         ))}
 
         {/* Base Device Marker */}
-        <Marker position={[base.lat, base.lng]} icon={markerIconBase}>
+        <Marker position={[base.lat, base.lng]} icon={baseIcon}>
           <Popup>
             <b>Base</b>
             <p>Status: {baseconnectionStatus}</p>
