@@ -46,30 +46,22 @@ function useWindowSize() {
 
 const MapSection = () => {
   const { projectId } = useParams();
-
-  const [center, setCenter] = useState({ lat: 7.254822, lng: 80.59215 });
   const ZOOM_LEVEL = 20;
   const mapRef = useRef();
-
   const { width } = useWindowSize();
 
   const [base, setBase] = useState({ lat: 7.254822, lng: 80.59252 });
+  const [center, setCenter] = useState({ lat: 7.254822, lng: 80.59215 });
   
-
-
   const {
     navigate,
-    backendUrl,
-    points,
     fetchPoints,
-    setPoints,
     loadingPoints,
     showPointRecorded,
     setShowPointRecorded,
     showConfirmDiscard,
     setShowConfirmDiscard,
   } = useContext(Context);
-
 
   // mock devices 
   const rovers = ["device123", "device456"];
@@ -80,20 +72,26 @@ const MapSection = () => {
   const { sensorData, connectionStatus } = useSensorData(WS_URL, rovers);
   const { baseSensorData, baseconnectionStatus } = useBaseSensorData(WS_URL, baseStation);
 
+  // 
+
 
   // Update rover positions based on sensor data
   useEffect(() => {
     console.log("Sensor Data:", sensorData);
-    if (sensorData && sensorData[rovers[0]] && sensorData[rovers[0]].latitude && sensorData[rovers[0]].longitude) {
-      setRover({
-        lat: sensorData[rovers[0]].latitude,
-        lng: sensorData[rovers[0]].longitude,
-      });
-    }
-    if (sensorData && sensorData[rovers[1]] && sensorData[rovers[1]].latitude && sensorData[rovers[1]].longitude) {
-      setBase({
-        lat: sensorData[rovers[1]].latitude,
-        lng: sensorData[rovers[1]].longitude,
+    if (Array.isArray(sensorData)) {
+      sensorData.forEach(data => {
+        if (data && 
+            data.deviceName && 
+            typeof data.latitude === 'number' && 
+            typeof data.longitude === 'number') {
+          // Update center position if it's the first rover
+          if (data.deviceName === rovers[0]) {
+            setCenter({
+              lat: data.latitude,
+              lng: data.longitude
+            });
+          }
+        }
       });
     }
   }, [sensorData, rovers]);
@@ -114,45 +112,27 @@ const MapSection = () => {
   }, [baseSensorData, baseStation]);
 
 
-  useEffect(() => {
-    if (rover.lat && rover.lng && base.lat && base.lng) {
-      // Calculate the center point between rover and base
-      const centerLat = (rover.lat + base.lat) / 2;
-      const centerLng = (rover.lng + base.lng) / 2;
-      
-      setCenter({
-        lat: centerLat,
-        lng: centerLng
-      });
-    } else if (rover.lat && rover.lng) {
-      // If only rover position is available
-      setCenter({
-        lat: rover.lat,
-        lng: rover.lng
-      });
-    } else if (base.lat && base.lng) {
-      // If only base position is available
-      setCenter({
-        lat: base.lat,
-        lng: base.lng
-      });
-    }
-  }, [rover, base]);
 
-  
-
-  
+  // Update the center position based on rover and base positions
   useEffect(() => {
-    console.log("Sensor Data:", sensorData);
-    if (sensorData && 
-      typeof sensorData.latitude === 'number' && 
-      typeof sensorData.longitude === 'number') {
-      setCenter({
-      lat: sensorData.latitude,
-      lng: sensorData.longitude,
-      });
+    // If we have valid sensor data from at least one rover
+    if (Array.isArray(sensorData) && sensorData.length > 0) {
+      const validRoverData = sensorData.find(data => 
+        data && typeof data.latitude === 'number' && typeof data.longitude === 'number'
+      );
+
+      if (validRoverData && base) {
+        // Calculate the midpoint between the first rover and base station
+        const centerLat = (validRoverData.latitude + base.lat) / 2;
+        const centerLng = (validRoverData.longitude + base.lng) / 2;
+        
+        setCenter({
+          lat: centerLat,
+          lng: centerLng
+        });
+      }
     }
-  }, [sensorData]);
+  }, [sensorData, base]);
 
   // Fetch previously recorded points from Context when projectId changes
   useEffect(() => {
@@ -219,32 +199,26 @@ const MapSection = () => {
         <RecenterAutomatically center={center} />
 
         <MapFix />
-        {/* Live Device Markers
-        {rovers.map((deviceName) => {
-          console.log("Device Name:", deviceName);
-          const roverData = sensorData[deviceName];
-          if (roverData && roverData.latitude && roverData.longitude) {
-            return (
-              <Marker 
-                key={deviceName}
-                position={[roverData.latitude, roverData.longitude]} 
-                icon={markerIcon}
-              >
-                <Popup>
-                  <b>Device</b>
-                  <br />
-                  {roverData.deviceName || roverId}
-                </Popup>
-              </Marker>
-            );
-          }
-          return null;
-        })} */}
+        {/* Live Device Markers */}
+        {sensorData.map((data) => (
+          <Marker
+            key={data.deviceName}
+            position={[data.latitude, data.longitude]}
+            icon={markerIconDevice}
+          >
+            <Popup>
+              <b>{data.deviceName}</b>
+              <p>Status: {data.status}</p>
+            </Popup>
+          </Marker>
+        ))}
 
         {/* Base Device Marker */}
         <Marker position={[base.lat, base.lng]} icon={markerIconBase}>
           <Popup>
             <b>Base</b>
+            <p>Status: {baseconnectionStatus}</p>
+
           </Popup>
         </Marker>
 
