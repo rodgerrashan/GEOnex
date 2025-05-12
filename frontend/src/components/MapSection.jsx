@@ -7,6 +7,8 @@ import PointRecorded from "./PointRecorded";
 import ConfirmDiscard from "./ConfirmDiscard";
 import { Context } from "../context/Context";
 import useSensorData from "./useSensorData";
+import useBaseSensorData from "./useBaseSensorData";
+
 import { useParams } from "react-router-dom";
 
 // const markerIcon = new L.Icon({
@@ -52,6 +54,7 @@ const MapSection = () => {
   const { width } = useWindowSize();
 
   const [base, setBase] = useState({ lat: 7.254822, lng: 80.59252 });
+  const [rover, setRover] = useState({ lat: 7.254822, lng: 80.59215 });
 
   const {
     navigate,
@@ -68,11 +71,43 @@ const MapSection = () => {
 
 
   // mock devices 
-  const myDevices = ["device123", "device456"];
+  const rovers = ["device123", "device456"];
+  const baseStation = "base123";
   // Define your WebSocket URL here
   const WS_URL = "http://localhost:5000";
   // Use our custom hook to get sensor data and connection status
-  const { sensorData, connectionStatus } = useSensorData(WS_URL, myDevices);
+  const { sensorData, connectionStatus } = useSensorData(WS_URL, rovers);
+  const { baseSensorData, baseconnectionStatus } = useBaseSensorData(WS_URL, baseStation);
+
+
+  // Update rover and base positions based on sensor data
+  useEffect(() => {
+    if (sensorData && sensorData.deviceId === baseStation) {
+      setBase({
+        lat: sensorData.latitude,
+        lng: sensorData.longitude,
+      });
+    } else if (rovers.includes(sensorData.deviceId)) {
+      setRover({
+        lat: sensorData.latitude,
+        lng: sensorData.longitude,
+      }); 
+    }
+  }, [sensorData, rovers]);
+ 
+
+  // Update the base position when base sensor data updates
+  useEffect(() => {
+    console.log("Base Sensor Data:", baseSensorData);
+    if (baseSensorData &&
+      typeof baseSensorData.latitude === 'number' && 
+      typeof baseSensorData.longitude === 'number') {
+      setBase({
+        lat: baseSensorData.latitude,
+        lng: baseSensorData.longitude,
+      });
+    }
+  }, [baseSensorData, baseStation]);
 
   
 
@@ -139,7 +174,7 @@ const MapSection = () => {
   });
 
   return (
-    <div className="w-full h-full relative">
+    <div className="w-full h-full relative ">
       <MapContainer
         center={center}
         zoom={ZOOM_LEVEL}
@@ -152,15 +187,29 @@ const MapSection = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         <RecenterAutomatically center={center} />
+
         <MapFix />
-        {/* Live Device Marker */}
-        <Marker position={[center.lat, center.lng]} icon={markerIcon}>
-          <Popup>
-            <b>Device</b>
-            <br />
-            {sensorData.deviceName || "Unknown Device"}
-          </Popup>
-        </Marker>
+        {/* Live Device Markers
+        {rovers.map((deviceName) => {
+          console.log("Device Name:", deviceName);
+          const roverData = sensorData[deviceName];
+          if (roverData && roverData.latitude && roverData.longitude) {
+            return (
+              <Marker 
+                key={deviceName}
+                position={[roverData.latitude, roverData.longitude]} 
+                icon={markerIcon}
+              >
+                <Popup>
+                  <b>Device</b>
+                  <br />
+                  {roverData.deviceName || roverId}
+                </Popup>
+              </Marker>
+            );
+          }
+          return null;
+        })} */}
 
         {/* Base Device Marker */}
         <Marker position={[base.lat, base.lng]} icon={markerIconBase}>
@@ -169,7 +218,7 @@ const MapSection = () => {
           </Popup>
         </Marker>
 
-        {/* Recorded Points Markers (from Context) */}
+        {/* Recorded Points Markers (from Context)
         {!loadingPoints &&
           points.map((point) => (
             <Marker
@@ -181,7 +230,7 @@ const MapSection = () => {
                 <b>{point.Name}</b>
               </Popup>
             </Marker>
-          ))}
+          ))} */}
 
         {/* Loading Overlay */}
         {loadingPoints && (
@@ -195,6 +244,7 @@ const MapSection = () => {
       {/* Display connection status (optional for debugging) */}
       <div className="absolute top-4 left-4 bg-white p-2 rounded shadow">
         <p>Status: {connectionStatus}</p>
+        <p>Base Status: {baseconnectionStatus}</p>
       </div>
 
       {/* Buttons on the bottom right */}
