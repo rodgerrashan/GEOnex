@@ -1,31 +1,42 @@
 const {getDb} = require('../db.js');
 const Point = require('../models/Point');
+const {getProjectById} = require('../../project-service/controllers/projectController.js');
+const Project = require('../../project-service/models/Project.js');
 const {ObjectId} = require('mongodb');
 
 
 // Create new point
 const createPoint = async (req, res) => {
     try {
-        const {ProjectId, Name, Type, Latitude, Longitude, Accuracy, Timestamp } = req.body;
+        const {ProjectId, Name, Type, Latitude, Longitude, Accuracy, Timestamp, Device} = req.body;
         
         // Validate required fields (adjust based on your business logic)
         if (!Name || Latitude == null || Longitude == null || !Timestamp || !ProjectId) {
             return res.status(400).json({ error: "Missing required fields" });
         }
         
-        const newPoint = new Point({
-            
+        const newPoint = new Point({ 
             ProjectId,
             Name,
             Type: Type || "recorded",
             Latitude,
             Longitude,
             Accuracy: Accuracy || null,
-            Timestamp,
+            Timestamp: Timestamp || null,
+            Device: Device || null,
         });
 
         // Save the new point to the database
         const savedPoint = await newPoint.save();
+
+        // Update the project with the new point
+        await Project.findByIdAndUpdate(
+            ProjectId,
+            {
+                $push: { Points: savedPoint._id },
+                $inc: { Total_Points: 1 }
+            }
+        );
 
         // Return the saved point in the response
         return res.status(201).json(savedPoint);
@@ -46,6 +57,10 @@ const getPointsByProjectId = async (req, res) => {
 
         if (!projectId) {
             return res.status(400).json({ error: "Missing project id" });
+        }
+
+        if (!ObjectId.isValid(projectId)) {
+            return res.status(400).json({ error: "Invalid Project ID" });
         }
 
         const points = await db.collection('points').find({ ProjectId: new ObjectId(projectId) }).toArray();
@@ -70,14 +85,30 @@ const deletePoint = async (req, res) => {
             return res.status(400).json({ error: "Missing project id or point id" });
         }
 
+        if (!ObjectId.isValid(projectId) || !ObjectId.isValid(id)) {
+            return res.status(400).json({ error: "Invalid project id or point id" });
+        }
+
         const result = await db.collection('points').deleteOne({
             ProjectId: new ObjectId(projectId), 
             _id: new ObjectId(id)
         });
 
+        
+
         if (!result.deletedCount) {
             return res.status(404).json({ error: 'Point not found'});
         }
+
+        // Update the project with the new point
+        await Project.findByIdAndUpdate(
+            ProjectId,
+            {
+                $pull: { Points: id },
+                $inc: { Total_Points: -1 }
+            }
+        );
+
         return res.status(200).json({ message: "Point deleted successfully" });
     } catch (error) {
         console.error("Error deleting point:", error);

@@ -28,17 +28,18 @@ const useSensorData = (WS_URL, deviceIds = []) => {
         updatedList[existingDeviceIndex] = {
           ...updatedList[existingDeviceIndex],
           ...newData,
-          timestamp: newData.timestamp || new Date().toISOString()
+          timestamp: newData.timestamp || 'N/A,'
         };
         return updatedList;
       } else {
         // Add new entry
         return [...prevList, {
+          
           deviceName: newData.deviceName || 'Unknown Device',
           deviceType: newData.deviceType || 'N/A',
           action: newData.action || 'N/A',
           status: newData.status || 'N/A',
-          timestamp: newData.timestamp || new Date().toISOString(),
+          timestamp: newData.timestamp || 'N/A',
           latitude: newData.latitude || 'N/A',
           longitude: newData.longitude || 'N/A'
         }];

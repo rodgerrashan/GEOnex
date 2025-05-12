@@ -75,26 +75,26 @@ const MapSection = () => {
   // 
 
 
-  // Update rover positions based on sensor data
-  useEffect(() => {
-    console.log("Sensor Data:", sensorData);
-    if (Array.isArray(sensorData)) {
-      sensorData.forEach(data => {
-        if (data && 
-            data.deviceName && 
-            typeof data.latitude === 'number' && 
-            typeof data.longitude === 'number') {
-          // Update center position if it's the first rover
-          if (data.deviceName === rovers[0]) {
-            setCenter({
-              lat: data.latitude,
-              lng: data.longitude
-            });
-          }
-        }
-      });
-    }
-  }, [sensorData, rovers]);
+  // // Update rover positions based on sensor data
+  // useEffect(() => {
+  //   console.log("Sensor Data:", sensorData);
+  //   if (Array.isArray(sensorData)) {
+  //     sensorData.forEach(data => {
+  //       if (data && 
+  //           data.deviceName && 
+  //           typeof data.latitude === 'number' && 
+  //           typeof data.longitude === 'number') {
+  //         // Update center position if it's the first rover
+  //         if (data.deviceName === rovers[0]) {
+  //           setCenter({
+  //             lat: data.latitude,
+  //             lng: data.longitude
+  //           });
+  //         }
+  //       }
+  //     });
+  //   }
+  // }, [sensorData, rovers]);
 
  
 
@@ -129,6 +129,18 @@ const MapSection = () => {
         setCenter({
           lat: centerLat,
           lng: centerLng
+        });
+      }else if (base) {
+        // If no valid rover data, set center to base position
+        setCenter({
+          lat: base.lat,
+          lng: base.lng
+        });
+      }else if (validRoverData){
+        // If no base data, set center to first rover position
+        setCenter({
+          lat: validRoverData.latitude,
+          lng: validRoverData.longitude
         });
       }
     }
@@ -253,7 +265,7 @@ const MapSection = () => {
 
       {/* Buttons on the bottom right */}
       <div className="absolute bottom-4 right-2 flex flex-col gap-1 md:gap-2 z-[1000] items-center">
-        {/* Button 1 */}
+        {/* Taken points button */}
         <button
           className="bg-black p-2 md:p-3 rounded-full shadow-md w-8 h-8 md:w-12 md:h-12 flex items-center justify-center "
           onClick={() => {
@@ -283,7 +295,7 @@ const MapSection = () => {
       {/* Show Point Recorded Popup */}
       {showPointRecorded && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[5px] z-[2000]">
-          <PointRecorded sensorData={sensorData} projectId={projectId} />
+          <PointRecorded sensorData={sensorData} baseData={baseSensorData} projectId={projectId} />
         </div>
       )}
 

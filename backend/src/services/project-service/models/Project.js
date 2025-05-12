@@ -13,15 +13,7 @@ const projectSchema = new mongoose.Schema({
     Total_Points: { type: Number, default: 0 },
     BaseStation: { type: mongoose.Schema.Types.ObjectId, ref: "Device" , required: true },
     ClientDevices: [{ type: mongoose.Schema.Types.ObjectId, ref: "Device", required: true }],
-    Points: [
-      {
-        Latitude: { type: Number },
-        Longitude: { type: Number },
-        PointName: { type: String },
-        PointStatus: { type: String, default: "Not Surveyed" },
-        PointSurveyedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-      },
-    ],
+    Points: [{ type: mongoose.Schema.Types.ObjectId, ref: "Point" }]
   });
 
 

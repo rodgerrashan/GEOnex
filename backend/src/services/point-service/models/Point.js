@@ -1,13 +1,46 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const PointSchema = new mongoose.Schema({
-  ProjectId: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true },
-  Name: { type: String, required: true },
-  Type: { type: String },
-  Latitude: { type: Number, required: true },
-  Longitude: { type: Number, required: true },
-  Accuracy: { type: Number, default: null},
-  Timestamp: { type: Date, required: true }
+const pointSchema = new mongoose.Schema({
+    ProjectId: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "Project", 
+        required: true 
+    },
+    Name: { 
+        type: String, 
+        required: true 
+    },
+    Type: { 
+        type: String, 
+        default: "recorded" 
+    },
+    Latitude: { 
+        type: Number, 
+        required: true 
+    },
+    Longitude: { 
+        type: Number, 
+        required: true 
+    },
+    Accuracy: { 
+        type: Number, 
+        default: null 
+    },
+    Timestamp: { 
+        type: Date, 
+        required: true 
+    },
+    PointStatus: { 
+        type: String, 
+        default: "default" 
+    },
+    Device:{
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "devices", 
+        required: false 
+    }
+
+    
 }, { timestamps: true });
 
-module.exports = mongoose.model("Point", PointSchema);
+module.exports = mongoose.model('Point', pointSchema);
