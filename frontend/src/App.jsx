@@ -18,6 +18,8 @@ import Login from "./pages/Login";
 import EmailVerify from "./pages/EmailVerify";
 import ResetPassword from "./pages/ResetPassword";
 import RegisterNewDevice from "./pages/RegisterNewDevice";
+import 'leaflet/dist/leaflet.css';
+
 
 const App = () => {
   return (

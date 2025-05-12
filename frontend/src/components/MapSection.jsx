@@ -12,6 +12,7 @@ import LoadingSpinner from "./LoadingSpinner";
 
 import { useParams } from "react-router-dom";
 
+
 // const markerIcon = new L.Icon({
 //   iconUrl: assets.location_point,
 //   iconSize: [40, 40],
@@ -94,6 +95,7 @@ const MapSection = () => {
   useEffect(() => {
     // If we have valid sensor data from rovers
     if (Array.isArray(sensorData) && sensorData.length > 0) {
+
       const validRoverData = sensorData.filter(data => 
       data && typeof data.latitude === 'number' && typeof data.longitude === 'number'
       );
@@ -103,25 +105,6 @@ const MapSection = () => {
       const avgLat = validRoverData.reduce((sum, data) => sum + data.latitude, 0) / validRoverData.length;
       const avgLng = validRoverData.reduce((sum, data) => sum + data.longitude, 0) / validRoverData.length;
 
-      if (base) {
-        // Include base station in the center calculation
-        setCenter({
-        lat: (avgLat + base.lat) / 2,
-        lng: (avgLng + base.lng) / 2
-        });
-      } else {
-        // Use just the rover average if no base
-        setCenter({
-        lat: avgLat,
-        lng: avgLng
-        });
-      }
-      } else if (base) {
-      // Fallback to base position if no valid rovers
-      setCenter({
-        lat: base.lat,
-        lng: base.lng
-      });
       }
     } else if (base) {
         // If no valid rover data, set center to base position
@@ -163,6 +146,21 @@ const MapSection = () => {
   }, [width]);
 
   // Create icons with responsive size
+
+
+  const pulseIcon = L.divIcon({
+  className: '',
+  html: `
+    <div class="relative w-5 h-5">
+      <div class="absolute w-full h-full bg-blue-500 rounded-full opacity-60 animate-pulse-signal"></div>
+      <div class="absolute w-2.5 h-2.5 bg-blue-600 rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"></div>
+    </div>
+  `,
+  iconSize: [20, 20],
+  iconAnchor: [10, 10],
+});
+
+
   const markerIcon = new L.Icon({
     iconUrl: assets.location_point,
     iconSize,
@@ -203,7 +201,7 @@ const MapSection = () => {
           <Marker
             key={data.deviceName}
             position={[data.latitude, data.longitude]}
-            icon={markerIconDevice}
+            icon={pulseIcon}
           >
             <Popup>
               <b>{data.deviceName}</b>
