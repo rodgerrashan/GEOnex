@@ -45,7 +45,7 @@ const init = () => {
         const status = parts[2];
         const deviceId = parts[3];
         const value = payload.toString();
-        const deviceName = `${deviceType}-${deviceId}`;
+        const deviceName = `${deviceId}`;
 
         // Debug print
         console.log('Device:', deviceName);

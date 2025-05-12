@@ -2,7 +2,20 @@ import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 
 const useSensorData = (WS_URL, deviceIds = []) => {
-  const [sensorData, setSensorData] = useState([]);
+  const [sensorData, setSensorData] = useState(
+    
+      {
+        deviceName: "N/A",
+        deviceType: "N/A",
+        action: "N/A",
+        status: "N/A",
+        timestamp: new Date().toISOString(),
+        latitude: "N/A",
+        longitude: "N/A",
+      },
+    
+  );
+ 
   const [connectionStatus, setConnectionStatus] = useState("Disconnected ❌");
   const socketRef = useRef(null);
 
@@ -48,20 +61,18 @@ const useSensorData = (WS_URL, deviceIds = []) => {
       let parsedData = data;
       
 
-      // Append new sensor data to the list
-    setSensorData((prev) => [
-      ...prev,
-      {
-        deviceName: parsedData.deviceName || 'N/A',
-        deviceType: parsedData.deviceType || 'N/A',
-        action: parsedData.action || 'N/A',
-        status: parsedData.status || 'N/A',
-        timestamp: parsedData.timestamp || new Date().toISOString(),
-        latitude: parsedData.latitude || 'N/A',
-        longitude: parsedData.longitude || 'N/A'
-      },
-      
-    ]);
+    // Replace sensor data with new data
+    setSensorData(
+    {
+      deviceName: parsedData.deviceName || 'N/A',
+      deviceType: parsedData.deviceType || 'N/A',
+      action: parsedData.action || 'N/A',
+      status: parsedData.status || 'N/A',
+      timestamp: parsedData.timestamp || new Date().toISOString(),
+      latitude: parsedData.latitude || 6.6150,
+      longitude: parsedData.longitude || 79.968074
+    }
+    );
     console.log("Updated sensorData:", sensorData);
     };
 

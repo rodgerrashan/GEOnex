@@ -46,7 +46,7 @@ const MapSection = () => {
   const { projectId } = useParams();
 
   const [center, setCenter] = useState({ lat: 7.254822, lng: 80.59215 });
-  const ZOOM_LEVEL = 24;
+  const ZOOM_LEVEL = 20;
   const mapRef = useRef();
 
   const { width } = useWindowSize();
@@ -74,17 +74,20 @@ const MapSection = () => {
   // Use our custom hook to get sensor data and connection status
   const { sensorData, connectionStatus } = useSensorData(WS_URL, myDevices);
 
+  
+
   // Update the map center when sensor data updates
   useEffect(() => {
     console.log("Sensor Data:", sensorData);
-    if (sensorData.latitude && sensorData.longitude) {
+    if (sensorData && 
+      typeof sensorData.latitude === 'number' && 
+      typeof sensorData.longitude === 'number') {
       setCenter({
-        lat: sensorData.latitude,
-        lng: sensorData.longitude,
+      lat: sensorData.latitude,
+      lng: sensorData.longitude,
       });
-      
     }
-  }, [sensorData.latitude, sensorData.longitude]);
+  }, [sensorData]);
 
   // Fetch previously recorded points from Context when projectId changes
   useEffect(() => {
@@ -155,7 +158,7 @@ const MapSection = () => {
           <Popup>
             <b>Device</b>
             <br />
-            {sensorData.deviceId || "Unknown Device"}
+            {sensorData.deviceName || "Unknown Device"}
           </Popup>
         </Marker>
 

@@ -67,7 +67,7 @@ const sendToClients = (deviceName, deviceType, action, value, status) => {
     
     if (deviceName) {
         console.log(`Emitting to room [${deviceName}]:`, data);
-        io.to("device123").emit("device-data", data); 
+        io.to(deviceName).emit("device-data", data); 
     }
 };
 
