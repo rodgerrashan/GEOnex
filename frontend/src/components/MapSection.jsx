@@ -66,18 +66,23 @@ const MapSection = () => {
     setShowConfirmDiscard,
   } = useContext(Context);
 
+
+  // mock devices 
+  const myDevices = ["device123", "device456"];
   // Define your WebSocket URL here
-  const WS_URL = "http://16.171.134.131:5000";
+  const WS_URL = "http://localhost:5000";
   // Use our custom hook to get sensor data and connection status
-  const { sensorData, connectionStatus } = useSensorData(WS_URL);
+  const { sensorData, connectionStatus } = useSensorData(WS_URL, myDevices);
 
   // Update the map center when sensor data updates
   useEffect(() => {
+    console.log("Sensor Data:", sensorData);
     if (sensorData.latitude && sensorData.longitude) {
       setCenter({
         lat: sensorData.latitude,
         lng: sensorData.longitude,
       });
+      
     }
   }, [sensorData.latitude, sensorData.longitude]);
 

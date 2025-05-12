@@ -1,87 +1,86 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 
-const useSensorData = (WS_URL) => {
-    const [sensorData, setSensorData] = useState({
-        deviceId: "Loading...",
-        latitude: null,
-        longitude: null,
-        altitude: "Loading...",
-        speed: "Loading...",
-        status: "Loading...",
-        lastUpdate: null
+const useSensorData = (WS_URL, deviceIds = []) => {
+  const [sensorData, setSensorData] = useState([]);
+  const [connectionStatus, setConnectionStatus] = useState("Disconnected ❌");
+  const socketRef = useRef(null);
+
+  useEffect(() => {
+    console.log("Connecting to WebSocket at:", WS_URL);
+    const socket = io(WS_URL, {
+      transports: ["websocket"],
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      timeout: 10000,
     });
 
-    const [connectionStatus, setConnectionStatus] = useState("Connecting...");
-
-    useEffect(() => {
-        console.log("Connecting to WebSocket at:", WS_URL);
-        const socket = io(WS_URL, { 
-            transports: ["websocket"],
-            reconnectionAttempts: 5,
-            reconnectionDelay: 1000,
-            timeout: 10000
-    });
+    socketRef.current = socket;
 
     socket.on("connect", () => {
-        console.log("WebSocket Connected:", socket.id);
-        setConnectionStatus("Connected ✅");
-        
-        // Subscribe to tracking events
-        socket.emit("subscribe", "tracking");
+      console.log("WebSocket Connected:", socket.id);
+      setConnectionStatus("Connected ✅");
+
+      // Subscribe to each deviceId room
+      if (Array.isArray(deviceIds) && deviceIds.length > 0) {
+        deviceIds.forEach((deviceId) => {
+          console.log(`Subscribing to deviceId: ${deviceId}`);
+          socket.emit("subscribe", deviceId);
+        });
+      }
     });
 
     socket.on("connect_error", (error) => {
-        console.error("Connection Error:", error);
-        setConnectionStatus(`Connection Error: ${error.message} ❌`);
+      console.error("Connection Error:", error);
+      setConnectionStatus(`Connection Error: ${error.message} ❌`);
     });
 
     socket.on("disconnect", () => {
-        console.log("WebSocket Disconnected");
-        setConnectionStatus("Disconnected ❌");
+      console.log("WebSocket Disconnected");
+      setConnectionStatus("Disconnected ❌");
     });
 
-    // Flexible data handler that can work with both data formats
-    const handleData = (data) => {
-        console.log("Received data:", data);
+    // Unified handler for incoming device data
+    const handleDeviceData = (data) => {
+      console.log("Received device-data:", data);
 
-        // Check if data contains a value property that is a string containing JSON
-        let parsedData = data;
-        if (
-            data.value &&
-            typeof data.value === "string" &&
-            data.value.trim().startsWith("{")
-        ){
-        try {
-            const valueObj = JSON.parse(data.value);
-            // Merge the parsed object with the original data
-            parsedData = { ...data, ...valueObj };
-        } catch (e) {
-            console.error("Failed to parse value:", e);
-        }
-      }
+      // Try to parse value if it's a JSON string
+      let parsedData = data;
+      
 
-      setSensorData({
-        deviceId: parsedData.deviceId || "N/A",
-        // Set latitude and longitude as numbers (or null if missing)
-        latitude: parsedData.latitude ? parseFloat(parsedData.latitude) : null,
-        longitude: parsedData.longitude ? parseFloat(parsedData.longitude) : null,
-        altitude: parsedData.altitude || "N/A",
-        speed: parsedData.speed || "N/A",
-        status: parsedData.status || "N/A",
-        lastUpdate: new Date().toLocaleTimeString(),
-      });
+      // Append new sensor data to the list
+    setSensorData((prev) => [
+      ...prev,
+      {
+        deviceName: parsedData.deviceName || 'N/A',
+        deviceType: parsedData.deviceType || 'N/A',
+        action: parsedData.action || 'N/A',
+        status: parsedData.status || 'N/A',
+        timestamp: parsedData.timestamp || new Date().toISOString(),
+        latitude: parsedData.latitude || 'N/A',
+        longitude: parsedData.longitude || 'N/A'
+      },
+      
+    ]);
+    console.log("Updated sensorData:", sensorData);
     };
 
-    // Listen for live tracking updates and corrections
-    socket.on("live", handleData);
-    socket.on("corrections", handleData);
+    // Listen for room-based events for each device
+    if (Array.isArray(deviceIds)) {
+      deviceIds.forEach((deviceId) => {
+        socket.on("device-data", handleDeviceData); // If backend sends room message as "device-data"
+      });
+    }
+
+    // Optional: fallback to global events
+    socket.on("live", handleDeviceData);
+    socket.on("corrections", handleDeviceData);
 
     return () => {
-        console.log("Disconnecting socket");
-        socket.disconnect();
+      console.log("Disconnecting socket");
+      socket.disconnect();
     };
-  }, [WS_URL]);
+  }, [WS_URL, JSON.stringify(deviceIds)]);
 
   return { sensorData, connectionStatus };
 };

@@ -14,9 +14,19 @@ const init = (server) => {
     io.on("connection", (socket) => {
         console.log("New client connected:", socket.id);
 
-        socket.on("subscribe", (eventName) => {
-            console.log(`Client subscribed to: ${eventName}`);
-            socket.join(eventName);
+        // Handle subscriptions for multiple devices
+        socket.on("subscribe", (deviceIds) => {
+            if (Array.isArray(deviceIds)) {
+                deviceIds.forEach((deviceId) => {
+                    console.log(`Client ${socket.id} subscribed to device: ${deviceId}`);
+                    socket.join(deviceId); // Join the room named after the device ID
+                });
+            } else if (typeof deviceIds === "string") {
+                console.log(`Client ${socket.id} subscribed to device: ${deviceIds}`);
+                socket.join(deviceIds);
+            } else {
+                console.warn("Invalid subscription format");
+            }
         });
 
         socket.on("disconnect", () => {
@@ -28,8 +38,10 @@ const init = (server) => {
 };
 
 const sendToClients = (deviceName, deviceType, action, value, status) => {
+    console.log("Sending data to clients:");
+
     if (!io) return;
-    
+
     // Parse the value if it's a JSON string
     let parsedValue = value;
     if (typeof value === 'string' && value.trim().startsWith('{')) {
@@ -37,33 +49,25 @@ const sendToClients = (deviceName, deviceType, action, value, status) => {
             parsedValue = JSON.parse(value);
         } catch (e) {
             console.error("Failed to parse value:", e);
-            // Keep the original value if parsing fails
         }
     }
 
-    // Create the data object with the parsed value properties at the top level
-    const data = { 
-        deviceName, 
-        deviceType, 
-        action, 
+    // Construct the data object
+    const data = {
+        deviceName,
+        deviceType,
+        action,
         status,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        latitude: parsedValue?.latitude || null,
+        longitude: parsedValue?.longitude || null,
     };
-    
-    // If parsedValue is an object, add its properties directly to the data object
-    if (parsedValue && typeof parsedValue === 'object') {
-        Object.assign(data, parsedValue);
-    } else {
-        // Otherwise, just add the value as is
-        data.value = value;
-    }
 
-    if (action === "corrections") {
-        console.log("Emitting corrections:", data);
-        io.emit("corrections", data);
-    } else if (action === "tracking") {
-        console.log("Emitting tracking:", data);
-        io.emit("live", data);
+    
+    
+    if (deviceName) {
+        console.log(`Emitting to room [${deviceName}]:`, data);
+        io.to("device123").emit("device-data", data); 
     }
 };
 
