@@ -52,8 +52,8 @@ const ProjectDetails = () => {
        
 
         {/* Actions Section (Left) */}
-        <div className="col-span-1 lg:row-span-6 bg-white p-2 rounded-lg flex flex-col gap-4 overflow-auto">
-          <h2 className="text-base md:text-lg font-semibold">Actions</h2>
+        <div className="h-max bg-white p-5 rounded-lg flex flex-col gap-3 overflow-auto">
+          <h2 className="text-base md:text-lg font-semibold pb-5">Actions</h2>
           <div
             className="flex items-center gap-3 p-3 rounded-lg cursor-pointer"
             style={{ backgroundColor: "rgba(217, 217, 217, 1)" }}
@@ -128,8 +128,8 @@ const ProjectDetails = () => {
         </div>
 
         {/* Overview Section (Right) */}
-        <div className="col-span-1 row-span-3 bg-white p-4 rounded-lg flex flex-col gap-3">
-          <h2 className="text-base md:text-lg font-semibold">Overview</h2>
+        <div className=" bg-white p-5 rounded-lg flex flex-col gap-5 h-max ">
+          <h2 className="text-base md:text-lg font-semibold pb-5">Overview</h2>
 
           <div className="flex justify-between items-center">
             <span className="font-semibold text-sm md:text-base">Created On</span>
@@ -164,8 +164,8 @@ const ProjectDetails = () => {
               className="px-3 py-1 rounded-xl text-xs md:text-sm w-32 text-center"
               style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
             >
-              {/* {project.Total_Points || 0} */}
-              2
+              {project.Total_Points || 0}
+              
             </span>
           </div>
 
