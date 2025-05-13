@@ -1,0 +1,116 @@
+/* MarkerStyles.css */
+
+/* Modern marker styling */
+.modern-marker-icon {
+  background-color: transparent !important;
+}
+
+.marker-pin {
+  width: 50px;
+  height: 30px;
+  border-radius: 50% 50% 50% 0;
+  background-color: #3498db;
+  position: absolute;
+  transform: rotate(-45deg);
+  left: 50%;
+  top: 50%;
+  margin: -15px 0 0 -15px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.marker-pin::after {
+  content: '';
+  width: 20px;
+  height: 20px;
+  margin: 5px 0 0 5px;
+  background-color: white;
+  position: absolute;
+  border-radius: 50%;
+}
+
+/* Pulse animation for markers */
+.marker-pulse {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  height: 45px;
+  width: 45px;
+  position: absolute;
+  left: -7.5px;
+  top: -7.5px;
+  z-index: -1;
+  opacity: 0;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* Modern tooltip styling with blurred background */
+.modern-tooltip {
+  background-color: rgba(255, 255, 255, 0) !important;
+  color: #333 !important;
+  border: 0px solid rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0) !important;
+  border-radius: 10px !important;
+  padding: 8px 2px !important;
+  font-family: 'Segoe UI', 'Helvetica Neue', sans-serif !important;
+  font-size: 6px !important;
+  line-height: 1 !important;
+  min-width: 75px;
+  text-align: center;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.modern-tooltip:before {
+  border-top-color: white !important;
+}
+
+.point-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+  display: block;
+}
+
+.point-sublabel {
+  display: block;
+  font-size: 12px;
+  color: #777;
+  margin-top: 4px;
+}
+
+/* Optional: Custom styling for different point categories */
+.marker-pin.important {
+  background-color: #e74c3c;
+}
+.marker-pin.featured {
+  background-color: #2ecc71;
+}
+.marker-pin.historical {
+  background-color: #9b59b6;
+}
+
+/* No points message styling */
+.no-points-message {
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 10px 15px;
+  border-radius: 4px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  font-weight: 500;
+  color: #555;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}

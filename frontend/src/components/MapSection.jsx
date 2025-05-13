@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { MapContainer, TileLayer, useMap, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, useMap, Marker, Popup, Tooltip } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { assets } from "../assets/assets";
@@ -11,7 +11,7 @@ import useBaseSensorData from "./useBaseSensorData";
 import LoadingSpinner from "./LoadingSpinner";
 
 import { useParams } from "react-router-dom";
-
+import './MarkerStyles.css';
 import MapPopUp from "./MapPopUp";
 
 
@@ -241,9 +241,9 @@ const baseIcon = L.divIcon({
               position={[point.Latitude, point.Longitude]}
               icon={staticTakenPointIcon}
             >
-              <Popup>
-                <b>{point.Name}</b>
-              </Popup>
+              <Tooltip permanent={true} direction="top" offset={[0, -10]} className="modern-tooltip">
+              <span className="point-name">{point.Name || "Unnamed Point"}</span>
+            </Tooltip>
             </Marker>
           ))}
         
