@@ -167,33 +167,41 @@ An overview of the MQTT topics used in the IoT project, including details on how
 `Please note this section @gssamuditha`
 
 1. Rover Live Data
-   * Topic `tracking/r/live/{deviceId}/data`
+   * Topic `tracking/r/live/{deviceId = device123}/data`
    * Description
         Subscribe to this topic to receive live data from all rovers.
     * Payload:
   ```sh
     {
-    "deviceId": "rover1",
-    "latitude": 45.1234,
-    "longitude": 93.1234,
-    "status": "active",
-    "timestamp": "2025-02-27T12:05:00Z"
-    }
+  "deviceId": "device123",
+  "deviceType": "rover",
+  "action": "tracking",
+  "latitude": 7.29,
+  "longitude": 80.5923,
+  "status": "active",
+  "timestamp": "2025-02-27T12:05:00Z",
+  "battery": 89,
+  "signal": -23
+  }
 
   ```
 2. Base Live Data
-   * Topic `tracking/b/live/{deviceId}/data`
+   * Topic `tracking/b/live/{deviceId = base123}/data`
    * Description
         Subscribe to this topic to receive live data from all base stations. 
     * Payload:
   ```sh
     {
-    "deviceId": "base2031",
-    "latitude": 45.1234,
-    "longitude": 93.1234,
-    "status": "active",
-    "timestamp": "2025-02-27T12:05:00Z"
-    }
+  "deviceId": "base123",
+  "deviceType": "base",
+  "action": "tracking",
+  "latitude": 7.292,
+  "longitude": 80.5915,
+  "status": "active",
+  "timestamp": "2025-02-27T12:05:00Z",
+  "battery": 51,
+  "signal": -10
+  }
 
   ```
 3. Base Correction Data
