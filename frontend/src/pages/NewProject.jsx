@@ -167,7 +167,7 @@ const NewProject = () => {
             
             <div className="absolute right-3 top-14 -translate-y-1/2 pointer-events-none">
             {baseloading ? (
-              <LoadingSpinner size={16} className="animate-spin text-gray-500" />
+              <LoadingSpinner size={6} className="animate-spin text-gray-500" />
             ) : (
               <ChevronDown size={16} className="text-gray-500" />
             )}

@@ -1,5 +1,7 @@
 import React from "react";
 import ConnectedDevices from "../components/ConnectedDevices";
+import RegisteredDevices from "../components/RegisteredDevices";
+
 
 const Devices = () => {
   return (
@@ -20,7 +22,7 @@ const Devices = () => {
             <ConnectedDevices />
           </div>
           <div className="bg-white p-4 rounded-lg">
-            Available devices
+            <RegisteredDevices/>
           </div>
         </div>
 

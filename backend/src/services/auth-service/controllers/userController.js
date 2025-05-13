@@ -153,5 +153,26 @@ const getUserClientDevices = async( req, res) => {
 }
 
 
+const getUserRegisteredDevices = async (req, res) => {
+    const userId = req.params.userId;
 
-module.exports = {getUserData,addDeviceToUser,getUserDevices, removeDeviceFromUser, getUserBases, getUserClientDevices}
+    try {
+        
+        const devices = await Device.find({ Registered_User_Id: userId });
+
+        if (!devices || devices.length === 0) {
+            return res.status(404).json({ message: 'Registered devices not found' });
+        }
+
+        console.log(devices);
+        res.status(200).json({ devices });
+    } catch (error) {
+        console.error('Error fetching user registered devices:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+
+
+
+module.exports = {getUserData,addDeviceToUser,getUserDevices, removeDeviceFromUser, getUserBases, getUserClientDevices, getUserRegisteredDevices}

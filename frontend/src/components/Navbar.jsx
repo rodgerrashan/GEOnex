@@ -52,7 +52,7 @@ const Navbar = ({ mobileOpen = false, onClose = () => {} }) => {
     "z-40", // stays above content
     "fixed md:static inset-0 left-0", // overlay on mobile, normal on desktop
     "flex flex-col",
-    "w-full md:w-[15%]", // full-width on phones, 15 % on ≥ md
+    "w-full md:w-[20%] ", // full-width on phones, 15 % on ≥ md
     "overflow-y-auto",
     navbarHeightClass,
     "transform transition-transform duration-300",
@@ -97,9 +97,9 @@ const Navbar = ({ mobileOpen = false, onClose = () => {} }) => {
             to={to}
             onClick={handleNavClick}
             className={({ isActive }) =>
-              `block w-full flex items-center justify-center md:justify-start gap-3 px-4 lg:px-10 py-2 rounded transition ${
+              `w-full flex items-center justify-center md:justify-start gap-3 px-4 lg:px-10 py-2 transition ${
                 isActive
-                  ? "bg-white shadow-md font-semibold"
+                  ? "bg-white font-semibold"
                   : "hover:bg-gray-300"
               }`
             }

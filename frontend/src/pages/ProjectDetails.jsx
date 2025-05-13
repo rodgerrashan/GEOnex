@@ -6,6 +6,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
 import relativeTime from "dayjs/plugin/relativeTime";
+import PageTopic from "../components/PageTopic";
 
 // Extend dayjs with relativeTime
 dayjs.extend(relativeTime);
@@ -17,7 +18,7 @@ const ProjectDetails = () => {
 
   const handleDelete = async () => {
     await removeProject(projectId);
-    navigate("/projects");  
+    navigate(-1);  // Go back
   };
 
   useEffect(() => {
@@ -43,30 +44,15 @@ const ProjectDetails = () => {
 
   return (
     <div>
+      <PageTopic topic={project.Name}  intro={project.Description} />
       <div className="grid grid-cols-1  
       md:grid-cols-2 lg:grid-cols-3 lg:grid-rows-7
-      gap-4 lg:h-screen">
+      gap-4 lg:h-screen lg:ml-14">
 
-        <div className="col-span-1 md:col-span-2 lg:col-span-3 flex items-center gap-3">
-          {/* Left arrow button */}
-          <button
-            className="text-2xl"
-            onClick={() => {
-              navigate("/projects");
-            }}
-          >
-            <img className="w-6 h-6 md:w-8 md:h-8" src={assets.arrow} alt="goback" />
-          </button>
-
-          {/* Title & subtitle */}
-          <div>
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold">{project.Name}</h1>
-            <p className="text-sm md:text-base lg:text-lg mt-1">{project.Description}</p>
-          </div>
-        </div>
+       
 
         {/* Actions Section (Left) */}
-        <div className="col-span-1 lg:row-span-6 bg-white p-4 rounded-lg flex flex-col gap-4 overflow-auto">
+        <div className="col-span-1 lg:row-span-6 bg-white p-2 rounded-lg flex flex-col gap-4 overflow-auto">
           <h2 className="text-base md:text-lg font-semibold">Actions</h2>
           <div
             className="flex items-center gap-3 p-3 rounded-lg cursor-pointer"
