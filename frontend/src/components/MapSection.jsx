@@ -60,6 +60,8 @@ const MapSection = () => {
   const {
     navigate,
     fetchPoints,
+    points,
+    setPoints,
     loadingPoints,
     showPointRecorded,
     setShowPointRecorded,
@@ -107,7 +109,14 @@ const MapSection = () => {
       const avgLat = validRoverData.reduce((sum, data) => sum + data.latitude, 0) / validRoverData.length;
       const avgLng = validRoverData.reduce((sum, data) => sum + data.longitude, 0) / validRoverData.length;
 
+      setCenter({
+        lat:avgLat,
+        lng:avgLng
+      });
+
       }
+
+
     } else if (base) {
         // If no valid rover data, set center to base position
         setCenter({
@@ -147,7 +156,16 @@ const MapSection = () => {
     setIconSize(getSize());
   }, [width]);
 
-  // Create icons with responsive size
+  const staticTakenPointIcon = L.divIcon({
+  className: '',
+  html: `
+    <div class="relative w-3 h-3">
+      <div class="w-full h-full bg-blue-600 rounded-full border-2 border-white shadow-md"></div>
+    </div>
+  `,
+  iconSize: [24, 24],
+  iconAnchor: [12, 12],
+});
 
 
   const pulseIcon = L.divIcon({
@@ -166,9 +184,10 @@ const baseIcon = L.divIcon({
   className: '',
   html: `
     <div class="relative w-12 h-12">
-      <div class="absolute w-full h-full bg-green-500 rounded-full opacity-60 animate-wave"></div>
-      <div class="absolute w-full h-full bg-green-500 rounded-full opacity-60 animate-wave-delay"></div>
-      <div class="absolute w-3 h-3 bg-green-600 rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"></div>
+      <div class="absolute w-full h-full bg-gray-500 rounded-full opacity-60 animate-wave"></div>
+      <div class="absolute w-full h-full bg-gray-600 rounded-full opacity-60 animate-wave-delay"></div>
+      
+      <div class="absolute w-3 h-3 bg-gray-900 rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"></div>
     </div>
   `,
   iconSize: [24, 24],
@@ -213,6 +232,20 @@ const baseIcon = L.divIcon({
 
 
         </Marker>
+
+        {/* Recorded Points Markers (from Context) */}
+        {!loadingPoints &&
+          points.map((point) => (
+            <Marker
+              key={point._id}
+              position={[point.Latitude, point.Longitude]}
+              icon={staticTakenPointIcon}
+            >
+              <Popup>
+                <b>{point.Name}</b>
+              </Popup>
+            </Marker>
+          ))}
         
 
         {/* Loading Overlay */}
