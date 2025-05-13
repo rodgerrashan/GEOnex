@@ -214,13 +214,17 @@ const baseIcon = L.divIcon({
         {/* Live Device Markers */}
         {sensorData.map((data) => (
           <Marker
-            key={data.deviceName}
+            key={data.deviceName}  
             position={[data.latitude, data.longitude]}
             icon={pulseIcon}
           >
             <Popup>
               <MapPopUp battery={data.battery} deviceName={data.deviceName} signal={data.signal} status={data.status}/>
             </Popup>
+
+            <Tooltip permanent={true} direction="right" offset={[10, 10]} className="modern-tooltip">
+              <span className="point-name">{data.deviceName || "Rover"}</span>
+            </Tooltip>
           </Marker>
         ))}
 
@@ -229,6 +233,10 @@ const baseIcon = L.divIcon({
           <Popup >
  <MapPopUp battery={baseSensorData.battery} deviceName={baseSensorData.deviceName} signal={baseSensorData.signal} status={baseSensorData.status}/>
 </Popup>
+
+            <Tooltip permanent={true} direction="right" offset={[10, 10]} className="modern-tooltip">
+              <span className="point-name">{baseSensorData.deviceName || "Base"}</span>
+            </Tooltip>
 
 
         </Marker>
