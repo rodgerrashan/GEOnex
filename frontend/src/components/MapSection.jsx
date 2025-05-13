@@ -14,28 +14,6 @@ import { useParams } from "react-router-dom";
 import './MarkerStyles.css';
 import MapPopUp from "./MapPopUp";
 
-
-// const markerIcon = new L.Icon({
-//   iconUrl: assets.location_point,
-//   iconSize: [40, 40],
-//   iconAnchor: [17, 46], //[left/right, top/bottom]
-//   popupAnchor: [0, -46], //[left/right, top/bottom]
-// });
-
-// const markerIconDevice = new L.Icon({
-//   iconUrl: assets.device_point,
-//   iconSize: [40, 40],
-//   iconAnchor: [17, 46], //[left/right, top/bottom]
-//   popupAnchor: [0, -46], //[left/right, top/bottom]
-// });
-
-// const markerIconBase = new L.Icon({
-//   iconUrl: assets.base_point,
-//   iconSize: [40, 40],
-//   iconAnchor: [17, 46], //[left/right, top/bottom]
-//   popupAnchor: [0, -46], //[left/right, top/bottom]
-// });
-
 // Hook to track window width
 function useWindowSize() {
   const [size, setSize] = useState({ width: window.innerWidth });
@@ -94,6 +72,14 @@ const MapSection = () => {
   }, [baseSensorData, baseStation]);
 
 
+  // Fetch previously recorded points from Context when projectId changes
+  useEffect(() => {
+    if (projectId) {
+      fetchPoints(projectId);
+    }
+  }, [projectId]);
+
+
 
   // Update the center position based on rover and base positions
   useEffect(() => {
@@ -117,22 +103,25 @@ const MapSection = () => {
       }
 
 
-    } else if (base) {
+    } else if (points && points.length > 0) {
+          // Calculate average of fetched points
+          const avgLat = points.reduce((sum, point) => sum + point.Latitude, 0) / points.length;
+          const avgLng = points.reduce((sum, point) => sum + point.Longitude, 0) / points.length;
+          setCenter({
+            lat: avgLat,
+            lng: avgLng
+          });
+        }else if (base) {
         // If no valid rover data, set center to base position
         setCenter({
           lat: base.lat,
           lng: base.lng
         });
-      }
+      } 
     
-  }, [sensorData, base]);
+  }, [sensorData, base, points]);
 
-  // Fetch previously recorded points from Context when projectId changes
-  useEffect(() => {
-    if (projectId) {
-      fetchPoints(projectId);
-    }
-  }, [projectId]);
+  
 
   // Recenter the map when center state changes
   const RecenterAutomatically = ({ center }) => {
