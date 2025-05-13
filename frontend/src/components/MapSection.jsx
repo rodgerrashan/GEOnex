@@ -185,12 +185,12 @@ const baseIcon = L.divIcon({
 
 
   return (
-    <div className="w-full h-full relative ">
+    <div className="w-full h-full relative p-2 bg-gray " style={{ backgroundColor: 'rgb(232, 232, 232)' }}>
       <MapContainer
         center={center}
         zoom={ZOOM_LEVEL}
         ref={mapRef}
-        className="w-full h-full"
+        className="w-full h-full p-2"
       >
         <TileLayer
           url="https://api.maptiler.com/maps/basic-v2/256/{z}/{x}/{y}.png?key=adWhcNjZozsvPpfwl4Zo"

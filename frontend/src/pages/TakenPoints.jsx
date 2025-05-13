@@ -61,9 +61,7 @@ const TakenPoints = () => {
             {/* refresh button */}
             <button
               className="text-2xl"
-              //   onClick={() => {
-              //     navigate("/");
-              //   }}
+              onClick={() => window.location.reload()}
             >
               <img
                 className="w-7 h-7 md:w-9 md:h-9"
