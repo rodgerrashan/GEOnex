@@ -44,8 +44,7 @@ const Navbar = ({ mobileOpen = false, onClose = () => {} }) => {
     "fixed md:static inset-0 z-40",
     "flex flex-col",
     "bg-gradient-to-b from-gray-100 to-gray-200",
-    
-    "w-64 md:w-52 lg:w-64",
+    "w-64 md:w-52 lg:w-64 h-screen overflow-hidden",
     "transition-all duration-300 ease-in-out",
     isScrolled ? "md:w-64" : "md:w-72 lg:w-80",
     mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
@@ -67,6 +66,7 @@ const Navbar = ({ mobileOpen = false, onClose = () => {} }) => {
       )}
     
       <aside className={sidebarClasses}>
+        <div className="flex flex-col h-full overflow-y-auto scrollbar-hide">
         {/* Close button with improved styling */}
         <button
           onClick={onClose}
@@ -143,6 +143,7 @@ const Navbar = ({ mobileOpen = false, onClose = () => {} }) => {
           </svg>
           Log out
         </button>
+        </div>
       </aside>
     </>
   );
