@@ -41,7 +41,9 @@ const useSensorData = (WS_URL, deviceIds = []) => {
           status: newData.status || 'N/A',
           timestamp: newData.timestamp || 'N/A',
           latitude: newData.latitude || 'N/A',
-          longitude: newData.longitude || 'N/A'
+          longitude: newData.longitude || 'N/A',
+          battery: newData.battery || 'N/A',
+          signal: newData.signal || 'N/A',
         }];
       }
     });

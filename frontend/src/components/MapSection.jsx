@@ -207,10 +207,40 @@ const baseIcon = L.divIcon({
         {/* Base Device Marker */}
         <Marker position={[base.lat, base.lng]} icon={baseIcon}>
           <Popup>
-            <b>Base</b>
-            <p>Status: {baseconnectionStatus}</p>
+  <div class="p-2 w-56 text-sm">
+    {/* Header */}
+      <div class="flex items-center space-x-2 mb-1">
+        <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20"></svg>
+        <path d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"/>
+        
+        <span class="font-semibold truncate">{base.deviceName}</span>
+      </div>
 
-          </Popup>
+      {/* Status */}
+    <div class="flex items-center space-x-1 mb-1">
+      <span class="text-gray-600">Status:</span>
+      <span class="px-1.5 py-0.5 bg-green-100 text-green-700 rounded text-xs">{base.status}</span>
+    </div>
+
+    {/* Battery & Signal */}
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-1">
+        <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M16 4h-1V2h-6v2H8a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V6a2 2 0 00-2-2zM8 6h8v12H8V6z"/>
+        </svg>
+        <span>{base.batteryLevel}%</span>
+      </div>
+      <div class="flex items-center space-x-1">
+        <svg class="w-4 h-4 text-blue-500 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M2 14s2-4 6-4 6 4 6 4h2s-2-6-8-6-8 6-8 6h2z"/>
+        </svg>
+        <span>{base.signalStrength} dBm</span>
+      </div>
+    </div>
+  </div>
+</Popup>
+
+
         </Marker>
         
 

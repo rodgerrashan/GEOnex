@@ -61,6 +61,8 @@ const sendToClients = (deviceName, deviceType, action, value, status) => {
         timestamp: new Date().toISOString(),
         latitude: parsedValue?.latitude || null,
         longitude: parsedValue?.longitude || null,
+        battery: parsedValue?.battery || null,
+        signal: parsedValue?.signal || null,
     };
 
     

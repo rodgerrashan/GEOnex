@@ -12,6 +12,8 @@ const useBaseSensorData = (WS_URL, deviceId) => {
         timestamp: new Date().toISOString(),
         latitude: "N/A",
         longitude: "N/A",
+        battery: "N/A",
+        signal: "N/A",
       },
     
   );
@@ -60,7 +62,10 @@ const useBaseSensorData = (WS_URL, deviceId) => {
       status: data.status || 'N/A',
       timestamp: data.timestamp || new Date().toISOString(),
       latitude: data.latitude || 6.6150,
-      longitude: data.longitude || 79.968074
+      longitude: data.longitude || 79.968074,
+      battery: data.battery || 'N/A',
+      signal: data.signal || 'N/A',
+
     };
     console.log("Updated base sensorData:", newData);
     return newData;
