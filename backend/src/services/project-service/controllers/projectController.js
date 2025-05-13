@@ -30,9 +30,12 @@ const createProject = async (req, res) => {
 
 // Get all projects
 const getProjects = async (req, res) => {
+    console.log("Get project request came");
+    const userid = req.params.userid; 
     const db = getDb();
     try {
-        const projects = await db.collection('projects').find().toArray();
+        const projects = await db.collection('projects').find({ User_Id: new ObjectId(userid) }).toArray();
+        console.log(projects);
         res.json({success:true,projects});
     } catch (error) {
         res.status(500).json({success:false , message: 'Error fetching projects', error});

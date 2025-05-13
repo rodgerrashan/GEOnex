@@ -1,14 +1,19 @@
-import React, { useContext }  from "react";
+import React, { useContext, useMemo } from "react";
 import { assets } from "../assets/assets";
 import RecentProjects from "../components/RecentProjects";
 import { Context } from "../context/Context";
 
 const Dashboard = () => {
-
   const { navigate, userData } = useContext(Context);
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  // Use a constant or get this from context instead of hardcoding
   const userId = '681e012572b69cef1e2c116b'; // Replace with actual user ID
+
+  // Memoize the RecentProjects component to prevent unnecessary re-renders
+  const memoizedRecentProjects = useMemo(() => {
+    return <RecentProjects userId={userId} />;
+  }, [userId]); // Only re-render if userId changes
 
   return (
     <div>
@@ -22,10 +27,10 @@ const Dashboard = () => {
           <div>
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-semi-bold">
               Hello {userData ? userData.name : 'User'}
-              </h1>
+            </h1>
             <p className="text-sm md:text-base lg:text-lg mt-1">
               Welcome to Site Measurement IoT
-              </p>
+            </p>
           </div>
 
           {/* Right side: "Add New Project" Button */}
@@ -85,7 +90,7 @@ const Dashboard = () => {
         </div>
 
         <div className="col-span-1 md:col-span-2 lg:col-span-3 bg-white p-4 rounded-lg">
-          <RecentProjects />
+          {memoizedRecentProjects}
         </div>
       </div>
     </div>

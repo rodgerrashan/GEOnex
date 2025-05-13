@@ -133,7 +133,7 @@ const PointRecorded = ({ sensorData, baseData, projectId }) => {
           disabled={loading || !isTakePoint}
           style={{ backgroundColor: (loading || !isTakePoint) ? "grey" : "black" }}
           >
-            {loading ? "Saving..." : "Rename & Save"}
+            {loading ? "Saving..." : "Save"}
           </button>
 
           <button
