@@ -102,7 +102,7 @@ const deletePoint = async (req, res) => {
 
         // Update the project with the new point
         await Project.findByIdAndUpdate(
-            ProjectId,
+            projectId,
             {
                 $pull: { Points: id },
                 $inc: { Total_Points: -1 }

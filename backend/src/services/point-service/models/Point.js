@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const pointSchema = new mongoose.Schema({
     ProjectId: { 
         type: mongoose.Schema.Types.ObjectId, 
-        ref: "Project", 
+        ref: "projects", 
         required: true 
     },
     Name: { 

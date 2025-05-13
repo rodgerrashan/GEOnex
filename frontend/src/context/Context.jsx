@@ -92,6 +92,7 @@ const ContextProvider = (props) => {
   };
 
   const deletePoint = async (projectId, pointId) => {
+    console.log(projectId, pointId);
     try {
       const response = await axios.delete(
         `${backendUrl}/api/points/${projectId}/${pointId}`
