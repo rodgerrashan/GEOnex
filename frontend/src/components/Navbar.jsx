@@ -20,104 +20,132 @@ const Navbar = ({ mobileOpen = false, onClose = () => {} }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // When scrolled, the navbar height shrinks (e.g., 80vh), otherwise it fills the viewport.
-  const navbarHeightClass = isScrolled ? "min-h-[80vh]" : "min-h-screen";
-
-  // build the logout class once, so we can swap `mt-auto` */
-  const logoutBtnClass = [
-    isScrolled ? "mt-auto" : "mt-48",
-    "font-bold text-red-500 mx-auto px-6 py-2 mb-10 rounded-md border",
-    "hover:bg-red-500 hover:text-white transition",
-  ].join(" ");
-
   const logout = async () => {
     try {
       axios.defaults.withCredentials = true;
       const { data } = await axios.post(backendUrl + "/api/auth/logout");
-      data.success && setIsLoggedin(false);
-      data.success && setUserData(false);
-      navigate("/");
+      if (data.success) {
+        setIsLoggedin(false);
+        setUserData(false);
+        toast.success("Logged out successfully");
+        navigate("/");
+      }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message || "Logout failed");
     }
   };
 
-  // fires only on screens < 768 px
   const handleNavClick = () => {
     if (window.innerWidth < 768) onClose();
   };
 
-  /* ── responsive wrapper ───────────────────────────── */
-  const wrapperCls = [
-    "z-40", // stays above content
-    "fixed md:static inset-0 left-0", // overlay on mobile, normal on desktop
+  // Advanced responsive classes with smooth transitions
+  const sidebarClasses = [
+    "fixed md:static inset-0 z-40",
     "flex flex-col",
-    "w-full md:w-[15%]", // full-width on phones, 15 % on ≥ md
-    "overflow-y-auto",
-    navbarHeightClass,
-    "transform transition-transform duration-300",
+    "bg-gradient-to-b from-gray-100 to-gray-200",
+    "w-64 md:w-52 lg:w-64 h-screen overflow-hidden",
+    "transition-all duration-300 ease-in-out",
+    isScrolled ? "md:w-64" : "md:w-72 lg:w-80",
     mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
   ].join(" ");
 
-  return (
-    <div
-      className={wrapperCls}
-      style={{ backgroundColor: "rgba(197,197,198,1)" }}
-    >
-      {/* close (“×”) button shown only on phones */}
-      <button
-        onClick={onClose}
-        className="md:hidden absolute top-4 right-4 p-2 rounded hover:bg-gray-300"
-      >
-        ✕
-      </button>
+  // Create consistent nav item styling for reuse
+  const navItemBase = "flex items-center gap-3 px-6 py-3 transition duration-200 rounded-lg mx-3";
+  const navItemActive = `${navItemBase} bg-gray-800 text-white font-medium shadow-sm`;
+  const navItemInactive = `${navItemBase} hover:bg-gray-300/70 text-gray-700`;
 
-      <Link to="/dashboard" onClick={handleNavClick}>
-        {/* ───── GEOnex Logo ───── */}
-        <div className="w-full flex justify-center pt-6 sm:pt-8 md:pt-10 items-end space-x-1 whitespace-nowrap">
-          <span className="font-bold text-[48px] md:text-3xl lg:text-5xl leading-none text-black">
+  return (
+    <>
+      {/* Overlay that only appears on mobile when menu is open */}
+      {mobileOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-30 md:hidden"
+          onClick={onClose}
+        />
+      )}
+    
+      <aside className={sidebarClasses}>
+        <div className="flex flex-col h-full overflow-y-auto scrollbar-hide">
+        {/* Close button with improved styling */}
+        <button
+          onClick={onClose}
+          className="md:hidden absolute top-4 right-4 p-2 rounded-full hover:bg-gray-300 bg-white/80 text-gray-700"
+          aria-label="Close menu"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        {/* Logo with enhanced styling */}
+        <Link 
+          to="/dashboard" 
+          onClick={handleNavClick}
+          className="mt-8 mb-6 flex justify-center items-end space-x-1"
+        >
+          <span className="font-bold text-4xl md:text-4xl lg:text-5xl text-gray-900">
             GEO
           </span>
-          <span className="font-semibold text-[32px] md:text-xl lg:text-3xl leading-none text-black">
+          <span className="font-semibold text-2xl md:text-xl lg:text-2xl text-gray-700">
             nex
           </span>
+        </Link>
+
+        {/* Subtle divider */}
+        <div className="w-3/4 h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent mx-auto mb-6" />
+
+        {/* Navigation links with indicators and hover effects */}
+        <nav className="flex flex-col gap-2 mt-2">
+          {[
+            { to: "/dashboard", icon: assets.home, label: "Home" },
+            { to: "/devices", icon: assets.devices, label: "Devices" },
+            { to: "/projects", icon: assets.projects, label: "Projects" },
+            { to: "/settings", icon: assets.settings, label: "Settings" },
+          ].map(({ to, icon, label }) => (
+            <NavLink
+              key={to}
+              to={to}
+              onClick={handleNavClick}
+              className={({ isActive }) => isActive ? navItemActive : navItemInactive}
+            >
+              <div className="bg-white/80 p-2 rounded-lg shadow-sm">
+                <img src={icon} alt="" className="w-5 h-5" />
+              </div>
+              <span className="text-lg font-medium">{label}</span>
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* Empty space that grows to push logout button to bottom */}
+        <div className="flex-grow" />
+
+        {/* User profile hint (optional) */}
+        <div className="px-6 py-4 mx-3 mb-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-white font-bold">
+              U
+            </div>
+            <div className="flex-grow">
+              <p className="text-sm text-gray-500">Logged in</p>
+            </div>
+          </div>
         </div>
-      </Link>
 
-      {/* Navigation Frame */}
-      <nav className="flex flex-col gap-3 md:gap-4 pt-4 md:pt-20 text-base md:text-base lg:text-lg mt-12 w-full">
-        {[
-          { to: "/dashboard", icon: assets.home, label: "Home" },
-          { to: "/devices", icon: assets.devices, label: "Devices" },
-          { to: "/projects", icon: assets.projects, label: "Projects" },
-          { to: "/settings", icon: assets.settings, label: "Settings" },
-        ].map(({ to, icon, label }) => (
-          <NavLink
-            key={to}
-            to={to}
-            onClick={handleNavClick}
-            className={({ isActive }) =>
-              `block w-full flex items-center justify-center md:justify-start gap-3 px-4 lg:px-10 py-2 rounded transition ${
-                isActive
-                  ? "bg-white shadow-md font-semibold"
-                  : "hover:bg-gray-300"
-              }`
-            }
-          >
-            <img src={icon} alt={label} className="w-5 h-5" />
-            <p className="truncate text-[20px] md:text-lg lg:text-xl">
-              {label}
-            </p>
-          </NavLink>
-        ))}
-      </nav>
-
-      {/* Logout Button */}
-
-      <button onClick={logout} className={logoutBtnClass}>
-        Log out
-      </button>
-    </div>
+        {/* Improved logout button */}
+        <button 
+          onClick={logout} 
+          className="mx-4 mb-6 px-6 py-3 rounded-lg border border-red-500 text-red-500 font-medium
+                    hover:bg-red-500 hover:text-white transition-colors duration-200 flex items-center justify-center gap-2"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          Log out
+        </button>
+        </div>
+      </aside>
+    </>
   );
 };
 

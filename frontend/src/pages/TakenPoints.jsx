@@ -40,7 +40,7 @@ const TakenPoints = () => {
             <button
               className="text-2xl"
               onClick={() => {
-                navigate(`/pointsurvey/${projectId}`);
+                navigate(-1);
               }}
             >
               <img className="w-8 h-8" src={assets.arrow} alt="Go back" />
@@ -61,9 +61,7 @@ const TakenPoints = () => {
             {/* refresh button */}
             <button
               className="text-2xl"
-              //   onClick={() => {
-              //     navigate("/");
-              //   }}
+              onClick={() => window.location.reload()}
             >
               <img
                 className="w-7 h-7 md:w-9 md:h-9"

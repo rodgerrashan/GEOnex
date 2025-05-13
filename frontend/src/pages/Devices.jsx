@@ -1,28 +1,39 @@
 import React from "react";
+import ConnectedDevices from "../components/ConnectedDevices";
+import RegisteredDevices from "../components/RegisteredDevices";
+
 
 const Devices = () => {
   return (
-    <div>
-      <div className="grid grid-cols-2 grid-rows-7 gap-4 h-screen">
-        <div className="col-span-2 ">
-          <h1 className="text-2xl font-semi-bold">Devices</h1>
-          <p className="text-xs mt-1">Track your all devices from here</p>
+    <div className="min-h-screen p-1">
+      <div className="mb-10">
+        <h1 className="text-4xl font-semi-bold">Devices</h1>
+        <p className="text-md mt-1">Track your all devices from here</p>
+      </div>
+      
+      <div className="flex flex-wrap gap-4">
+        {/* Left column */}
+        <div className="flex-1 min-w-[300px]">
+          <div className="bg-white p-4 rounded-lg mb-4 h-[400px]">
+            {/* Map section */}
+            Map Section
+          </div>
+          <div className="bg-white p-4 rounded-lg mb-4">
+            <ConnectedDevices />
+          </div>
+          <div className="bg-white p-4 rounded-lg">
+            <RegisteredDevices/>
+          </div>
         </div>
-        <div className="col-span-1 row-span-3 bg-white p-4 rounded-lg">
-          {/* Map section */}
-          Map Section
-        </div>
-        <div className="col-span-1 row-span-2 bg-white p-4 rounded-lg">
-          Connected devices
-        </div>
-        <div className="col-span-1 row-span-2 bg-white p-4 rounded-lg">
-          Available devices
-        </div>
-        <div className="col-span-1 row-span-3 bg-white p-4 rounded-lg">
-          RT data
-        </div>
-        <div className="col-span-1 row-span-2 bg-white p-4 rounded-lg">
-          Critical alert
+
+        {/* Right column */}
+        <div className="flex-1 min-w-[300px]">
+          <div className="bg-white p-4 rounded-lg mb-4 h-[400px]">
+            RT data
+          </div>
+          <div className="bg-white p-4 rounded-lg">
+            Critical alert
+          </div>
         </div>
       </div>
     </div>

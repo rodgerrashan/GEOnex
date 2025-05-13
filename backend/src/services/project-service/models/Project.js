@@ -3,15 +3,17 @@ const deviceSchema = require("../../device-service/models/Device");
 
 
 const projectSchema = new mongoose.Schema({
-    User_Id: { type: mongoose.Schema.Types.ObjectId, ref: "User",required: false },
+    User_Id: {type: mongoose.Schema.Types.ObjectId, ref: "User",required: false },
     Name: { type: String, required: true },
     Created_On: { type: Date, required: true },
     Last_Modified: { type: Date, required: true },
-    Status: { type: String, default: "Active" },
+    Status: { type: String, default: "Started" },
     Survey_Time: { type: String,required: false  },
-    Description: { type: String },
-    Total_Points: { type: Number },
-    Devices: [deviceSchema.schema] 
+    Description: { type: String, required: false },
+    Total_Points: { type: Number, default: 0 },
+    BaseStation: { type: mongoose.Schema.Types.ObjectId, ref: "Device" , required: true },
+    ClientDevices: [{ type: mongoose.Schema.Types.ObjectId, ref: "Device", required: true }],
+    Points: [{ type: mongoose.Schema.Types.ObjectId, ref: "Point" }]
   });
 
 

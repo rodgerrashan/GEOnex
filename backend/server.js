@@ -8,6 +8,7 @@ const projectRoutes = require('./src/services/project-service/routes/projectRout
 const pointRoutes = require('./src/services/point-service/routes/pointRoutes');
 const mqttService = require('./src/services/mqtt-service/mqttClient');
 const socketService = require('./src/services/socket-service/socketServer');
+const deviceServices = require('./src/services/device-service/routes/deviceRoutes');        
 
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const authRouter = require('./src/services/auth-service/routes/authRoutes');
@@ -30,6 +31,7 @@ app.use(cookieParser());
 // Routes
 app.use('/api/projects', projectRoutes);
 app.use('/api/points', pointRoutes);
+app.use('/api/devices', deviceServices); 
 app.use('/api/auth',authRouter);
 app.use('/api/user',userRouter);
 

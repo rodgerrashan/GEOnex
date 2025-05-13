@@ -25,4 +25,154 @@ const getUserData = async (req, res) => {
     }
 };
 
-module.exports = {getUserData}
+
+const Device = require('../../device-service/models/Device'); 
+const { get } = require('mongoose');
+
+const addDeviceToUser = async (req, res) => {
+    const userId = req.params.userId;
+    const { DeviceCode } = req.body;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const device = await Device.findOne({ DeviceCode: DeviceCode });
+        if (!device) {
+            return res.status(404).json({ message: 'Device not found' });
+        }
+
+        // Check if the device is already assigned to the user
+        if (user.connectedDevices.includes(device._id)) {
+            return res.status(400).json({ message: 'Device is already assigned to this user' });
+        }
+
+        // Add device to user's connectedDevices
+        user.connectedDevices.push(device._id);
+        await user.save();
+
+        res.status(200).json({ message: 'Device added to user successfully', connectedDevices: user.connectedDevices });
+    } catch (error) {
+        console.error('Error assigning device to user:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+
+const getUserDevices = async(req,res)=>{
+    const userId = req.params.userId;
+
+    try {
+        const user = await User.findById(userId).populate('connectedDevices');
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        if (user.connectedDevices.length === 0) {
+            console.log('No devices found for this user');
+            return res.status(404).json({ message: 'No devices found for this user' });
+        }
+        console.log('User devices:', user.connectedDevices);
+        res.status(200).json({ connectedDevices: user.connectedDevices });
+    } catch (error) {
+        console.error('Error fetching user devices:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+
+
+const removeDeviceFromUser = async (req, res) => {
+    const userId = req.params.userId;
+    const { deviceId } = req.body;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Check if the device is assigned to the user
+        if (!user.connectedDevices.includes(deviceId)) {
+            return res.status(400).json({ message: 'Device is not assigned to this user' });
+        }
+
+        // Remove device from user's connectedDevices
+        user.connectedDevices = user.connectedDevices.filter(device => device.toString() !== deviceId);
+        await user.save();
+
+        res.status(200).json({ message: 'Device removed from user successfully', connectedDevices: user.connectedDevices });
+    } catch (error) {
+        console.error('Error removing device from user:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+
+const getUserBases = async( req, res) => {
+    const userId = req.params.userId;
+
+
+    try {
+        const user = await User.findById(userId).populate('connectedDevices');
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Filter the devices to get only base stations
+        const baseStations = user.connectedDevices.filter(device => device.Type === "base");
+        console.log('User base stations:', baseStations);
+        res.status(200).json({ connectedDevices: baseStations });
+    } catch (error) {
+        console.error('Error fetching user base stations:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+
+const getUserClientDevices = async( req, res) => {
+    const userId = req.params.userId;
+    try {
+        const user = await User.findById(userId).populate('connectedDevices');
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Filter the devices to get only base stations
+        const clientDevices = user.connectedDevices.filter(device => device.Type === "rover");
+        console.log('User base stations:', clientDevices);
+        res.status(200).json({ connectedDevices: clientDevices });
+    } catch (error) {
+        console.error('Error fetching user client Devices:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+
+const getUserRegisteredDevices = async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+        
+        const devices = await Device.find({ Registered_User_Id: userId });
+
+        if (!devices || devices.length === 0) {
+            return res.status(404).json({ message: 'Registered devices not found' });
+        }
+
+        console.log(devices);
+        res.status(200).json({ devices });
+    } catch (error) {
+        console.error('Error fetching user registered devices:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+
+
+
+module.exports = {getUserData,addDeviceToUser,getUserDevices, removeDeviceFromUser, getUserBases, getUserClientDevices, getUserRegisteredDevices}

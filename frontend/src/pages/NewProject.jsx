@@ -1,24 +1,92 @@
-import React, { useContext, useState} from "react";
+import React, { useState, useEffect } from "react";
 import { assets } from "../assets/assets";
-import { Context } from "../context/Context";
 import axios from "axios";
+import { ChevronDown } from 'lucide-react';
+
 import { toast } from "react-toastify";
+import PageTopic from "../components/PageTopic";
+import { useParams, useNavigate } from "react-router-dom";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const NewProject = () => {
-  const { navigate, backendUrl } = useContext(Context);
+  const navigate = useNavigate();
   const [projectName, setProjectName] = useState("");
   const [description, setDescription] = useState("");
+  const [baseStations, setBaseStations] = useState([]);
+  const [clientDevices, setClientDevices] = useState([]);
+  const [baseloading, setBaseLoading] = useState(true);
+  const [clientloading, setClientLoading] = useState(true);
+  const [selectedBaseStation, setSelectedBaseStation] = useState("");
+
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const { userId } = useParams();
+
+  useEffect(() => {
+    fetchAssignedBaseStations();
+    fetchAssignedClientDevices();
+  }, [userId]);
+
+  const toggleBaseLoading = () => {
+    setBaseLoading(!baseloading);
+  };
+
+  const toggleClientLoading = () => {
+    setClientLoading(!clientloading);
+  };
+
+  const fetchAssignedBaseStations = async () => {
+    try {
+      const response = await axios.get(
+        backendUrl + `/api/user/${userId}/devices/base-stations`
+      );
+      const baseStations = response.data.connectedDevices || [];
+      if (baseStations.length > 0) {
+        setBaseStations(baseStations);
+        setBaseLoading(false);
+        console.log(baseStations);
+      } else {
+        toast.error("No base stations assigned to this user.");
+        setBaseStations([]);
+      }
+    } catch (error) {
+      console.error("Error fetching assigned base stations:", error);
+    }
+  };
+
+  const fetchAssignedClientDevices = async () => {
+    try {
+      const response = await axios.get(
+        backendUrl + `/api/user/${userId}/devices/client-devices`
+      );
+      const clientDevices = response.data.connectedDevices || [];
+      if (clientDevices.length > 0) {
+        setClientDevices(clientDevices);
+      } else {
+        toast.error("No client devices connected to this user.");
+        setClientDevices([]);
+      }
+    } catch (error) {
+      console.error("Error fetching client devices", error);
+    }
+  };
 
   const handleSubmit = async () => {
     try {
-      // Create payload with project name and description
+      
       const payload = {
         Name: projectName,
         Description: description,
+        BaseStation: selectedBaseStation,
+        ClientDevices: Array.from(
+          document.querySelectorAll('input[name="clientDevice"]:checked')
+        ).map((checkbox) => checkbox.value),
+        UserId: userId,
+
+
       };
 
       // POST to your create project endpoint
-      const response = await axios.post( backendUrl + '/api/projects/', payload);
+      const response = await axios.post(backendUrl + "/api/projects/", payload);
       console.log("Project created:", response.data);
 
       // Extract the newly created project ID from response data
@@ -39,37 +107,28 @@ const NewProject = () => {
   };
 
   return (
-    <div>
-      <div className="grid grid-cols-1 md:grid-cols-2 grid-rows-[auto_auto] md:grid-rows-7 gap-4 md:h-screen">
-        <div className="col-span-1 md:col-span-2 flex items-center gap-3">
-          {/* Left arrow button */}
-          <button
-            className="text-2xl"
-            onClick={() => {
-              navigate("/");
-            }}
-          >
-            <img className="w-6 h-6 md:w-8 md:h-8" src={assets.arrow} alt="goback" />
-          </button>
+    <div className="min-h-screen flex flex-col">
+      {/* Header Section */}
+      <PageTopic
+        topic="New Project"
+        intro="Create a new project and start your survey"
+      />
 
-          {/* Title & subtitle */}
-          <div>
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold">Add New Project</h1>
-            <p className="text-sm md:text-base lg:text-lg mt-1">Setup your new project</p>
-          </div>
-        </div>
-
-        {/* Form Section */}
-        <div className="col-span-1 row-span-6 bg-white p-4 rounded-lg flex flex-col gap-4 overflow-auto">
+      {/* Form Section */}
+      <div className="flex-1 p-4 max-w-3xl mx-4 pl-10">
+        <div className="bg-white rounded-lg p-6 shadow-sm">
           {/* Project Name */}
-          <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-10">
-            <label className="w-full md:w-1/3 text-sm md:text-base font-medium" htmlFor="projectName">
+          <div className="mb-6">
+            <label
+              className="block text-sm md:text-base font-medium mb-2"
+              htmlFor="projectName"
+            >
               Project Name
             </label>
             <input
               id="projectName"
               type="text"
-              className="w-full md:w-2/3 rounded-xl p-1  pl-5 text-sm md:text-base "
+              className="w-full rounded-xl p-2 pl-5 text-sm md:text-base"
               style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
               value={projectName}
               placeholder="Enter project name"
@@ -77,81 +136,91 @@ const NewProject = () => {
             />
           </div>
 
-          <div className="relative">
+          {/* Base Station Selection */}
+          <div className="relative mb-6">
+            <p className="text-sm md:text-base font-semibold mb-2">
+              Select a Base Station
+            </p>
             <select
               id="baseStation"
-              className="
-                    appearance-none
-                    w-full
-                    rounded-xl
-                    p-2
-                    text-sm md:text-base
-                    pr-8 
-                   "
+              className="w-full rounded-xl p-3 text-sm md:text-base appearance-none"
               style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
-              defaultValue=""
+              value={selectedBaseStation}
+              onChange={(e) => setSelectedBaseStation(e.target.value)}
             >
-              <option value="">Select the Base Station</option>
-              <option value="BS001">BS001</option>
-              <option value="BS002">BS002</option>
-              <option value="BS192">BS192</option>
+              <option value="" disabled>
+                Select a base station
+              </option>
+
+
+              {baseStations.length === 0 && (
+                <option value="" disabled>
+                  No base stations available
+                </option>
+              )}
+              {baseStations.map((station, index) => (
+                <option key={index} value={station._id}>
+                  {station.Name} - {station.DeviceCode}
+                </option>
+              ))}
             </select>
-
-            {/* Custom down arrow image */}
-            <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center">
-              <img src={assets.down} alt="Down arrow" className="w-4 h-4" />
-            </div>
+            
+            <div className="absolute right-3 top-14 -translate-y-1/2 pointer-events-none">
+            {baseloading ? (
+              <LoadingSpinner size={6} className="animate-spin text-gray-500" />
+            ) : (
+              <ChevronDown size={16} className="text-gray-500" />
+            )}
           </div>
 
 
-          {/* Available Client Devices */}
-          <div>
-            <p className="text-sm md:text-base font-semibold">Available Client Devices</p>
-            <div className="flex flex-col gap-2 mt-2 p-2 rounded-xl"
-                style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
+          </div>
+
+          {/* Client Devices */}
+          <div className="mb-6 relative">
+            <p className="text-sm md:text-base font-semibold mb-2">
+              Available Client Devices
+            </p>
+            <div
+              className="flex flex-col gap-2 p-3 rounded-xl"
+              style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
             >
-              <label className="flex items-center gap-2 text-sm md:text-base">
-                <input type="radio" name="clientDevice" value="RC002" />
-                <span>
-                  RC002
-                  <span className="ml-10 text-xs md:text-sm text-gray-500 ">
-                    Description #001 Lynx
-                  </span>
-                </span>
-              </label>
-              <label className="flex items-center gap-2 text-sm md:text-base">
-                <input type="radio" name="clientDevice" value="RC059" />
-                <span>
-                  RC059
-                  <span className="ml-10 text-xs md:text-sm text-gray-500 ">
-                    Descr #0239 Sheen
-                  </span>
-                </span>
-              </label>
-              <label className="flex items-center gap-2 text-sm md:text-base">
-                <input type="radio" name="clientDevice" value="RC058" />
-                <span>
-                  RC058
-                  <span className="ml-10 text-xs md:text-sm text-gray-500">
-                    Description_01L
-                  </span>
-                </span>
-              </label>
+              {!clientDevices || clientDevices.length === 0 ? (
+                <p className="text-sm text-gray-800">No client devices available</p>
+              ) : (
+                clientDevices.map((device, index) => (
+                  <label
+                    key={index}
+                    className="flex items-center gap-2 text-sm md:text-base"
+                  >
+                    <input
+                      type="checkbox"
+                      name="clientDevice"
+                      value={device._id}
+                    />
+                    <span className="flex-1">
+                      {device.Name} 
+                      <span className="ml-auto pl-2 text-xs md:text-sm text-gray-500">
+                        {device.DeviceCode}
+                      </span>
+                    </span>
+                  </label>
+                ))
+              )}
             </div>
           </div>
-
 
           {/* Description */}
-          <div>
+          <div className="mb-6">
             <label
-              className="block text-sm md:text-base font-semibold"
+              className="block text-sm md:text-base font-semibold mb-2"
               htmlFor="description"
             >
               Description
             </label>
             <textarea
               id="description"
-              className="mt-1 w-full h-32 rounded-lg p-2 text-sm md:text-base"
+              className="w-full h-32 rounded-xl p-3 text-sm md:text-base"
               placeholder="Short description of the project"
               style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
               value={description}
@@ -161,7 +230,7 @@ const NewProject = () => {
 
           {/* Start Survey Button */}
           <button
-            className="mt-auto w-full bg-black text-white py-2 rounded-md text-sm md:text-base font-semibold"
+            className="w-full bg-black text-white py-3 rounded-xl text-sm md:text-base font-semibold mt-4"
             onClick={handleSubmit}
           >
             Start Survey

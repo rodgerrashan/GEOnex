@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route ,BrowserRouter as Router} from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Devices from "./pages/Devices";
 import Projects from "./pages/Projects";
@@ -17,12 +17,16 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import EmailVerify from "./pages/EmailVerify";
 import ResetPassword from "./pages/ResetPassword";
+import RegisterNewDevice from "./pages/RegisterNewDevice";
+import 'leaflet/dist/leaflet.css';
+
 
 const App = () => {
   return (
     <div>
       <ToastContainer />
 
+     
       <Routes>
         <Route element={<Layout />}>
           <Route path="/dashboard" element={<Dashboard />} />
@@ -33,7 +37,7 @@ const App = () => {
 
           <Route path="/settings" element={<Settings />} />
 
-          <Route path="/newproject" element={<NewProject />} />
+          <Route path="/:userId/newproject" element={<NewProject />} />
 
           <Route path="/pointsurvey/:projectId" element={<PointSurvey />} />
 
@@ -42,6 +46,7 @@ const App = () => {
           <Route path="/takenpoints/:projectId" element={<TakenPoints />} />
 
           <Route path="/project/:projectId" element={<ProjectDetails />} />
+          <Route path="/devices/register-device/:userId" element={<RegisterNewDevice />} />
         </Route>
         {/* routes **outside** the sidebar  */}
         <Route path="/" element={<Home />} />
@@ -49,6 +54,10 @@ const App = () => {
         <Route path="/email-verify" element={<EmailVerify />} />
         <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
+
+      
+
+      
     </div>
   );
 };

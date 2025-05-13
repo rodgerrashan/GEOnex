@@ -9,7 +9,8 @@ const device = awsIot.device({
     certPath: path.resolve(__dirname,process.env.AWS_CERT ) ,
     caPath: path.resolve(__dirname, process.env.AWS_ROOT_CA),
     clientId: process.env.AWS_CLIENT_ID,
-    host: process.env.AWS_IOT_ENDPOINT
+    host: process.env.AWS_IOT_ENDPOINT,
+    protocol: 'mqtts'
 });
 
 
@@ -36,7 +37,7 @@ const init = () => {
     });
 
     device.on('message', (topic, payload) => {
-        console.log(`Received message on ${topic}:`, payload.toString());
+        // console.log(`Received message on ${topic}:`, payload.toString());
         const parts = topic.split('/'); // ['tracking', 'rover', 'status', 'rover1']
 
         const deviceType = parts[1];
@@ -44,7 +45,7 @@ const init = () => {
         const status = parts[2];
         const deviceId = parts[3];
         const value = payload.toString();
-        const deviceName = `${deviceType}-${deviceId}`;
+        const deviceName = `${deviceId}`;
 
         // Debug print
         console.log('Device:', deviceName);

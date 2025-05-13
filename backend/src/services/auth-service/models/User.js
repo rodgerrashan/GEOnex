@@ -10,7 +10,8 @@ const userSchema = new mongoose.Schema({
   isAccountVerified:{type:Boolean, default:false},
   resetOtp:{type:String, default:''},
   resetOtpExpiredAt:{type:Number, default:0},
-  created_At: { type: Date, default: Date.now }
+  created_At: { type: Date, default: Date.now },
+  connectedDevices: [{ type: mongoose.Schema.Types.ObjectId, ref: "Device", default: [] }]
   //Last_Login: { type: Date, default: Date.now }
 });
 
