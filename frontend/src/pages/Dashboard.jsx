@@ -8,7 +8,7 @@ const Dashboard = () => {
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   // Use a constant or get this from context instead of hardcoding
-  const userId = '681e012572b69cef1e2c116b'; // Replace with actual user ID
+  const userId = userData.userId; // Replace with actual user ID
 
   // Memoize the RecentProjects component to prevent unnecessary re-renders
   const memoizedRecentProjects = useMemo(() => {
@@ -29,7 +29,7 @@ const Dashboard = () => {
               Hello {userData ? userData.name : 'User'}
             </h1>
             <p className="text-sm md:text-base lg:text-lg mt-1">
-              Welcome to Site Measurement IoT
+              Welcome to Site Measurement IoT 
             </p>
           </div>
 
