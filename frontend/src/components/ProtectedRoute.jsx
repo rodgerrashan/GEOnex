@@ -4,11 +4,19 @@ import { Context } from "../context/Context";
 import Loading from "./Loading";
 
 const ProtectedRoute = () => {
-  const { isLoggedin, isLoading } = useContext(Context);
+  const { isLoggedin, isLoading, userData } = useContext(Context);
 
   if (isLoading) return <Loading />;
 
-  return isLoggedin ? <Outlet /> : <Navigate to="/login" replace />;
+  if (!isLoggedin) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (userData && !userData.isAccountVerified) {
+    return <Navigate to="/email-verify" replace />;
+  }
+
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

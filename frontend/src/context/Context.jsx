@@ -25,17 +25,12 @@ const ContextProvider = (props) => {
   const getAuthState = async () => {
     try {
       const { data } = await axios.get(backendUrl + "/api/auth/is-auth");
-      if (data.success) {
+      if (data.success && data.verified) {
         setIsLoggedin(true);
         await getUserData();
       }else{
         setIsLoggedin(false);
-        if(data.message === "Please verify your account first."){
-          toast.info(data.message);
-          navigate('/email-verify');
-        } else if(data.message === "Not Authorized.Login Again"){
-          navigate("/login")
-        }
+        setUserData(null);
       }
     } catch (error) {
       setIsLoggedin(false);

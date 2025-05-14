@@ -220,10 +220,14 @@ const isAuthenticated=async (req,res) => {
         }
         
         if (!user.isAccountVerified) {
-            return res.json({ success: false, message: "Please verify your account first." });
-        }
+            return res.json({
+              success: false,
+              verified: false, 
+              message: "Please verify your account first."
+            });
+          }
         
-        return res.json({success:true});
+        return res.json({success:true, verified: true});
 
     } catch (error) {
         res.json({success:false, message:error.message});
