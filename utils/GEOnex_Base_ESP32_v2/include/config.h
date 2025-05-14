@@ -25,7 +25,7 @@
 // MQTT Broker
 #define MQTT_HOST "a1qulasp0wzg24-ats.iot.eu-north-1.amazonaws.com"
 #define MQTT_PORT 8883
-#define DEVICE_ID "rover1234"
+#define DEVICE_ID "base123"
 
 // MQTT Topics (subscribed)
 #define MQTT_TOPIC_COMMAND "GEOnex/siteSurvey/commands/" DEVICE_ID
@@ -33,7 +33,7 @@
 // MQTT Topics (published)
 // #define MQTT_TOPIC_DATA_LIVE "GEOnex/siteSurvey/data/" DEVICE_ID "/gps/live"
 // #define MQTT_TOPIC_DATA_LIVE "esp8266/pub"
-#define MQTT_TOPIC_DATA_LIVE "tracking/r/live/rover1234/data"
+#define MQTT_TOPIC_DATA_LIVE "tracking/r/live/base123/data"
 
 // Hardware Pins
 #define GPS_RX 16
