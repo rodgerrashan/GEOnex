@@ -69,7 +69,12 @@ const sendToClients = (deviceName, deviceType, action, value, status) => {
     
     if (deviceName) {
         console.log(`Emitting to room [${deviceName}]:`, data);
-        io.to(deviceName).emit("device-data", data); 
+        if(data.latitude === null || data.longitude === null){
+            console.warn("Won't submit to clients due to null safety.");
+        }else{
+            io.to(deviceName).emit("device-data", data); 
+        }
+        
     }
 };
 
