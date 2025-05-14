@@ -9,17 +9,6 @@ const Navbar = ({ mobileOpen = false, onClose = () => {} }) => {
   const { navigate, backendUrl, setUserData, setIsLoggedin } =
     useContext(Context);
 
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   const logout = async () => {
     try {
       axios.defaults.withCredentials = true;
@@ -41,12 +30,11 @@ const Navbar = ({ mobileOpen = false, onClose = () => {} }) => {
 
   // Advanced responsive classes with smooth transitions
   const sidebarClasses = [
-    "fixed md:static inset-0 z-40",
+    "fixed md:static inset-0 md:top-0 md:left-0 z-40",
     "flex flex-col",
     "bg-gradient-to-b from-gray-100 to-gray-200",
     "w-64 md:w-52 lg:w-64 h-screen overflow-hidden",
     "transition-all duration-300 ease-in-out",
-    isScrolled ? "md:w-64" : "md:w-72 lg:w-80",
     mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
   ].join(" ");
 

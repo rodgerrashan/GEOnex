@@ -20,15 +20,24 @@ const ContextProvider = (props) => {
   const [isLoggedin, setIsLoggedin] = useState(false);
   const [userData, setUserData] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const getAuthState = async () => {
     try {
       const { data } = await axios.get(backendUrl + "/api/auth/is-auth");
-      if (data.success) {
+      if (data.success && data.verified) {
         setIsLoggedin(true);
-        getUserData();
+        await getUserData();
+      }else{
+        setIsLoggedin(false);
+        setUserData(null);
       }
     } catch (error) {
+      setIsLoggedin(false);
       toast.error(error.message);
+      navigate("/login");
+    }finally{
+      setIsLoading(false)
     }
   };
 
@@ -150,6 +159,7 @@ const ContextProvider = (props) => {
     userData,
     setUserData,
     getUserData,
+    isLoading
   };
 
   return <Context.Provider value={value}>{props.children}</Context.Provider>;

@@ -24,14 +24,14 @@ export default function Layout() {
       {open && (
         <div
           onClick={() => setOpen(false)}
-          className="fixed inset-0 bg-black/40 md:hidden z-4000"
+          className="fixed inset-0 bg-black/40 md:hidden z-40"
         />
       )}
       {/* ───── sidebar ───── */}
       <Navbar mobileOpen={open} onClose={() => setOpen(false)} />
 
       {/* ───── page area ───── */}
-      <div className="flex-1 relative">
+      <div className="flex-1 relative h-screen overflow-y-auto">
         {/* mobile hamburger */}
         <button
           onClick={() => setOpen(true)}
