@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route ,BrowserRouter as Router} from "react-router-dom";
+import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Devices from "./pages/Devices";
 import Projects from "./pages/Projects";
@@ -18,46 +18,46 @@ import Login from "./pages/Login";
 import EmailVerify from "./pages/EmailVerify";
 import ResetPassword from "./pages/ResetPassword";
 import RegisterNewDevice from "./pages/RegisterNewDevice";
-import 'leaflet/dist/leaflet.css';
-
+import "leaflet/dist/leaflet.css";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
   return (
     <div>
       <ToastContainer />
 
-     
       <Routes>
-        <Route element={<Layout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<Layout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
 
-          <Route path="/devices" element={<Devices />} />
+            <Route path="/devices" element={<Devices />} />
 
-          <Route path="/projects" element={<Projects />} />
+            <Route path="/projects" element={<Projects />} />
 
-          <Route path="/settings" element={<Settings />} />
+            <Route path="/settings" element={<Settings />} />
 
-          <Route path="/:userId/newproject" element={<NewProject />} />
+            <Route path="/:userId/newproject" element={<NewProject />} />
 
-          <Route path="/pointsurvey/:projectId" element={<PointSurvey />} />
+            <Route path="/pointsurvey/:projectId" element={<PointSurvey />} />
 
-          <Route path="/projectdetails" element={<ProjectDetails />} />
+            <Route path="/projectdetails" element={<ProjectDetails />} />
 
-          <Route path="/takenpoints/:projectId" element={<TakenPoints />} />
+            <Route path="/takenpoints/:projectId" element={<TakenPoints />} />
 
-          <Route path="/project/:projectId" element={<ProjectDetails />} />
-          <Route path="/devices/register-device/:userId" element={<RegisterNewDevice />} />
+            <Route path="/project/:projectId" element={<ProjectDetails />} />
+            <Route
+              path="/devices/register-device/:userId"
+              element={<RegisterNewDevice />}
+            />
+          </Route>
         </Route>
-        {/* routes **outside** the sidebar  */}
+        {/* Public routes */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/email-verify" element={<EmailVerify />} />
         <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
-
-      
-
-      
     </div>
   );
 };

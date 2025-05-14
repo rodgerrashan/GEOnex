@@ -20,15 +20,29 @@ const ContextProvider = (props) => {
   const [isLoggedin, setIsLoggedin] = useState(false);
   const [userData, setUserData] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const getAuthState = async () => {
     try {
       const { data } = await axios.get(backendUrl + "/api/auth/is-auth");
       if (data.success) {
         setIsLoggedin(true);
-        getUserData();
+        await getUserData();
+      }else{
+        setIsLoggedin(false);
+        if(data.message === "Please verify your account first."){
+          toast.info(data.message);
+          navigate('/email-verify');
+        } else if(data.message === "Not Authorized.Login Again"){
+          navigate("/login")
+        }
       }
     } catch (error) {
+      setIsLoggedin(false);
       toast.error(error.message);
+      navigate("/login");
+    }finally{
+      setIsLoading(false)
     }
   };
 
@@ -150,6 +164,7 @@ const ContextProvider = (props) => {
     userData,
     setUserData,
     getUserData,
+    isLoading
   };
 
   return <Context.Provider value={value}>{props.children}</Context.Provider>;

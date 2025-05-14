@@ -84,7 +84,7 @@ const login = async(req,res)=>{
     const {email, password} = req.body;
 
     if(!email || !password){
-        return res.json({success:false, message:'email and password are required'})
+        return res.json({success:false, message:'Email and password are required'})
     }
 
     try {
@@ -98,6 +98,10 @@ const login = async(req,res)=>{
 
         if (!isMatch) {
             return res.json({success:false, message:'Invalid password'})
+        }
+
+        if (!user.isAccountVerified) {
+            return res.json({ success: false, message: 'Please verify your account first.' });
         }
 
         const token= jwt.sign({id: user._id},process.env.JWT_SECRET,{expiresIn: '7d'});
@@ -209,7 +213,18 @@ const verifyEmail = async (req,res) => {
 
 const isAuthenticated=async (req,res) => {
     try {
+        const user = await User.findById(req.userId);
+
+        if (!user) {
+            return res.json({ success: false, message: "User not found." });
+        }
+        
+        if (!user.isAccountVerified) {
+            return res.json({ success: false, message: "Please verify your account first." });
+        }
+        
         return res.json({success:true});
+
     } catch (error) {
         res.json({success:false, message:error.message});
     }    

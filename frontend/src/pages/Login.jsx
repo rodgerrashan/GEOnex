@@ -43,7 +43,7 @@ const Login = () => {
         /* ask server to generate & send OTP */
         const { data: otpRes } = await axios.get(
           `${backendUrl}/api/auth/sendverifyotp`,
-          { withCredentials: true } 
+          { withCredentials: true }
         );
 
         if (otpRes.success) {
@@ -52,7 +52,6 @@ const Login = () => {
         } else {
           toast.error(otpRes.message || "Failed to send verification OTP.");
         }
-
       } else {
         /* Log-in branch */
         const { data: loginRes } = await axios.post(
@@ -65,10 +64,13 @@ const Login = () => {
 
         if (loginRes.success) {
           setIsLoggedin(true);
-          getUserData();
+          await getUserData();
           navigate("/dashboard");
         } else {
           toast.error(loginRes.message);
+          if (loginRes.message === "Please verify your account first.") {
+            navigate("/email-verify");
+          }
         }
       }
     } catch (error) {
