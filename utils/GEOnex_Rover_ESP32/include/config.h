@@ -25,7 +25,7 @@
 // MQTT Broker
 #define MQTT_HOST "a1qulasp0wzg24-ats.iot.eu-north-1.amazonaws.com"
 #define MQTT_PORT 8883
-#define DEVICE_ID "rover1234"
+#define DEVICE_ID "device123"
 
 // MQTT Topics (subscribed)
 #define MQTT_TOPIC_COMMAND "GEOnex/siteSurvey/commands/" DEVICE_ID
@@ -33,7 +33,7 @@
 // MQTT Topics (published)
 // #define MQTT_TOPIC_DATA_LIVE "GEOnex/siteSurvey/data/" DEVICE_ID "/gps/live"
 // #define MQTT_TOPIC_DATA_LIVE "esp8266/pub"
-#define MQTT_TOPIC_DATA_LIVE "tracking/r/live/rover1234/data"
+#define MQTT_TOPIC_DATA_LIVE "tracking/r/live/device123/data"
 
 // Hardware Pins
 #define GPS_RX 16
@@ -70,7 +70,7 @@
 
 // Delay Settings
 #define POWERUP_DELAY 5000         // Delay for power-up (in milliseconds)
-#define MAIN_LOOP_DELAY 500        // Delay for main loop (in milliseconds)
+#define MAIN_LOOP_DELAY 1000        // Delay for main loop (in milliseconds)
 #define WIFI_RETRY_DELAY 1000       // Delay for WiFi connection retries (in milliseconds)
 #define MQTT_RETRY_DELAY 1000       // Delay for MQTT connection retries (in milliseconds)
 #define GPS_UPDATE_DELAY 2000       // Delay between GPS updates (in milliseconds)
