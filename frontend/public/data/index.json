@@ -1,0 +1,33 @@
+{
+    "title": "e20-3yp-Smart-Site-Printing-Rover",
+    
+    "team": [
+        {
+            "name": "B.V.R.R.Jaysinghe",
+            "email": "e20168@eng.pdn.ac.lk",
+            "eNumber": "E/20/168"
+        },
+        {
+            "name": "G.A.I.Malinga",
+            "email": "e20242@eng.pdn.ac.lk",
+            "eNumber": "E/20/242"
+        },
+        {
+            "name": "S.M.N.N.Padeniya",
+            "email": "e20276@eng.pdn.ac.lk",
+            "eNumber": "E/20/276"
+        },
+        {
+            "name": "G.S. Seneviratne",
+            "email": "e20369@eng.pdn.ac.lk",
+            "eNumber": "E/20/369"
+        }
+    ],
+    "supervisors": [
+        {
+            "name": "Dr. Isuru Nawinne",
+            "email": "isurunawinne@eng.pdn.ac.lk"
+        }
+    ],
+    "tags": ["Web", "Embedded Systems"]
+}
