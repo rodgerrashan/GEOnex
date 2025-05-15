@@ -15,6 +15,7 @@ const getUserData = async (req, res) => {
             success: true,
             userData: {
                 name: user.name,
+                userId: user._id,
                 isAccountVerified: user.isAccountVerified
             }
         });

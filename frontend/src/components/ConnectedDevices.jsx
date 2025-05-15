@@ -1,5 +1,6 @@
+import { Context } from "../context/Context";
 import LoadingSpinner from "./LoadingSpinner";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 
 export default function ConnectedDevices() {
     const [devices, setDevices] = useState([]);
@@ -9,8 +10,10 @@ export default function ConnectedDevices() {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
+    const { userData } = useContext(Context);
+
     // Mock user ID (in real app, this would come from auth context)
-    const userId = "681e012572b69cef1e2c116b";
+    const userId = userData.userId;
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 

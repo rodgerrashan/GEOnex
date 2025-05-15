@@ -6,7 +6,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const Navbar = ({ mobileOpen = false, onClose = () => {} }) => {
-  const { navigate, backendUrl, setUserData, setIsLoggedin } =
+  const { navigate, backendUrl, setUserData, userData, setIsLoggedin } =
     useContext(Context);
 
   const logout = async () => {
@@ -112,7 +112,7 @@ const Navbar = ({ mobileOpen = false, onClose = () => {} }) => {
         <div className="px-6 py-4 mx-3 mb-3">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-white font-bold">
-              U
+              {userData ? userData.name.charAt(0).toUpperCase() : 'U'}
             </div>
             <div className="flex-grow">
               <p className="text-sm text-gray-500">Logged in</p>
