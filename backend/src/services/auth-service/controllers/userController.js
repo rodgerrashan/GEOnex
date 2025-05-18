@@ -29,6 +29,7 @@ const getUserData = async (req, res) => {
 
 const Device = require('../../device-service/models/Device'); 
 const { get } = require('mongoose');
+const Alert = require('../../device-service/models/Alert'); 
 
 const addDeviceToUser = async (req, res) => {
     const userId = req.params.userId;
@@ -174,6 +175,39 @@ const getUserRegisteredDevices = async (req, res) => {
 };
 
 
+const getUserDeviceAlerts = async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+        const user = await User.findById(userId).populate('connectedDevices');
+        
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Get array of device IDs
+        const deviceIds = user.connectedDevices.map(device => device._id);
+
+        // Find the latest 5 alerts for these devices
+        const alerts = await Alert.find({
+            deviceId: { $in: deviceIds }
+        })
+        .sort({ created_At: -1 })  // Ensure this matches your schema's timestamp field
+        .limit(5);
+
+        if (!alerts || alerts.length === 0) {
+            return res.status(200).json({ message: 'No alerts found for user devices' });
+        }
+
+        res.status(200).json({ alerts });
+
+    } catch (error) {
+        console.error('Error fetching device alerts:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
 
 
-module.exports = {getUserData,addDeviceToUser,getUserDevices, removeDeviceFromUser, getUserBases, getUserClientDevices, getUserRegisteredDevices}
+
+
+module.exports = {getUserData,addDeviceToUser,getUserDevices, removeDeviceFromUser, getUserBases, getUserClientDevices, getUserRegisteredDevices, getUserDeviceAlerts}
