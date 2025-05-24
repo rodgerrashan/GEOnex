@@ -58,7 +58,7 @@ const init = () => {
 
 
          if (action === 'tracking') {
-            sendToClients(deviceName, deviceType, action, value, status);
+            sendToClients(deviceName, deviceType, value, status);
         } else if (action === 'inform') {
             console.log("$ Running alert");
             // Construct a mock req and res for internal use of createAlert

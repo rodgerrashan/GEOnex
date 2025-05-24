@@ -37,7 +37,7 @@ const init = (server) => {
     return io;
 };
 
-const sendToClients = (deviceName, deviceType, action, value, status) => {
+const sendToClients = (deviceName, deviceType, value, status) => {
     console.log("Sending data to clients:");
 
     if (!io) return;
@@ -56,13 +56,15 @@ const sendToClients = (deviceName, deviceType, action, value, status) => {
     const data = {
         deviceName,
         deviceType,
-        action,
         status,
         timestamp: new Date().toISOString(),
         latitude: parsedValue?.latitude || null,
         longitude: parsedValue?.longitude || null,
         battery: parsedValue?.battery || null,
-        signal: parsedValue?.signal || null,
+        signal: parsedValue?.wifi || null,
+        satellites: parsedValue?.satallites || null,
+        colatitude: parsedValue?.colatitude || null,
+        colongitude: parsedValue?.colongitude || null
     };
 
     

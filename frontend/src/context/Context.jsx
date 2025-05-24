@@ -22,6 +22,8 @@ const ContextProvider = (props) => {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  const [notifications, setNotifications] = useState([]);
+
   const getAuthState = async () => {
     try {
       const { data } = await axios.get(backendUrl + "/api/auth/is-auth");
@@ -125,6 +127,24 @@ const ContextProvider = (props) => {
     }
   };
 
+
+
+  // Notifications 
+  const getNotificationsData = async (userId) => {
+    try {
+      const response = await axios.get(`/api/users/${userId}/notifications`);
+      if (Array.isArray(response.data)) {
+        setNotifications(response.data);
+      } else {
+        console.warn("Unexpected notifications format", response.data);
+        setNotifications([]);
+      }
+    } catch (error) {
+      console.error("Failed to fetch notifications", error);
+      setNotifications([]);
+    }
+  };
+
   useEffect(() => {
     getProjectsData();
     getAuthState();
@@ -140,6 +160,8 @@ const ContextProvider = (props) => {
   }, [isLoggedin]);
 
   const value = {
+    getNotificationsData,
+    notifications,
     navigate,
     showPointRecorded,
     setShowPointRecorded,
