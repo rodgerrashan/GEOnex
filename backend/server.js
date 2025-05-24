@@ -13,6 +13,7 @@ const deviceServices = require('./src/services/device-service/routes/deviceRoute
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const authRouter = require('./src/services/auth-service/routes/authRoutes');
 const userRouter = require('./src/services/auth-service/routes/userRoutes');
+const notificationRouter = require('./src/services/notification-service/routes/notificationRoutes');
 
 connectDB();
 
@@ -34,6 +35,7 @@ app.use('/api/points', pointRoutes);
 app.use('/api/devices', deviceServices); 
 app.use('/api/auth',authRouter);
 app.use('/api/user',userRouter);
+app.use('/api/notifications',notificationRouter);
 
 // Initialize socket server with the HTTP server instance
 socketService.init(server);
