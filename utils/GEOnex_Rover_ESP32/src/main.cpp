@@ -12,6 +12,7 @@
 #include "mpu_correction.h"
 #include "pin_manager.h"
 #include "battery_manager.h"
+#include "wifi_strength.h"
 
 
 IMUManager mpu(SDA, SCL);
@@ -44,29 +45,61 @@ void loop()
 
   mpu.update(); // Update MPU data test
 
+  double lat, lon;
+  int satellites;
+  String time;
+
   if (gpsInfo.isValid)
   {
-    double lat = gpsInfo.latitude;
-    double lon = gpsInfo.longitude;
-    int satellites = gpsInfo.satellites;
-    String time = gpsInfo.time;
+    lat = gpsInfo.latitude;
+    lon = gpsInfo.longitude;
+    satellites = gpsInfo.satellites;
+    time = gpsInfo.time;
+
+    // Print GPS data for tesing
+    Serial.print("[Test]  Raw GPS: ");
+    Serial.print(lat, 6);
+    Serial.print(", ");
+    Serial.print(lon, 6);
+    Serial.print(", ");
+    Serial.print(satellites);
+    Serial.print(", ");
+    Serial.print(time);
 
     // Correct GPS coordinates using MPU data
-    // Get pitch and roll from MPU9250
     float pitch = mpu.getPitch();
     float roll = mpu.getRoll();
-    
     correctGPSCoordinates(lat, lon, pitch, roll, POLE_HEIGHT);
-
-    publishGPSData(lat, lon, satellites, time);
 
     Serial.print("[Test]  Corrected GPS: ");
     Serial.print(lat, 6);
     Serial.print(", ");
     Serial.println(lon, 6);
   }
+  else
+  {
+    lat = NAN;
+    lon = NAN;
+    satellites = -1;
+    time = "";
 
-  publish_wifi_strength();
+    Serial.println("[Test]  GPS data invalid, sent null values.");
+  }
+
+  int wifiquality = get_signal_quality();
+  Serial.printf("[Test]  WiFi Quality: %d\n", wifiquality);
+
+  int batteryPercentage = getBatteryPercentage(readBatteryVoltage());
+  Serial.printf("[Test]  Battery Percentage: %d%%\n", batteryPercentage);
+
+  /* Publish data to MQTT  */
+
+
+  // Uncomment the next line to enable GPS data publishing
+  // publishGPSData(lat, lon, satellites, time);
+  // publish_wifi_strength();
+
+  publishData(DEVICE_ID, "OK", lat, lon, satellites, time, 0.0, 0.0, batteryPercentage, wifiquality);
 
   mqttLoop();
 
