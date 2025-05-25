@@ -15,6 +15,8 @@ const authRouter = require('./src/services/auth-service/routes/authRoutes');
 const userRouter = require('./src/services/auth-service/routes/userRoutes');
 const notificationRouter = require('./src/services/notification-service/routes/notificationRoutes');
 
+const exportRoutes = require("./src/services/export-service/routes/exportRoutes");
+
 connectDB();
 
 const app = express();
@@ -36,6 +38,7 @@ app.use('/api/devices', deviceServices);
 app.use('/api/auth',authRouter);
 app.use('/api/user',userRouter);
 app.use('/api/notifications',notificationRouter);
+app.use('/api/export',exportRoutes);
 
 // Initialize socket server with the HTTP server instance
 socketService.init(server);
