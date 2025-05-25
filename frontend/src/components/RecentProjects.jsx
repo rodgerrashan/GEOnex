@@ -19,15 +19,14 @@ const RecentProjects = ({userId}) => {
     <div className="bg-white p-4 rounded-lg">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg md:text-xl lg:text-2xl font-semibold">Recent Projects</h2>
+        
+
         <button
-          className="text-sm md:text-base lg:text-lg px-4 py-2"
-          style={{ color: "blue" }}
-          onClick={() => {
-            navigate("/projects");
-          }}
-        >
-          View All
-        </button>
+            className="text-sm md:text-base lg:text-lg px-4 py-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors"
+            onClick={() => navigate("/projects")}
+          >
+            View All
+          </button>
       </div>
       <div className="overflow-x-auto">
         <table
@@ -62,9 +61,8 @@ const RecentProjects = ({userId}) => {
               return (
                 <tr
                   key={index}
-                  style={{ backgroundColor: "rgba(197,197,198,1)" }}
                   onClick={() => navigate(`/project/${project._id}`)}
-                  className="cursor-pointer text-xs md:text-sm lg:text-base"
+                  className="cursor-pointer text-xs md:text-sm lg:text-base bg-slate-100 hover:bg-slate-200 transition-colors duration-200 rounded-lg shadow-sm"
                 >
                   <td className="px-6 py-4 rounded-l-lg">{project.Name}</td>
                   <td className="px-6 py-4">{createdOn}</td>
@@ -72,13 +70,7 @@ const RecentProjects = ({userId}) => {
 
                   <td className="px-6 py-4 rounded-r-lg">
                     <span
-                      className={`px-1 py-1 text-xs md:text-sm lg:text-base font-semibold ${
-                        project.Status === "Active"
-                          ? "text-blue-700"
-                          : project.Status === "Pending"
-                          ? "text-orange-500"
-                          : "text-green-700"
-                      }`}
+                      className={`px-1 py-1 text-xs md:text-sm lg:text-base font-medium ` }
                     >
                       {project.Status}
                     </span>

@@ -29,7 +29,7 @@ const getNotificationsByUserId = async (req, res) => {
   try {
     const { userId, numofnotifications } = req.params;
 
-    const limit = parseInt(numofnotifications) || 5; 
+    const limit = parseInt(numofnotifications) || 10; 
     const notifications = await Notifications.find({ userId })
       .sort({ timestamp: -1 })
       .limit(limit);
@@ -40,24 +40,29 @@ const getNotificationsByUserId = async (req, res) => {
   }
 };
 
-// Mark specific notification(s) as read
+// Mark specific notification as read
 const markAsRead = async (req, res) => {
   try {
-    const { ids } = req.body; // array of notification _ids
+    const { id } = req.body; 
 
-    if (!Array.isArray(ids)) {
-      return res.status(400).json({ success: false, message: "ids must be an array" });
+    if (!id) {
+      return res.status(400).json({ success: false, message: "notification id is required" });
     }
 
-    await Notifications.updateMany(
-      { _id: { $in: ids } },
-      { $set: { read: true } }
+    const notification = await Notifications.findByIdAndUpdate(
+      id,
+      { $set: { read: true } },
+      { new: true }
     );
 
-    res.status(200).json({ success: true, message: "Notifications marked as read" });
+    if (!notification) {
+      return res.status(404).json({ success: false, message: "Notification not found" });
+    }
+
+    res.status(200).json({ success: true, message: "Notification marked as read" });
 
   } catch (error) {
-    res.status(500).json({ success: false, message: "Error updating notifications", error: error.message });
+    res.status(500).json({ success: false, message: "Error updating notification", error: error.message });
   }
 };
 

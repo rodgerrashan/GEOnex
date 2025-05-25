@@ -22,6 +22,7 @@ import RegisterNewDevice from "./pages/RegisterNewDevice";
 import "leaflet/dist/leaflet.css";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { Context } from "../src/context/Context";
+import Notifications from "./pages/Notifications";
 
 
 const App = () => {
@@ -57,6 +58,7 @@ const App = () => {
             <Route path="/takenpoints/:projectId" element={<TakenPoints />} />
 
             <Route path="/project/:projectId" element={<ProjectDetails />} />
+            <Route path="/notifications" element={<Notifications/>} />
             <Route
               path="/devices/register-device/:userId"
               element={<RegisterNewDevice />}

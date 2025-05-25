@@ -138,7 +138,7 @@ const ContextProvider = (props) => {
   const getNotificationsData = async (userId, numOfNotifications) => {
     try {
       console.log("Getting notifications for user:", userId);
-      const response = await axios.get(`${backendUrl}/api/notifications/user/${userId}/${numOfNotifications || 5}`);
+      const response = await axios.get(`${backendUrl}/api/notifications/user/${userId}/${numOfNotifications || 10}`);
       console.log("Notifications response:", response.data);
       if (Array.isArray(response.data.notifications)) {
         setNotifications(response.data.notifications);
@@ -153,24 +153,28 @@ const ContextProvider = (props) => {
   };
 
 
-  // markasread function
-  const markAsRead = async (ids) => {
-    try {
-      const response = await axios.put(`${backendUrl}/api/notifications/mark-read`, { ids });
-      if (response.data.success) {
-        setNotifications((prevNotifications) =>
-          prevNotifications.map((note) =>
-            ids.includes(note._id) ? { ...note, read: true } : note
-          )
-        );
-      } else {
-        toast.error("Failed to mark notifications as read.");
-      }
-    } catch (error) {
-      console.error("Error marking notifications as read:", error);
-      toast.error("Failed to mark notifications as read.");
+  const markAsRead = async (id) => {
+  try {
+    console.log("Marking notification as read:", id);
+
+    const response = await axios.put(`${backendUrl}/api/notifications/mark-read`, { id });
+    console.log("Mark as read response:", response.data);
+
+    if (response.data.success) {
+      setNotifications((prevNotifications) =>
+        prevNotifications.map((note) =>
+          note._id === id ? { ...note, read: true } : note
+        )
+      );
+    } else {
+      toast.error("Failed to mark notification as read.");
     }
-  };
+  } catch (error) {
+    console.error("Error marking notification as read:", error);
+    toast.error("Failed to mark notification as read.");
+  }
+};
+
 
 
   // devices
