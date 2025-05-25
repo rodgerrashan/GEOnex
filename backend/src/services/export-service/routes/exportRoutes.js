@@ -3,7 +3,7 @@ const {ObjectId} = require('mongodb');
 const { getDb } = require("../../point-service/db");
 const router = express.Router();
 const { getPointsByProjectId } = require("../../point-service/controllers/pointController");
-const { exportToTxt, exportToPng, exportToDxf } = require("../../../utils/export");
+const { exportToTxt, exportToPng, exportToDxf, exportToPdf } = require("../../../utils/export");
 const Point = require("../../point-service/models/Point");
 const path = require("path");
 const fs = require("fs").promises;
@@ -100,8 +100,16 @@ router.get("/png/:projectId", validateProjectId, async (req, res) => {
   let filePath = null;
   
   try {
-    const { projectId } = req.params;
-    const points = await getPointsByProjectId(projectId);
+    const { projectId} = req.params;
+    if (!ObjectId.isValid(projectId)) {
+      return res.status(400).json({ error: "Invalid Project ID" });
+    }
+
+    const db = getDb();
+    const cursor = await db.collection('points').find({ 
+      ProjectId: new ObjectId(projectId) 
+    });
+    const points = await cursor.toArray();
     
     if (!points || points.length === 0) {
       return res.status(404).json({ 
@@ -147,8 +155,16 @@ router.get("/dxf/:projectId", validateProjectId, async (req, res) => {
   let filePath = null;
   
   try {
-    const { projectId } = req.params;
-    const points = await getPointsByProjectId(projectId);
+    const { projectId} = req.params;
+    if (!ObjectId.isValid(projectId)) {
+      return res.status(400).json({ error: "Invalid Project ID" });
+    }
+
+    const db = getDb();
+    const cursor = await db.collection('points').find({ 
+      ProjectId: new ObjectId(projectId) 
+    });
+    const points = await cursor.toArray();
     
     if (!points || points.length === 0) {
       return res.status(404).json({ 
@@ -188,6 +204,65 @@ router.get("/dxf/:projectId", validateProjectId, async (req, res) => {
     });
   }
 });
+
+
+
+// Export PDF
+router.get("/pdf/:projectId", validateProjectId, async (req, res) => {
+  let filePath = null;
+  
+  try {
+    const { projectId} = req.params;
+    if (!ObjectId.isValid(projectId)) {
+      return res.status(400).json({ error: "Invalid Project ID" });
+    }
+
+    const db = getDb();
+    const cursor = await db.collection('points').find({ 
+      ProjectId: new ObjectId(projectId) 
+    });
+    const points = await cursor.toArray();
+    
+    if (!points || points.length === 0) {
+      return res.status(404).json({ 
+        message: "No points found for the specified user",
+        projectId 
+      });
+    }
+    
+    const filename = `points-${projectId}-${Date.now()}.pdf`;
+    filePath = await exportToPdf(points, filename);
+    
+    if (!filePath || !(await fs.access(filePath).then(() => true).catch(() => false))) {
+      throw new Error("Failed to generate PDF file");
+    }
+    
+    // Set proper headers
+    res.setHeader('Content-Type', 'application/dxf');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    
+    // Send file and cleanup after response
+    res.download(filePath, filename, (err) => {
+      if (err) {
+        console.error("Error sending PDF file:", err);
+      }
+      // Cleanup temp file
+      cleanupFile(filePath);
+    });
+    
+  } catch (err) {
+    console.error("PDF export error:", err);
+    if (filePath) {
+      cleanupFile(filePath);
+    }
+    res.status(500).json({ 
+      message: "Error generating PDF export", 
+      error: process.env.NODE_ENV === 'development' ? err.message : "Internal server error"
+    });
+  }
+});
+
+
 
 // Health check endpoint
 router.get("/health", (req, res) => {

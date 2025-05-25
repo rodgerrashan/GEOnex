@@ -172,10 +172,9 @@ const handleExport = async () => {
             value={exportFormat}
         onChange={handleFormatChange}
             >
-               <option value="dwg">DWG (AutoCAD)</option>
+               <option value="dxf">DXF (AutoCAD)</option>
               <option value="png">PNG Image</option>
               <option value="pdf">PDF Document</option>
-              <option value="jpeg">JPEG Image</option>
               <option value="txt">TXT</option>
             </select>
             <button className="bg-black text-white px-8 py-1.5 rounded-xl text-sm md:text-base"
