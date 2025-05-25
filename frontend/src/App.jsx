@@ -26,13 +26,6 @@ import Notifications from "./pages/Notifications";
 
 
 const App = () => {
-  const { userData } = React.useContext(Context);
-  console.log("User Data:", userData);
-  useEffect(() => {
-    if ("Notification" in window && Notification.permission !== "granted") {
-      Notification.requestPermission();
-    }
-  }, [userData.userId]);
 
   return (
     <div>

@@ -19,6 +19,12 @@ const Dashboard = () => {
     return <RecentProjects userId={userId} />;
   }, [userId]); // Only re-render if userId changes
 
+  useEffect(() => {
+  if ("Notification" in window && Notification.permission === "default") {
+    Notification.requestPermission();
+  }
+}, []);
+
 
   useEffect(() => {
     const fetchData = async () => {
