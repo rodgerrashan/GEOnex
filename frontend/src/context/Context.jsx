@@ -135,10 +135,10 @@ const ContextProvider = (props) => {
 
 
   // Notifications 
-  const getNotificationsData = async (userId) => {
+  const getNotificationsData = async (userId, numOfNotifications) => {
     try {
       console.log("Getting notifications for user:", userId);
-      const response = await axios.get(`${backendUrl}/api/notifications/user/${userId}`);
+      const response = await axios.get(`${backendUrl}/api/notifications/user/${userId}/${numOfNotifications || 5}`);
       console.log("Notifications response:", response.data);
       if (Array.isArray(response.data.notifications)) {
         setNotifications(response.data.notifications);
@@ -149,6 +149,26 @@ const ContextProvider = (props) => {
     } catch (error) {
       console.error("Failed to fetch notifications", error);
       setNotifications([]);
+    }
+  };
+
+
+  // markasread function
+  const markAsRead = async (ids) => {
+    try {
+      const response = await axios.put(`${backendUrl}/api/notifications/mark-read`, { ids });
+      if (response.data.success) {
+        setNotifications((prevNotifications) =>
+          prevNotifications.map((note) =>
+            ids.includes(note._id) ? { ...note, read: true } : note
+          )
+        );
+      } else {
+        toast.error("Failed to mark notifications as read.");
+      }
+    } catch (error) {
+      console.error("Error marking notifications as read:", error);
+      toast.error("Failed to mark notifications as read.");
     }
   };
 
@@ -200,6 +220,7 @@ const ContextProvider = (props) => {
   const value = {
     getNotificationsData,
     notifications,
+    markAsRead,
     navigate,
     showPointRecorded,
     setShowPointRecorded,
