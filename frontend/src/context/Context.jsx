@@ -13,6 +13,10 @@ const ContextProvider = (props) => {
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
+
+  const [rovers, setRovers] = useState([]);
+  const [base, setBase] = useState();
+
   const [projects, setProjects] = useState([]);
   const [points, setPoints] = useState([]);
   const [loadingPoints, setLoadingPoints] = useState(false);
@@ -21,6 +25,7 @@ const ContextProvider = (props) => {
   const [userData, setUserData] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingDevices, setLoadingDevices] = useState(true);
 
   const [notifications, setNotifications] = useState([]);
 
@@ -132,9 +137,11 @@ const ContextProvider = (props) => {
   // Notifications 
   const getNotificationsData = async (userId) => {
     try {
-      const response = await axios.get(`/api/users/${userId}/notifications`);
-      if (Array.isArray(response.data)) {
-        setNotifications(response.data);
+      console.log("Getting notifications for user:", userId);
+      const response = await axios.get(`${backendUrl}/api/notifications/user/${userId}`);
+      console.log("Notifications response:", response.data);
+      if (Array.isArray(response.data.notifications)) {
+        setNotifications(response.data.notifications);
       } else {
         console.warn("Unexpected notifications format", response.data);
         setNotifications([]);
@@ -145,9 +152,40 @@ const ContextProvider = (props) => {
     }
   };
 
+
+  // devices
+  const fetchUserDevices = async () => {
+    setLoadingDevices(true);
+    try {
+        const response = await fetch(`${backendUrl}/api/user/${userData.userId}/devices`);
+        if (!response.ok) {
+            throw new Error("Failed to fetch devices");
+        }
+
+        const data = await response.json();
+        console.log("Full response:", data);
+        // Filter and set devices based on their type
+        const rovers = data.connectedDevices?.filter(device => device.Type === 'rover') || [];
+        const baseDevice = data.connectedDevices?.find(device => device.Type === 'base');
+        
+        setRovers(rovers);
+        setBase(baseDevice);
+
+        console.log(rovers);
+        console.log(baseDevice);
+    } catch (error) {
+        console.error("Error fetching devices:", error);
+        setError("Failed to load connected devices");
+    } finally {
+        setLoadingDevices(false);
+    }
+};
+
   useEffect(() => {
     getProjectsData();
     getAuthState();
+    fetchUserDevices();
+    getNotificationsData(userData?.userId);
   }, []);
 
   // 🔍 watch auth state change
@@ -174,6 +212,7 @@ const ContextProvider = (props) => {
     points,
     loadingPoints,
     fetchPoints,
+    fetchUserDevices,
     setPoints,
     deletePoint,
     isLoggedin,
@@ -181,7 +220,9 @@ const ContextProvider = (props) => {
     userData,
     setUserData,
     getUserData,
-    isLoading
+    isLoadingDevices,
+    rovers,
+    base
   };
 
   return <Context.Provider value={value}>{props.children}</Context.Provider>;

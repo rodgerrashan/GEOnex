@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema({
   resetOtpExpiredAt:{type:Number, default:0},
   created_At: { type: Date, default: Date.now },
   connectedDevices: [{ type: mongoose.Schema.Types.ObjectId, ref: "Device", default: [] }]
+  
   //Last_Login: { type: Date, default: Date.now }
 });
 
