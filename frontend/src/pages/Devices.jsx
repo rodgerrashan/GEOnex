@@ -1,6 +1,8 @@
 import React from "react";
 import ConnectedDevices from "../components/ConnectedDevices";
 import RegisteredDevices from "../components/RegisteredDevices";
+import MapDeviceData from "../components/MapDeviceData";
+import CriticalAlerts from "../components/CriticalAlerts";
 
 
 const Devices = () => {
@@ -14,27 +16,25 @@ const Devices = () => {
       <div className="flex flex-wrap gap-4">
         {/* Left column */}
         <div className="flex-1 min-w-[300px]">
-          <div className="bg-white p-4 rounded-lg mb-4 h-[400px]">
-            {/* Map section */}
-            Map Section
+          <div className="bg-white p-4 rounded-lg mb-4 ">
+            <MapDeviceData/>
           </div>
-          <div className="bg-white p-4 rounded-lg mb-4">
+          <div className="bg-white p-4 rounded-lg ">
             <ConnectedDevices />
+          </div>
+          
+        </div>
+
+        {/* Right column */}
+        <div className="flex-1 min-w-[300px]">
+          <div className="bg-white p-4 rounded-lg mb-4">
+            <CriticalAlerts/>
           </div>
           <div className="bg-white p-4 rounded-lg">
             <RegisteredDevices/>
           </div>
         </div>
 
-        {/* Right column */}
-        <div className="flex-1 min-w-[300px]">
-          <div className="bg-white p-4 rounded-lg mb-4 h-[400px]">
-            RT data
-          </div>
-          <div className="bg-white p-4 rounded-lg">
-            Critical alert
-          </div>
-        </div>
       </div>
     </div>
   );

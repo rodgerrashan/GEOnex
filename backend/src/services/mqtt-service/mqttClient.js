@@ -2,6 +2,7 @@ const awsIot = require("aws-iot-device-sdk");
 const path = require("path");
 require("dotenv").config();
 const { sendToClients } = require("../socket-service/socketServer");
+const { createAlert } = require('../device-service/controllers/alertController');
 
 
 const device = awsIot.device({
@@ -23,6 +24,7 @@ const init = () => {
             process.env.AWS_TOPIC_ROVER_LIVE,
             process.env.AWS_TOPIC_BASE_LIVE,
             process.env.AWS_TOPIC_BASE_CORRECTIONS,
+            process.env.AWS_TOPIC_DEVICES_ALERTS
         ]
 
         topics.forEach(topic => {
@@ -36,7 +38,7 @@ const init = () => {
         });
     });
 
-    device.on('message', (topic, payload) => {
+    device.on('message', async (topic, payload) => {
         // console.log(`Received message on ${topic}:`, payload.toString());
         const parts = topic.split('/'); // ['tracking', 'rover', 'status', 'rover1']
 
@@ -55,11 +57,45 @@ const init = () => {
         console.log('status:', status);
 
 
-        sendToClients(deviceName, deviceType, action, value, status);
+         if (action === 'tracking') {
+            sendToClients(deviceName, deviceType, value, status);
+        } else if (action === 'inform') {
+            console.log("$ Running alert");
+            // Construct a mock req and res for internal use of createAlert
+            const parsedValue = JSON.parse(value);
+            const mockReq = {
+                body: {
+                    deviceId: deviceName,
+                    status: parsedValue.status,
+                    code: parsedValue.code,
+                    created_At: new Date().toISOString()
+                }
+            };
+
+            const mockRes = {
+                status: (code) => ({
+                    json: (data) => {
+                        console.log(`Alert created with status ${code}:`, data);
+                    }
+                }),
+                json: (data) => {
+                    console.log("Alert creation error:", data);
+                }
+            };
+
+            try {
+                await createAlert(mockReq, mockRes);
+            } catch (error) {
+                console.error("Error creating alert:", error.message);
+            }
+        }
+    });
+
+        
 
     
 
-    });
+    
     
     device.on('error', (error) => {
         console.error('MQTT Error:', error);

@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Devices from "./pages/Devices";
@@ -20,8 +21,19 @@ import ResetPassword from "./pages/ResetPassword";
 import RegisterNewDevice from "./pages/RegisterNewDevice";
 import "leaflet/dist/leaflet.css";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { Context } from "../src/context/Context";
+import Notifications from "./pages/Notifications";
+
 
 const App = () => {
+  const { userData } = React.useContext(Context);
+  console.log("User Data:", userData);
+  useEffect(() => {
+    if ("Notification" in window && Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+  }, [userData.userId]);
+
   return (
     <div>
       <ToastContainer />
@@ -46,6 +58,7 @@ const App = () => {
             <Route path="/takenpoints/:projectId" element={<TakenPoints />} />
 
             <Route path="/project/:projectId" element={<ProjectDetails />} />
+            <Route path="/notifications" element={<Notifications/>} />
             <Route
               path="/devices/register-device/:userId"
               element={<RegisterNewDevice />}
