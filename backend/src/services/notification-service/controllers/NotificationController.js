@@ -27,9 +27,12 @@ const addNotification = async (req, res) => {
 // Get all notifications for a user
 const getNotificationsByUserId = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { userId, numofnotifications } = req.params;
 
-    const notifications = await Notifications.find({ userId }).sort({ timestamp: -1 });
+    const limit = parseInt(numofnotifications) || 5; 
+    const notifications = await Notifications.find({ userId })
+      .sort({ timestamp: -1 })
+      .limit(limit);
     res.status(200).json({ success: true, notifications });
 
   } catch (error) {

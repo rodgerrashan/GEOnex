@@ -8,7 +8,7 @@ const {
 } = require('../controllers/NotificationController');
 
 router.post('/add', addNotification);
-router.get('/user/:userId', getNotificationsByUserId);
+router.get('/user/:userId/:numofnotifications', getNotificationsByUserId);
 router.put('/mark-read', markAsRead);
 router.delete('/clear/:userId', clearNotifications);
 
