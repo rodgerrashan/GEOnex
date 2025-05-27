@@ -15,10 +15,10 @@ export default function CriticalAlerts() {
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
     useEffect(() => {
-        fetchUserDevices();
+        fetchDeviceAlert();
     }, []);
 
-    const fetchUserDevices = async () => {
+    const fetchDeviceAlert = async () => {
         setLoading(true);
         try {
             const response = await fetch(`${backendUrl}/api/user/${userId}/device-alerts`);

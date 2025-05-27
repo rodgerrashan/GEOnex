@@ -13,7 +13,6 @@ const ContextProvider = (props) => {
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-
   const [rovers, setRovers] = useState([]);
   const [base, setBase] = useState();
 
@@ -35,7 +34,7 @@ const ContextProvider = (props) => {
       if (data.success && data.verified) {
         setIsLoggedin(true);
         await getUserData();
-      }else{
+      } else {
         setIsLoggedin(false);
         setUserData(null);
       }
@@ -43,8 +42,8 @@ const ContextProvider = (props) => {
       setIsLoggedin(false);
       toast.error(error.message);
       navigate("/login");
-    }finally{
-      setIsLoading(false)
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -60,16 +59,16 @@ const ContextProvider = (props) => {
   const getProjectsData = async (userId) => {
     try {
       if (userId !== undefined) {
-        const response = await axios.get(backendUrl + `/api/projects/recentprojects/${userId}`);
+        const response = await axios.get(
+          backendUrl + `/api/projects/recentprojects/${userId}`
+        );
 
-      if (response.data.success) {
-        setProjects(response.data.projects);
-      } else {
-        toast.error(response.data.message);
+        if (response.data.success) {
+          setProjects(response.data.projects);
+        } else {
+          toast.error(response.data.message);
+        }
       }
-
-      }
-      
     } catch (error) {
       console.error("Error fetching projects:", error);
       toast.error(error.message);
@@ -132,9 +131,7 @@ const ContextProvider = (props) => {
     }
   };
 
-
-
-  // Notifications 
+  // Notifications
   // const getNotificationsData = async (userId, numOfNotifications) => {
   //   try {
   //     console.log("Getting notifications for user:", userId);
@@ -152,65 +149,69 @@ const ContextProvider = (props) => {
   //   }
   // };
 
+  //   const markAsRead = async (id) => {
+  //   try {
+  //     console.log("Marking notification as read:", id);
 
-//   const markAsRead = async (id) => {
-//   try {
-//     console.log("Marking notification as read:", id);
+  //     const response = await axios.put(`${backendUrl}/api/notifications/mark-read`, { id });
+  //     console.log("Mark as read response:", response.data);
 
-//     const response = await axios.put(`${backendUrl}/api/notifications/mark-read`, { id });
-//     console.log("Mark as read response:", response.data);
-
-//     if (response.data.success) {
-//       setNotifications((prevNotifications) =>
-//         prevNotifications.map((note) =>
-//           note._id === id ? { ...note, read: true } : note
-//         )
-//       );
-//     } else {
-//       toast.error("Failed to mark notification as read.");
-//     }
-//   } catch (error) {
-//     console.error("Error marking notification as read:", error);
-//     toast.error("Failed to mark notification as read.");
-//   }
-// };
-
-
+  //     if (response.data.success) {
+  //       setNotifications((prevNotifications) =>
+  //         prevNotifications.map((note) =>
+  //           note._id === id ? { ...note, read: true } : note
+  //         )
+  //       );
+  //     } else {
+  //       toast.error("Failed to mark notification as read.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error marking notification as read:", error);
+  //     toast.error("Failed to mark notification as read.");
+  //   }
+  // };
 
   // devices
   const fetchUserDevices = async () => {
+    if (!userData || !userData.userId) {
+      console.warn("User ID not available, skipping device fetch");
+      return;
+    }
     setLoadingDevices(true);
     try {
-        const response = await fetch(`${backendUrl}/api/user/${userData.userId}/devices`);
-        if (!response.ok) {
-            throw new Error("Failed to fetch devices");
-        }
+      const response = await axios.get(
+        `${backendUrl}/api/user/${userData.userId}/devices`
+      );
+      const data = response.data;
+      console.log("Full response:", data);
+      const rovers =
+        data.connectedDevices?.filter((device) => device.Type === "rover") ||
+        [];
+      const baseDevice = data.connectedDevices?.find(
+        (device) => device.Type === "base"
+      );
 
-        const data = await response.json();
-        console.log("Full response:", data);
-        // Filter and set devices based on their type
-        const rovers = data.connectedDevices?.filter(device => device.Type === 'rover') || [];
-        const baseDevice = data.connectedDevices?.find(device => device.Type === 'base');
-        
-        setRovers(rovers);
-        setBase(baseDevice);
-
-        console.log(rovers);
-        console.log(baseDevice);
+      setRovers(rovers);
+      setBase(baseDevice);
     } catch (error) {
-        console.error("Error fetching devices:", error);
-        setError("Failed to load connected devices");
+      console.error("Error fetching devices:", error);
+      toast.error("Failed to load connected devices");
     } finally {
-        setLoadingDevices(false);
+      setLoadingDevices(false);
     }
-};
+  };
 
   useEffect(() => {
     getAuthState();
-    getProjectsData();
-    // fetchUserDevices();
     // getNotificationsData(userData?.userId);
   }, []);
+
+  useEffect(() => {
+    if (userData && userData.userId) {
+      getProjectsData(userData.userId);
+      fetchUserDevices();
+    }
+  }, [userData]);
 
   // 🔍 watch auth state change
   useEffect(() => {
@@ -248,7 +249,7 @@ const ContextProvider = (props) => {
     isLoading,
     isLoadingDevices,
     rovers,
-    base
+    base,
   };
 
   return <Context.Provider value={value}>{props.children}</Context.Provider>;

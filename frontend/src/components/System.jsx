@@ -15,7 +15,6 @@ const System = () => {
       </div>
       <hr className="border-gray-300" />
 
-
       {/* Coordinates Unit */}
       <div className="flex items-center justify-between mt-4">
         <span>Coordinates Unit</span>
@@ -39,25 +38,19 @@ const System = () => {
       <hr className="border-gray-300" />
 
       {/* Longitude and Latitude placeholders */}
-      <div className="flex gap-2 mt-6 mx-4">
+      <div className="flex flex-col md:flex-row gap-2 mt-6 mx-4">
         <input
           type="text"
           placeholder="Longitude"
           disabled
-          className="flex-1 bg-gray-200 rounded-full py-1 px-2 text-center text-gray-800 cursor-not-allowed"
+          className="flex-1 min-w-0 bg-gray-200 rounded-full py-1 px-2 text-center text-gray-800 cursor-not-allowed"
         />
         <input
           type="text"
           placeholder="Latitude"
           disabled
-          className="flex-1 bg-gray-200 rounded-full py-1 px-2 text-center text-gray-500 cursor-not-allowed"
+          className="flex-1 min-w-0 bg-gray-200 rounded-full py-1 px-2 text-center text-gray-500 cursor-not-allowed"
         />
-        <button
-          disabled
-          className="rounded-full bg-gray-200 w-7 h-7 flex items-center justify-center text-gray-500 cursor-not-allowed"
-        >
-          x
-        </button>
       </div>
     </div>
   );
