@@ -27,7 +27,7 @@ const ContextProvider = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingDevices, setLoadingDevices] = useState(true);
 
-  const [notifications, setNotifications] = useState([]);
+  // const [notifications, setNotifications] = useState([]);
 
   const getAuthState = async () => {
     try {
@@ -135,45 +135,45 @@ const ContextProvider = (props) => {
 
 
   // Notifications 
-  const getNotificationsData = async (userId, numOfNotifications) => {
-    try {
-      console.log("Getting notifications for user:", userId);
-      const response = await axios.get(`${backendUrl}/api/notifications/user/${userId}/${numOfNotifications || 10}`);
-      console.log("Notifications response:", response.data);
-      if (Array.isArray(response.data.notifications)) {
-        setNotifications(response.data.notifications);
-      } else {
-        console.warn("Unexpected notifications format", response.data);
-        setNotifications([]);
-      }
-    } catch (error) {
-      console.error("Failed to fetch notifications", error);
-      setNotifications([]);
-    }
-  };
+  // const getNotificationsData = async (userId, numOfNotifications) => {
+  //   try {
+  //     console.log("Getting notifications for user:", userId);
+  //     const response = await axios.get(`${backendUrl}/api/notifications/user/${userId}/${numOfNotifications || 10}`);
+  //     console.log("Notifications response:", response.data);
+  //     if (Array.isArray(response.data.notifications)) {
+  //       setNotifications(response.data.notifications);
+  //     } else {
+  //       console.warn("Unexpected notifications format", response.data);
+  //       setNotifications([]);
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to fetch notifications", error);
+  //     setNotifications([]);
+  //   }
+  // };
 
 
-  const markAsRead = async (id) => {
-  try {
-    console.log("Marking notification as read:", id);
+//   const markAsRead = async (id) => {
+//   try {
+//     console.log("Marking notification as read:", id);
 
-    const response = await axios.put(`${backendUrl}/api/notifications/mark-read`, { id });
-    console.log("Mark as read response:", response.data);
+//     const response = await axios.put(`${backendUrl}/api/notifications/mark-read`, { id });
+//     console.log("Mark as read response:", response.data);
 
-    if (response.data.success) {
-      setNotifications((prevNotifications) =>
-        prevNotifications.map((note) =>
-          note._id === id ? { ...note, read: true } : note
-        )
-      );
-    } else {
-      toast.error("Failed to mark notification as read.");
-    }
-  } catch (error) {
-    console.error("Error marking notification as read:", error);
-    toast.error("Failed to mark notification as read.");
-  }
-};
+//     if (response.data.success) {
+//       setNotifications((prevNotifications) =>
+//         prevNotifications.map((note) =>
+//           note._id === id ? { ...note, read: true } : note
+//         )
+//       );
+//     } else {
+//       toast.error("Failed to mark notification as read.");
+//     }
+//   } catch (error) {
+//     console.error("Error marking notification as read:", error);
+//     toast.error("Failed to mark notification as read.");
+//   }
+// };
 
 
 
@@ -206,10 +206,10 @@ const ContextProvider = (props) => {
 };
 
   useEffect(() => {
-    getProjectsData();
     getAuthState();
-    fetchUserDevices();
-    getNotificationsData(userData?.userId);
+    getProjectsData();
+    // fetchUserDevices();
+    // getNotificationsData(userData?.userId);
   }, []);
 
   // 🔍 watch auth state change
@@ -222,9 +222,9 @@ const ContextProvider = (props) => {
   }, [isLoggedin]);
 
   const value = {
-    getNotificationsData,
-    notifications,
-    markAsRead,
+    // getNotificationsData,
+    // notifications,
+    // markAsRead,
     navigate,
     showPointRecorded,
     setShowPointRecorded,
@@ -245,6 +245,7 @@ const ContextProvider = (props) => {
     userData,
     setUserData,
     getUserData,
+    isLoading,
     isLoadingDevices,
     rovers,
     base

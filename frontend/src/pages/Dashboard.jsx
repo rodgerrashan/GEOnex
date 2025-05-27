@@ -7,9 +7,6 @@ import DashboardNotifications from "../components/DashboardNotifications";
 const Dashboard = () => {
   const { navigate, userData, rovers, base, fetchUserDevices } = useContext(Context);
 
-  
-
-
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   // Use a constant or get this from context instead of hardcoding
   const userId = userData.userId; // Replace with actual user ID
@@ -19,17 +16,17 @@ const Dashboard = () => {
     return <RecentProjects userId={userId} />;
   }, [userId]); // Only re-render if userId changes
 
-  useEffect(() => {
-  if ("Notification" in window && Notification.permission === "default") {
-    Notification.requestPermission();
-  }
-}, []);
+//   useEffect(() => {
+//   if ("Notification" in window && Notification.permission === "default") {
+//     Notification.requestPermission();
+//   }
+// }, []);
 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await fetchUserDevices(userId);
+        await fetchUserDevices();
       } catch (error) {
         console.error('Error fetching user devices:', error);
       }
@@ -150,9 +147,9 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="col-span-1 md:col-span-2 lg:col-span-3 bg-white p-4 rounded-lg">
+        {/* <div className="col-span-1 md:col-span-2 lg:col-span-3 bg-white p-4 rounded-lg">
           <DashboardNotifications userId={userId}/>
-        </div>
+        </div> */}
 
         <div className="col-span-1 md:col-span-2 lg:col-span-3 bg-white p-4 rounded-lg">
           {memoizedRecentProjects}
