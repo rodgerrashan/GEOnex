@@ -86,17 +86,17 @@ export default function MapDeviceData() {
             <div className="flex flex-col w-full p-1 pb-0">
                 <div className="flex flex-col gap-4">
                     <div className="flex items-center justify-between">
-                        <h1 className="text-xl font-bold">Device Map</h1>
+                        <h1 className="text-lg md:text-xl lg:text-2xl font-bold">Device Map</h1>
                         <div className="flex gap-2">
                             <div className={`w-2 h-2 rounded-full ${connectionStatus === 'connected' ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                            <span className="text-xs text-gray-500">Rovers: {connectionStatus}</span>
+                            <span className="text-xs md:text-sm lg:text-base text-gray-500">Rovers: {connectionStatus}</span>
                             <div className={`w-2 h-2 rounded-full ${baseConnectionStatus === 'connected' ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                            <span className="text-xs text-gray-500">Base: {baseConnectionStatus}</span>
+                            <span className="text-xs md:text-sm lg:text-base text-gray-500">Base: {baseConnectionStatus}</span>
                         </div>
                     </div>
                     
-                    {error && <p className="text-red-500 text-sm">{error}</p>}
-                    {success && <p className="text-green-500 text-sm">{success}</p>}
+                    {error && <p className="text-red-500 text-xs md:text-sm lg:text-base">{error}</p>}
+                    {success && <p className="text-green-500 text-xs md:text-sm lg:text-base">{success}</p>}
 
 
                 </div>

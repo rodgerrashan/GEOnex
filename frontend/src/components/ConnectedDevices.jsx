@@ -200,103 +200,124 @@ export default function ConnectedDevices() {
         }
     };
 
-    return(
-        <>
-            <div className="flex flex-col gap-6 w-full">
-                <div className="flex flex-col gap-4">
-                    <div className="flex items-center justify-between">
-                        <h1 className="text-xl font-bold">Connected Devices</h1>
-                        <button 
-                            onClick={() => window.location.href = `/devices/register-device/${userId}`}
-                            className="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 transition-colors"
-                        >
-                            Register New Device
-                        </button>
-                    </div>
-                    
-                    {error && <p className="text-red-500 text-sm">{error}</p>}
-                    {success && <p className="text-green-500 text-sm">{success}</p>}
-                    
-                    <div className="flex items-center gap-2">
-                        <input
-                            type="text"
-                            placeholder="Enter Device ID"
-                            value={DeviceCode}
-                            onChange={(e) => setDeviceCode(e.target.value)}
-                            className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                        <button
-                            onClick={handleConnectDevice}
-                            disabled={connectingDevice}
-                            className="bg-green-500 text-white px-2 py-2 rounded-md text-sm hover:bg-green-600 transition-colors disabled:bg-gray-400"
-                        >
-                            {connectingDevice ? "Connecting..." : "Connect"}
-                        </button>
-                    </div>
-                </div>
+  return (
+  <>
+    <div className="flex flex-col gap-6 w-full">
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <h1 className="text-lg md:text-xl lg:text-2xl font-bold">Connected Devices</h1>
+          <button
+            onClick={() => (window.location.href = `/devices/register-device/${userId}`)}
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 transition-colors"
+          >
+            Register New Device
+          </button>
+        </div>
 
-                <div className="flex flex-col gap-2 w-full ">
-                    <div className="flex items-center justify-between bg-gray-100 p-3 rounded-lg">
-                        <span className="text-sm font-semibold">Device ID</span>
-                        <div className="flex gap-6">
-                            <span className="text-sm font-semibold">Type</span>
-                            <span className="text-sm font-semibold">Battery</span>
-                            <span className="text-sm font-semibold">Signal</span>
-                            <span className="text-sm font-semibold">Status</span>
-                            <span className="text-sm font-semibold">Actions</span>
-                        </div>
-                    </div>
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+        {success && <p className="text-green-500 text-sm">{success}</p>}
 
-                    {loading ? (
-                        <div className="flex items-center justify-center w-full py-8 max-h-96">
-                            <LoadingSpinner />
-                        </div>
-                    ) : (
-                        devices.length === 0 ? (
-                            <p className="text-gray-600 py-4 text-center">No devices connected yet.</p>
-                        ) : (
-                            devices.map((device) => (
-                                <div key={device._id} className="flex items-center justify-between bg-white p-3 rounded-lg shadow-sm border border-gray-100">
-                                    <div className="flex flex-col">
-                                        <span className="text-sm font-medium">{device.Name}</span>
-                                        <span className="text-xs font-small">{device.DeviceCode}</span>
-                                    </div>
-                                    
-                                    <div className="flex items-center gap-6">
-                                        <div className="flex items-center gap-1 w-12">
-                                            {getDeviceTypeIcon(device.Type)}
-                                            <span className="text-xs">{device.Type}</span>
-                                        </div>
-                                        <div className="flex items-center w-8">
-                                            {getBatteryIcon(device.Battery_Percentage)}
-                                        </div>
-                                        <div className="flex items-center w-8">
-                                            {getSignalIcon(device.Signal_Strength)}
-                                        </div>
-                                        <div className="w-16 flex justify-end">
-                                            <span className={`text-xs px-2 py-1 rounded-full ${device.isOnline ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                                {device.isOnline ? 'Online' : 'Offline'}
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <button 
-                                                onClick={() => handleDeleteDevice(device._id, userId)}
-                                                disabled={connectingDevice}     
-                                                className="text-red-500 hover:text-red-700"
-                                            >
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    
-                                    </div>
-                                </div>
-                            ))
-                        )
-                    )}
-                </div>
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            placeholder="Enter Device ID"
+            value={DeviceCode}
+            onChange={(e) => setDeviceCode(e.target.value)}
+            className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            onClick={handleConnectDevice}
+            disabled={connectingDevice}
+            className="bg-green-500 text-white px-2 py-2 rounded-md text-sm hover:bg-green-600 transition-colors disabled:bg-gray-400"
+          >
+            {connectingDevice ? "Connecting..." : "Connect"}
+          </button>
+        </div>
+      </div>
+
+      {/* Scroll wrapper for table */}
+      <div className="overflow-x-auto w-full">
+        <div className="min-w-[700px]">
+          {/* Table header */}
+          <div className="flex flex-nowrap items-center justify-between bg-gray-100 p-3 rounded-lg min-w-[700px]">
+            <span className="flex-shrink-0 w-[15%] text-sm md:text-base font-semibold">Device ID</span>
+            <span className="flex-shrink-0 w-[15%] text-sm md:text-base font-semibold text-center">Type</span>
+            <span className="flex-shrink-0 w-[10%] text-sm md:text-base font-semibold text-center">Battery</span>
+            <span className="flex-shrink-0 w-[10%] text-sm md:text-base font-semibold text-center">Signal</span>
+            <span className="flex-shrink-0 w-[15%] text-sm md:text-base font-semibold text-center">Status</span>
+            <span className="flex-shrink-0 w-[10%] text-sm md:text-base font-semibold text-center">Actions</span>
+          </div>
+
+          {loading ? (
+            <div className="flex items-center justify-center w-full py-8 max-h-96">
+              <LoadingSpinner />
             </div>
-        </>
-    );
+          ) : devices.length === 0 ? (
+            <p className="text-gray-600 py-4 text-center">No devices connected yet.</p>
+          ) : (
+            devices.map((device) => (
+              <div
+                key={device._id}
+                className="flex flex-nowrap items-center justify-between bg-white p-3 rounded-lg shadow-sm border border-gray-100 min-w-[700px]"
+              >
+                <div className="flex flex-col w-[15%]">
+                  <span className="text-sm font-medium">{device.Name}</span>
+                  <span className="text-xs font-small">{device.DeviceCode}</span>
+                </div>
+
+                <div className="flex items-center gap-1 justify-center flex-shrink-0 w-[15%]">
+                  {getDeviceTypeIcon(device.Type)}
+                  <span className="text-xs md:text-sm lg:text-base">{device.Type}</span>
+                </div>
+
+                <div className="flex justify-center flex-shrink-0 w-[10%]">
+                  {getBatteryIcon(device.Battery_Percentage)}
+                </div>
+
+                <div className="flex justify-center flex-shrink-0 w-[10%]">
+                  {getSignalIcon(device.Signal_Strength)}
+                </div>
+
+                <div className="flex justify-center flex-shrink-0 w-[15%]">
+                  <span
+                    className={`text-xs px-2 py-1 rounded-full ${
+                      device.isOnline ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    {device.isOnline ? "Online" : "Offline"}
+                  </span>
+                </div>
+
+                <div className="flex justify-center flex-shrink-0 w-[10%]">
+                  <button
+                    onClick={() => handleDeleteDevice(device._id, userId)}
+                    disabled={connectingDevice}
+                    className="text-red-500 hover:text-red-700"
+                    aria-label={`Delete device ${device.DeviceCode}`}
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    </div>
+  </>
+);
+
 }

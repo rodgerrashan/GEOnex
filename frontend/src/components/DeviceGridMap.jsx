@@ -264,8 +264,8 @@ return (
             <div className="flex justify-center max-w-7xl">
                 <div className="mt-4 grid grid-cols-2 sm:grid-cols-2 gap-16  ">
                 <div className="text-sm max-w-36">
-                    <div className="font-semibold">Connected Rovers: {devicePositions.length}</div>
-                    <ul className="text-xs mt-1">
+                    <div className="text-xs md:text-sm lg:text-base font-semibold">Connected Rovers: {devicePositions.length}</div>
+                    <ul className="text-xs md:text-sm lg:text-base mt-1">
                         {devicePositions.map((device, index) => (
                             <li key={index} className="flex justify-between">
                                 <span>{device.data.deviceName || `Rover ${index + 1}`}</span>
@@ -281,16 +281,16 @@ return (
                     </ul>
                 </div>
                 
-                <div className="text-sm max-w-48">
-                    <div className="font-semibold">Base Station</div>
+                <div className="text-xs md:text-sm lg:text-base max-w-48">
+                    <div className="text-xs md:text-sm lg:text-base font-semibold">Base Station</div>
                     {basePosition ? (
-                        <div className="text-xs mt-1">
+                        <div className="text-xs md:text-sm lg:text-base mt-1">
                             <p>ID: {baseSensorData.deviceName|| 'Base'}</p>
                             <p>Lat: {baseSensorData.latitude.toFixed(6)}</p>
                             <p>Lng: {baseSensorData.longitude.toFixed(6)}</p>
                         </div>
                     ) : (
-                        <p className="text-xs mt-1 text-gray-500">Not connected</p>
+                        <p className="text-xs md:text-sm lg:text-base mt-1 text-gray-500">Not connected</p>
                     )}
                 </div>
             </div>
@@ -299,7 +299,7 @@ return (
             
         </div>
         
-        <div className="mt-8 text-xs text-gray-500 mb-0">
+        <div className="mt-8 text-xs md:text-sm text-gray-500 mb-0">
             Grid coordinates: {gridBounds.minLat.toFixed(6)}° to {gridBounds.maxLat.toFixed(6)}° lat, 
             {gridBounds.minLng.toFixed(6)}° to {gridBounds.maxLng.toFixed(6)}° lng
         </div>

@@ -65,7 +65,7 @@ export default function CriticalAlerts() {
             <div className="flex flex-col gap-6 w-full">
                 <div className="flex flex-col gap-4">
                     <div className="flex items-center justify-between">
-                        <h1 className="text-xl font-bold">Alerts</h1>
+                        <h1 className="text-lg md:text-xl lg:text-2xl font-bold">Alerts</h1>
                     </div>
                     
                     {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -74,11 +74,11 @@ export default function CriticalAlerts() {
 
                 <div className="flex flex-col gap-2 w-full">
                     <div className="flex items-center justify-between bg-gray-100 p-3 rounded-lg">
-                        <span className="text-sm font-semibold">Device</span>
+                        <span className="text-xs md:text-sm lg:text-base font-semibold">Device</span>
                         <div className="flex gap-6">
-                            <span className="text-sm font-semibold">Status</span>
-                            <span className="text-sm font-semibold">Code</span>
-                            <span className="text-sm font-semibold">Details</span>
+                            <span className="text-xs md:text-sm lg:text-base font-semibold">Status</span>
+                            <span className="text-xs md:text-sm lg:text-base font-semibold">Code</span>
+                            <span className="text-xs md:text-sm lg:text-base font-semibold">Details</span>
                         </div>
                     </div>
 
@@ -92,8 +92,8 @@ export default function CriticalAlerts() {
                                 <svg className="w-12 h-12 text-green-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
-                                <h3 className="text-lg font-medium text-green-700">All Clear!</h3>
-                                <p className="text-green-600 mt-1">Congratulations! You have no alerts at this time.</p>
+                                <h3 className="text-sm md:text-base lg:text-lg font-medium text-green-700">All Clear!</h3>
+                                <p className="text-green-600 mt-1 text-center">Congratulations! You have no alerts at this time.</p>
                             </div>
                         ) : (
                             devices.map((device) => (
