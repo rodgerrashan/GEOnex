@@ -94,7 +94,8 @@ const Login = () => {
       flex flex-col justify-center"
       >
         {/* Logo */}
-        <h1 className="text-center text-3xl font-light text-gray-900">
+        <h1 onClick={() => navigate("/")}
+        className="text-center text-3xl font-light text-gray-900 cursor-pointer">
           <span className="font-semibold">GEO</span>nex
         </h1>
 
