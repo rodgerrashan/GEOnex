@@ -9,9 +9,9 @@
 #include "config.h"
 #include "button_manager.h"
 #include "base_calibration.h"
+#include "battery_manager.h"
+#include "pin_manager.h"
 
-// Function prototype declaration
-void setupPins();
 
 void setup()
 {
@@ -25,6 +25,9 @@ void setup()
 
   // Initialize MQTT
   connectMQTT();
+
+  // Initialize Battery monitor
+  initBatteryMonitor();
 
   Serial.println("[INFO]  ESP32 Setup complete");
 
@@ -40,36 +43,42 @@ void loop()
 {
   // Process GPS Data
   GPSData gpsInfo = processGPS();
+
+  double lat, lon;
+  int satellites;
+  String time;
+
+
   if (gpsInfo.isValid)
   {
-    publishGPSData(gpsInfo.latitude, gpsInfo.longitude, gpsInfo.satellites, gpsInfo.time);
+    lat = gpsInfo.latitude;
+    lon = gpsInfo.longitude;
+    satellites = gpsInfo.satellites;
+    time = gpsInfo.time;
+
+    // Print GPS data for testing
+    Serial.printf("[Test]  Raw GPS: Lat: %.6f, Lon: %.6f, Satellites: %d, Time: %s\n", lat, lon, satellites, time.c_str());
   }
+  else
+  {
+    lat = NAN;
+    lon = NAN;
+    satellites = -1;
+    time = "";
+    Serial.println("[Test]  No valid GPS data received.");
+  }
+
+  /* Publish data to MQTT  */
+  publishGPSData(lat, lon, satellites, time);
+  
 
   mqttLoop();
 
   checkButtonPresses();
 
+  int batteryPercentage = getBatteryPercentage(readBatteryVoltage());
+  Serial.printf("[Test]  Battery Percentage: %d%%\n", batteryPercentage);
+
   //Main loop delay
   delay(MAIN_LOOP_DELAY);
-}
-
-void setupPins()
-{
-  Serial.println("[INFO] Setting up pins...");
-
-  // Set LED pins as outputs
-  pinMode(LED_POWER, OUTPUT);
-  pinMode(LED_WIFI, OUTPUT);
-  pinMode(LED_GPS, OUTPUT);
-  pinMode(LED_MQTT, OUTPUT);
-
-  // Set button pins as inputs with pull-up resistors
-  pinMode(BUTTON_RESET_WIFI, INPUT_PULLUP);
-  pinMode(BUTTON_SEND_GPS, INPUT_PULLUP);
-  pinMode(BUTTON_CALIBRATION, INPUT_PULLUP);
-
-  // Power LED always ON
-  digitalWrite(LED_POWER, HIGH);
-
-  Serial.println("[INFO]  Pins initialized.");
 }

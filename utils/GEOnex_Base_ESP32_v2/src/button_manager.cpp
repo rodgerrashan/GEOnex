@@ -10,7 +10,7 @@ extern GPSModule gpsModule;
 
 void checkButtonPresses()
 {
-    if (digitalRead(BUTTON_RESET_WIFI) == LOW)
+    if (digitalRead(BUTTON_RESET_WIFI) == HIGH)
     {
         Serial.println("[RESET] Resetting WiFi...");
         WiFi.disconnect();
@@ -18,7 +18,7 @@ void checkButtonPresses()
         connectWiFi();
     }
 
-    if (digitalRead(BUTTON_SEND_GPS) == LOW)
+    if (digitalRead(BUTTON_SEND_GPS) == HIGH)
     {
         Serial.println("[INFO]  Manual GPS Data Send");
         if (gpsModule.hasNewLocation())

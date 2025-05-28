@@ -27,7 +27,7 @@ FIXEDData computePrecisePosition(){
             i++;
             Serial.print("Sample collected: ");
             Serial.println(i);
-            delay(500);
+            delay(1000);
         }        
     }
 

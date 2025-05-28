@@ -8,7 +8,7 @@ GPSModule gpsModule(GPS_RX, GPS_TX, GNSS_BAUD_RATE);
 GPSData processGPS()
 {
   gpsModule.processGPSData();
-  Serial.println("[INFO] Processing GPS data...");
+  Serial.println("\n[INFO] Processing GPS data...");
 
   GPSData gpsdata = {0.0, 0.0, 0, "null", false};
 
