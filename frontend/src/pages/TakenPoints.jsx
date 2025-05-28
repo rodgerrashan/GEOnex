@@ -3,6 +3,8 @@ import { Context } from "../context/Context";
 import { assets } from "../assets/assets";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import axios from "axios";
+import RenamePointPopup from "../components/RenamePointPopup";
 
 const TakenPoints = () => {
   const {
@@ -12,8 +14,12 @@ const TakenPoints = () => {
     fetchPoints,
     loadingPoints,
     deletePoint,
+    backendUrl,
   } = useContext(Context);
   const { projectId } = useParams();
+
+  const [showRenamePoint, setShowRenamePoint] = useState(false);
+  const [pointToRename, setPointToRename] = useState(null);
 
   // Fetch points from context when component mounts or projectId changes
   useEffect(() => {
@@ -28,10 +34,47 @@ const TakenPoints = () => {
     await deletePoint(projectId, pointId);
   };
 
+  const handleRenamePoint = (pointId) => {
+    const point = points.find((p) => p._id === pointId);
+    setPointToRename(point);
+    setShowRenamePoint(true);
+  };
+
+  const onRename = async (newName) => {
+    if (!pointToRename) return;
+
+    try {
+      const response = await axios.put(
+        backendUrl + `/api/points/${projectId}/${pointToRename._id}/rename`,
+        { Name: newName }
+      );
+
+      if (response.data.success) {
+        toast.success("Point renamed successfully");
+        // Refresh points list or update local state
+        const updatedPoints = points.map((p) =>
+          p._id === pointToRename._id ? { ...p, Name: newName } : p
+        );
+        setPoints(updatedPoints);
+      } else {
+        toast.error("Failed to rename point");
+      }
+    } catch (error) {
+      toast.error("Error renaming point: " + error.message);
+    } finally {
+      setShowRenamePoint(false);
+      setPointToRename(null);
+    }
+  };
+
+  const onDiscard = () => {
+    setShowRenamePoint(false);
+    setPointToRename(null);
+  };
+
   return (
     <div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:grid-rows-[80px_auto]">
-        
         {/* Header row with left group and right button */}
         <div className="col-span-1 md:col-span-2 flex items-center justify-between">
           {/* Left group: arrow and title */}
@@ -129,20 +172,23 @@ const TakenPoints = () => {
 
                       <td className="px-6 py-4 rounded-r-lg">
                         <div className="flex flex-col md:flex-row gap-2 w-full">
-                        <button className="flex-1 text-white text-xs md:text-sm 
+                          <button
+                            className="flex-1 text-white text-xs md:text-sm 
                         bg-black hover:text-blue-700 
-                        px-2 py-1 rounded-lg">
-                          Rename
-                        </button>
+                        px-2 py-1 rounded-lg"
+                            onClick={() => handleRenamePoint(point._id)}
+                          >
+                            Rename
+                          </button>
 
-                        <button
-                          className="flex-1 text-white text-xs md:text-sm 
+                          <button
+                            className="flex-1 text-white text-xs md:text-sm 
                           bg-red-500 hover:text-red-700 
                           px-2 py-1 rounded-lg"
-                          onClick={() => handleDeletePoint(point._id)}
-                        >
-                          Delete
-                        </button>
+                            onClick={() => handleDeletePoint(point._id)}
+                          >
+                            Delete
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -153,6 +199,16 @@ const TakenPoints = () => {
           )}
         </div>
       </div>
+
+      {showRenamePoint && pointToRename && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[5px] z-[2000]">
+          <RenamePointPopup
+            existingName={pointToRename.Name}
+            onRename={onRename}
+            onDiscard={onDiscard}
+          />
+        </div>
+      )}
     </div>
   );
 };

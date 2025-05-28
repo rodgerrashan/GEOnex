@@ -116,7 +116,7 @@ const ContextProvider = (props) => {
       const response = await axios.delete(
         `${backendUrl}/api/points/${projectId}/${pointId}`
       );
-      if (response.data.message) {
+      if (response.data.success) {
         toast.success(response.data.message);
         // Remove the deleted point from the local state
         setPoints((prevPoints) =>
