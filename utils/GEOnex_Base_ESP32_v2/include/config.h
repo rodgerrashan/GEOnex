@@ -16,11 +16,11 @@
 // #define WIFI_SSID "Eng-Student"
 // #define WIFI_PASS "3nG5tuDt"
 
-#define WIFI_SSID "Malinga' internet"
-#define WIFI_PASS "tgfb6053"
+// #define WIFI_SSID "Malinga' internet"
+// #define WIFI_PASS "tgfb6053"
 
-// #define WIFI_SSID "Lord of the Ping"
-// #define WIFI_PASS "GS200123"
+#define WIFI_SSID "Lord of the Ping"
+#define WIFI_PASS "GS200123"
 
 // MQTT Broker
 #define MQTT_HOST "a1qulasp0wzg24-ats.iot.eu-north-1.amazonaws.com"
@@ -50,12 +50,15 @@
 #define BUTTON_SEND_GPS 23   // Manually Send GPS Data
 #define BUTTON_CALIBRATION 20 // Malually set Calibration in base station
 
+// Battery Monitor Pin
+#define BATTERY_PIN 35 // ADC pin for battery voltage monitoring
+
 // Publishing Intervals (ms)
 #define PUBLISH_INTERVAL 2000  
 
 // Delay Settings
 #define POWERUP_DELAY 5000         // Delay for power-up (in milliseconds)
-#define MAIN_LOOP_DELAY 500        // Delay for main loop (in milliseconds)
+#define MAIN_LOOP_DELAY 2000        // Delay for main loop (in milliseconds)
 #define WIFI_RETRY_DELAY 1000       // Delay for WiFi connection retries (in milliseconds)
 #define MQTT_RETRY_DELAY 1000       // Delay for MQTT connection retries (in milliseconds)
 #define GPS_UPDATE_DELAY 2000       // Delay between GPS updates (in milliseconds)
