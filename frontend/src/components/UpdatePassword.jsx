@@ -66,21 +66,21 @@ const UpdatePassword = ({ isOpen, onClose }) => {
             placeholder="Current password"
             value={currentPw}
             onChange={(e) => setCurrentPw(e.target.value)}
-            className="w-full border rounded px-3 py-2"
+            className="w-full border rounded px-3 py-2 dark:text-gray-800"
           />
           <input
             type="password"
             placeholder="New password"
             value={newPw}
             onChange={(e) => setNewPw(e.target.value)}
-            className="w-full border rounded px-3 py-2"
+            className="w-full border rounded px-3 py-2 dark:text-gray-800"
           />
           <input
             type="password"
             placeholder="Confirm new password"
             value={confirmPw}
             onChange={(e) => setConfirmPw(e.target.value)}
-            className="w-full border rounded px-3 py-2"
+            className="w-full border rounded px-3 py-2 dark:text-gray-800"
           />
           <div className="flex justify-end gap-2">
             <button
