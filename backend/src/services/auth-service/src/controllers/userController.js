@@ -27,9 +27,8 @@ const getUserData = async (req, res) => {
 };
 
 
-const Device = require('../../device-service/models/Device'); 
-const { get } = require('mongoose');
-const Alert = require('../../device-service/models/Alert'); 
+const Device = require('../models/Device'); 
+const Alert = require('../models/Alert'); 
 
 const addDeviceToUser = async (req, res) => {
     const userId = req.params.userId;

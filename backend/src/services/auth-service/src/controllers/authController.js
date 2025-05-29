@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const transporter=require('../../../config/nodemailer.js');
+const transporter=require('../config/nodemailer');
 
 // Register a new user
 /*const registerUser = async (req, res) => {

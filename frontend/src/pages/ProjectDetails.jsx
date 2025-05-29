@@ -110,13 +110,12 @@ const handleExport = async () => {
   return (
     <div>
       <PageTopic topic={project.Name}  intro={project.Description} />
-      <div className="grid grid-cols-1  
-      md:grid-cols-2 lg:grid-cols-3 lg:grid-rows-7
-      gap-4 lg:h-screen lg:ml-14">
+      <div className="flex flex-col lg:flex-row gap-4 lg:ml-14 p-4">
 
-       
 
-        {/* Actions Section (Left) */}
+
+      <div className="flex flex-col gap-2">
+         {/* Actions Section (Left) */}
         <div className="h-max bg-white p-5 rounded-lg flex flex-col gap-3 overflow-auto">
           <h2 className="text-base md:text-lg font-semibold pb-5">Actions</h2>
           <div
@@ -218,7 +217,10 @@ const handleExport = async () => {
           </div>
         </div>
 
-        {/* Overview Section (Right) */}
+
+
+        {/* assigned devices */}
+
         <div className=" bg-white p-5 rounded-lg flex flex-col gap-5 h-max ">
           <h2 className="text-base md:text-lg font-semibold pb-5">Overview</h2>
 
@@ -270,7 +272,128 @@ const handleExport = async () => {
             </span>
           </div>
         </div>
+
       </div>
+
+      <div className="flex flex-col gap-4">
+         {/* Overview Section (Right) */}
+        <div className=" bg-white p-5 rounded-lg flex flex-col gap-5 h-max ">
+          <h2 className="text-base md:text-lg font-semibold pb-5">Overview</h2>
+
+          <div className="flex justify-between items-center">
+            <span className="font-semibold text-sm md:text-base">Created On</span>
+            <span
+              className="px-3 py-1 rounded-xl text-xs md:text-sm w-32 text-center"
+              style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
+            >
+              {dayjs(project.Created_On).format("MMM D, YYYY")}
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span className="font-semibold text-sm md:text-base">Last Modified</span>
+            <span
+              className="px-3 py-1 rounded-xl text-xs md:text-sm w-32 text-center"
+              style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
+            >
+              {dayjs(project.Last_Modified).fromNow()}
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span className="font-semibold text-sm md:text-base">Status</span>
+            <span className="bg-blue-600 text-white px-3 py-1 rounded-xl text-xs md:text-sm w-32 text-center">
+              {project.Status}
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span className="font-semibold text-sm md:text-base">Number of Points</span>
+            <span
+              className="px-3 py-1 rounded-xl text-xs md:text-sm w-32 text-center"
+              style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
+            >
+              {project.Total_Points || 0}
+              
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span className="font-semibold text-sm md:text-base">Survey Time</span>
+            <span
+              className="px-3 py-1 rounded-xl text-xs md:text-sm w-32 text-center"
+              style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
+            >
+              {project.Survey_Time || "N/A"}
+            </span>
+          </div>
+        </div>
+
+
+        {/* assigned survayers */}
+
+        <div className=" bg-white p-5 rounded-lg flex flex-col gap-5 h-max ">
+          <h2 className="text-base md:text-lg font-semibold pb-5">Overview</h2>
+
+          <div className="flex justify-between items-center">
+            <span className="font-semibold text-sm md:text-base">Created On</span>
+            <span
+              className="px-3 py-1 rounded-xl text-xs md:text-sm w-32 text-center"
+              style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
+            >
+              {dayjs(project.Created_On).format("MMM D, YYYY")}
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span className="font-semibold text-sm md:text-base">Last Modified</span>
+            <span
+              className="px-3 py-1 rounded-xl text-xs md:text-sm w-32 text-center"
+              style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
+            >
+              {dayjs(project.Last_Modified).fromNow()}
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span className="font-semibold text-sm md:text-base">Status</span>
+            <span className="bg-blue-600 text-white px-3 py-1 rounded-xl text-xs md:text-sm w-32 text-center">
+              {project.Status}
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span className="font-semibold text-sm md:text-base">Number of Points</span>
+            <span
+              className="px-3 py-1 rounded-xl text-xs md:text-sm w-32 text-center"
+              style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
+            >
+              {project.Total_Points || 0}
+              
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span className="font-semibold text-sm md:text-base">Survey Time</span>
+            <span
+              className="px-3 py-1 rounded-xl text-xs md:text-sm w-32 text-center"
+              style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
+            >
+              {project.Survey_Time || "N/A"}
+            </span>
+          </div>
+        </div>
+
+
+      </div>
+       
+           
+
+       
+        
+        
+      </div>
+      
     </div>
   );
 };
