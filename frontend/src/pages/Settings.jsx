@@ -102,10 +102,12 @@ const Settings = () => {
               </button>
 
               {showPw && (
-                <UpdatePassword
-                  isOpen={showPw}
-                  onClose={() => setShowPw(false)}
-                />
+                <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[5px] z-[2000]">
+                  <UpdatePassword
+                    isOpen={showPw}
+                    onClose={() => setShowPw(false)}
+                  />
+                </div>
               )}
 
               <button
