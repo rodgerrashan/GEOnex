@@ -56,7 +56,8 @@ const Navbar = ({ mobileOpen = false, onClose = () => {} }) => {
         <Link 
           to="/dashboard" 
           onClick={handleNavClick}
-          className="mt-8 mb-6 flex justify-center items-end space-x-1"
+          className="mt-8 mb-6 flex justify-center items-end space-x-1
+          focus:outline-none focus-visible:outline-none"
         >
           <span className="font-bold text-4xl md:text-4xl lg:text-5xl text-gray-900">
             GEO

@@ -3,6 +3,7 @@ const Settings = require("../models/Settings");
 const Device = require("../../device-service/models/Device");
 const { get } = require("mongoose");
 const Alert = require("../../device-service/models/Alert");
+const bcrypt = require("bcryptjs");
 
 const getUserData = async (req, res) => {
   try {
@@ -25,6 +26,62 @@ const getUserData = async (req, res) => {
     });
   } catch (error) {
     res.json({ success: false, message: error.message });
+  }
+};
+
+const changePassword = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+
+    // basic presence checks
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      return res
+        .status(400)
+        .json({ success: false, message: "All fields are required." });
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Passwords do not match." });
+    }
+
+    // optional strength check
+    if (newPassword.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: "Password must be at least 6 characters long.",
+      });
+    }
+
+    // fetch user
+    const user = await User.findById(userId).select("+password");
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found." });
+    }
+
+    // verify current password
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Current password is incorrect." });
+    }
+
+    // hash & save new password
+    user.password = await bcrypt.hash(newPassword, 10);
+  
+    await user.save();
+
+    return res.json({ success: true, message: "Password updated." });
+  } catch (err) {
+    console.error("Change-password error:", err);
+    res
+      .status(500)
+      .json({ success: false, message: "Server error. Try again later." });
   }
 };
 
@@ -308,4 +365,5 @@ module.exports = {
   getSettingsData,
   updateSettingsData,
   resetSettingsData,
+  changePassword,
 };

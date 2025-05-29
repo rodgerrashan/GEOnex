@@ -5,10 +5,13 @@ import Device from "../components/Device";
 import Network from "../components/Network";
 import { Context } from "../context/Context";
 import Map from "../components/Map";
+import UpdatePassword from "../components/UpdatePassword";
 
 const Settings = () => {
   const { userData, settings, updateSetting, resetSettings, logout } =
     useContext(Context);
+
+  const [showPw, setShowPw] = React.useState(false);
 
   if (!settings) {
     return (
@@ -91,9 +94,20 @@ const Settings = () => {
             <hr className="border-gray-300" />
 
             <div className="space-y-3 mt-8">
-              <button className="w-full bg-black text-white rounded-full py-2 hover:bg-gray-900 transition">
+              <button
+                onClick={() => setShowPw(true)}
+                className="w-full bg-black text-white rounded-full py-2 hover:bg-gray-900 transition"
+              >
                 CHANGE PASSWORD
               </button>
+
+              {showPw && (
+                <UpdatePassword
+                  isOpen={showPw}
+                  onClose={() => setShowPw(false)}
+                />
+              )}
+
               <button
                 onClick={logout}
                 className="w-full bg-red-500 text-white rounded-full py-2 hover:bg-red-600 transition"
