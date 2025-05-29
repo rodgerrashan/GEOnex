@@ -156,10 +156,6 @@ const ContextProvider = (props) => {
   //   const markAsRead = async (id) => {
   //   try {
   //     console.log("Marking notification as read:", id);
-
-  //     const response = await axios.put(`${backendUrl}/api/notifications/mark-read`, { id });
-  //     console.log("Mark as read response:", response.data);
-
   //     if (response.data.success) {
   //       setNotifications((prevNotifications) =>
   //         prevNotifications.map((note) =>
@@ -280,7 +276,9 @@ const ContextProvider = (props) => {
   };
 
   useEffect(() => {
+    getProjectsData();
     getAuthState();
+    // fetchUserDevices();
     // getNotificationsData(userData?.userId);
   }, []);
 

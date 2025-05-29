@@ -6,7 +6,7 @@ import DashboardNotifications from "../components/DashboardNotifications";
 
 const Dashboard = () => {
   const { navigate, userData, rovers, base, fetchUserDevices } = useContext(Context);
-
+    
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   // Use a constant or get this from context instead of hardcoding
   const userId = userData.userId; // Replace with actual user ID
