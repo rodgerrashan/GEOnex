@@ -264,6 +264,21 @@ const ContextProvider = (props) => {
     }
   };
 
+  const logout = async () => {
+    try {
+      axios.defaults.withCredentials = true;
+      const { data } = await axios.post(backendUrl + "/api/auth/logout");
+      if (data.success) {
+        setIsLoggedin(false);
+        setUserData(false);
+        toast.success("Logged out successfully");
+        navigate("/");
+      }
+    } catch (error) {
+      toast.error(error.message || "Logout failed");
+    }
+  };
+
   useEffect(() => {
     getAuthState();
     // getNotificationsData(userData?.userId);
@@ -330,6 +345,7 @@ const ContextProvider = (props) => {
     settings,
     updateSetting,
     resetSettings,
+    logout,
   };
 
   return <Context.Provider value={value}>{props.children}</Context.Provider>;

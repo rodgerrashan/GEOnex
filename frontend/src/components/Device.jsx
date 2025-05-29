@@ -1,6 +1,6 @@
 import React from "react";
 
-const Device = () => {
+const Device = ({ data, onChange }) => {
   return (
     <div>
       <div>
@@ -9,7 +9,11 @@ const Device = () => {
         {/* Sampling Interval */}
         <div className="flex items-center justify-between mt-4">
           <span>Sampling Interval</span>
-          <select className="text-blue-600 cursor-pointer outline-none rounded px-2 py-1">
+          <select
+            value={data.samplingInterval}
+            onChange={(e) => onChange("samplingInterval", e.target.value)}
+            className="text-blue-600 cursor-pointer outline-none rounded px-2 py-1"
+          >
             <option>1s</option>
             <option>2s</option>
             <option>5s</option>
@@ -20,7 +24,11 @@ const Device = () => {
         {/* RTK Correction Source */}
         <div className="flex items-center justify-between mt-4">
           <span>RTK Correction Source</span>
-          <select className="text-blue-600 cursor-pointer outline-none rounded px-2 py-1">
+          <select
+            value={data.rtkCorrectionSource}
+            onChange={(e) => onChange("rtkCorrectionSource", e.target.value)}
+            className="text-blue-600 cursor-pointer outline-none rounded px-2 py-1"
+          >
             <option>BASE</option>
             <option>NTRIP</option>
           </select>
@@ -48,7 +56,6 @@ const Device = () => {
             disabled
             className="w-full bg-gray-200 rounded-full py-2 px-4 text-gray-500 cursor-not-allowed"
           />
-          
         </div>
       </div>
 
@@ -56,7 +63,9 @@ const Device = () => {
 
       {/* Firmware Update */}
       <label className="block font-medium text-lg">Firmware Update</label>
-      <button className="w-full bg-black text-white rounded-full py-2 mt-4 hover:bg-gray-900 transition">
+      <button 
+      disabled
+      className="w-full bg-black text-white rounded-full py-2 mt-4 hover:bg-gray-900 transition cursor-not-allowed">
         CHECK UPDATES
       </button>
     </div>

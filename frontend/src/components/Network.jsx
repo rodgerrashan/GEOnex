@@ -6,10 +6,10 @@ const Network = ({ data, onChange }) => {
   const [url, setUrl] = useState(data.customMqttUrl);
   const [status, setStatus] = useState(""); // "saved" | "reset" | ""
 
-  useEffect(() => {
-    console.log("type:", type);
-    console.log("url:", url);
-  }, [type, url]);
+  // useEffect(() => {
+  //   console.log("type:", type);
+  //   console.log("url:", url);
+  // }, [type, url]);
 
   const handleSave = () => {
     // Only save when Custom selected
@@ -103,7 +103,7 @@ const Network = ({ data, onChange }) => {
       <button
         onClick={buttonAction}
         disabled={isDisabled}
-        className={`w-full rounded-full py-2 text-white transition ${classesByVariant[variant]}`}
+        className={`w-full rounded-full py-2 mt-4 text-white transition ${classesByVariant[variant]}`}
       >
         {buttonLabel}
       </button>

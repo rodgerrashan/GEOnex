@@ -7,7 +7,7 @@ import { Context } from "../context/Context";
 import Map from "../components/Map";
 
 const Settings = () => {
-  const { userData, settings, updateSetting, resetSettings } =
+  const { userData, settings, updateSetting, resetSettings, logout } =
     useContext(Context);
 
   if (!settings) {
@@ -76,7 +76,13 @@ const Settings = () => {
 
               <div className="flex items-center justify-between mt-4">
                 <span>Notifications</span>
-                <select className="text-blue-600 cursor-pointer outline-none rounded px-2 py-1">
+                <select
+                  value={settings.account.notifications}
+                  onChange={(e) =>
+                    updateSetting("account", "notifications", e.target.value)
+                  }
+                  className="text-blue-600 cursor-pointer outline-none rounded px-2 py-1"
+                >
                   <option>ON</option>
                   <option>OFF</option>
                 </select>
@@ -88,7 +94,10 @@ const Settings = () => {
               <button className="w-full bg-black text-white rounded-full py-2 hover:bg-gray-900 transition">
                 CHANGE PASSWORD
               </button>
-              <button className="w-full bg-red-500 text-white rounded-full py-2 hover:bg-red-600 transition">
+              <button
+                onClick={logout}
+                className="w-full bg-red-500 text-white rounded-full py-2 hover:bg-red-600 transition"
+              >
                 LOGOUT
               </button>
             </div>

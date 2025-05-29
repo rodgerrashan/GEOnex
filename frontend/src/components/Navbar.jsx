@@ -6,23 +6,9 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const Navbar = ({ mobileOpen = false, onClose = () => {} }) => {
-  const { navigate, backendUrl, setUserData, userData, setIsLoggedin } =
+  const { userData, logout} =
     useContext(Context);
 
-  const logout = async () => {
-    try {
-      axios.defaults.withCredentials = true;
-      const { data } = await axios.post(backendUrl + "/api/auth/logout");
-      if (data.success) {
-        setIsLoggedin(false);
-        setUserData(false);
-        toast.success("Logged out successfully");
-        navigate("/");
-      }
-    } catch (error) {
-      toast.error(error.message || "Logout failed");
-    }
-  };
 
   const handleNavClick = () => {
     if (window.innerWidth < 768) onClose();
