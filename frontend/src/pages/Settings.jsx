@@ -4,6 +4,7 @@ import System from "../components/System";
 import Device from "../components/Device";
 import Network from "../components/Network";
 import { Context } from "../context/Context";
+import Map from "../components/Map";
 
 const Settings = () => {
   const { userData, settings, updateSetting, resetSettings } =
@@ -56,31 +57,10 @@ const Settings = () => {
 
           {/* Map */}
           <section className="bg-white p-4 rounded-lg mb-4 h-[200px]">
-            <h2 className="font-semibold text-xl">Map</h2>
-
-            <div className="flex items-center justify-between mt-4">
-              <span>Accuracy Circles</span>
-              <select className="text-blue-600 cursor-pointer outline-none rounded px-2 py-1">
-                <option>Show</option>
-                <option>Hide</option>
-              </select>
-            </div>
-            <hr className="border-gray-300" />
-
-            <div className="flex items-center justify-between mt-4">
-              <span>Provider</span>
-              <span className="text-gray-600">OpenStreetMap</span>
-            </div>
-            <hr className="border-gray-300" />
-
-            <div className="flex items-center justify-between mt-4">
-              <span>Theme</span>
-              <select className="text-blue-600 cursor-pointer outline-none rounded px-2 py-1">
-                <option>Light</option>
-                <option>Dark</option>
-              </select>
-            </div>
-            <hr className="border-gray-300" />
+            <Map
+              data={settings.map}
+              onChange={(key, val) => updateSetting("map", key, val)}
+            />
           </section>
 
           {/* Account */}

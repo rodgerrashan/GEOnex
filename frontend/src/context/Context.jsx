@@ -28,6 +28,8 @@ const ContextProvider = (props) => {
 
   const [settings, setSettings] = useState(null);
 
+  const [theme, setTheme] = useState("Light");
+
   // const [notifications, setNotifications] = useState([]);
 
   const getAuthState = async () => {
@@ -208,6 +210,7 @@ const ContextProvider = (props) => {
       const { data } = await axios.get(backendUrl + "/api/user/settings");
       if (data.success) {
         setSettings(data.Data);
+        setTheme(data.Data.map.theme);
       } else {
         toast.error(data.message);
       }
@@ -218,13 +221,19 @@ const ContextProvider = (props) => {
 
   // updateSetting with optimistic UI + debounced API call
   const updateTimeout = useRef();
-  
+
   const updateSetting = (section, key, value) => {
     // optimistic
     setSettings((prev) => ({
       ...prev,
       [section]: { ...prev[section], [key]: value },
     }));
+
+    // if the user just changed the map theme, update <html> immediately
+    if (section === "map" && key === "theme") {
+      setTheme(value);
+    }
+
     // debounce
     clearTimeout(updateTimeout.current);
     updateTimeout.current = setTimeout(async () => {
@@ -241,11 +250,13 @@ const ContextProvider = (props) => {
   //  resetSettings
   const resetSettings = async () => {
     try {
-      const { data } = await axios.post(backendUrl + "/api/user/settings/reset");
+      const { data } = await axios.post(
+        backendUrl + "/api/user/settings/reset"
+      );
       if (data.success) {
         setSettings(data.Data);
         toast.success("Settings restored to defaults");
-      }else{
+      } else {
         toast.error(data.message);
       }
     } catch (err) {
@@ -266,6 +277,14 @@ const ContextProvider = (props) => {
     }
   }, [userData]);
 
+  useEffect(() => {
+    if (theme === "Dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme]);
+
   // 🔍 watch auth state change
   useEffect(() => {
     console.log("userData changed ➜", userData);
@@ -277,6 +296,7 @@ const ContextProvider = (props) => {
 
   useEffect(() => {
     console.log("🔧 settings updated:", settings);
+    console.log("theme", theme);
   }, [settings]);
 
   const value = {
