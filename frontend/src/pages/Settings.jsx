@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
 import Layout from "../components/Layout";
 import System from "../components/System";
 import Device from "../components/Device";
 import Network from "../components/Network";
+import { Context } from "../context/Context";
 
 const Settings = () => {
+  const { userData, settings, updateSetting, resetSettings } =
+    useContext(Context);
+
+  if (!settings) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-lg">Loading settings…</p>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen p-1">
       <div className="mb-10">
@@ -19,11 +30,17 @@ const Settings = () => {
         <div className="flex-1 min-w-[300px]">
           {/* System */}
           <section className="bg-white p-4 rounded-lg mb-4 h-[300px]">
-            <System />
+            <System
+              data={settings.system}
+              onChange={(key, val) => updateSetting("system", key, val)}
+            />
           </section>
 
           <section className="bg-white p-4 rounded-lg mb-4 h-[496px]">
-            <Device />
+            <Device
+              data={settings.device}
+              onChange={(key, val) => updateSetting("device", key, val)}
+            />
           </section>
         </div>
 
@@ -31,7 +48,10 @@ const Settings = () => {
         <div className="flex-1 min-w-[300px]">
           {/* Network */}
           <section className="bg-white p-4 rounded-lg mb-4 h-[300px]">
-            <Network />
+            <Network
+              data={settings.network}
+              onChange={(key, val) => updateSetting("network", key, val)}
+            />
           </section>
 
           {/* Map */}
@@ -70,9 +90,7 @@ const Settings = () => {
 
               <div className="flex items-center justify-between mt-4">
                 <span>Email</span>
-                <span className="text-gray-500">
-                  nisithapadeniya@gmail.com
-                </span>
+                <span className="text-gray-500">{userData.email}</span>
               </div>
               <hr className="border-gray-300" />
 

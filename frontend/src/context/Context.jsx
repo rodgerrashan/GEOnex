@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 axios.defaults.withCredentials = true;
@@ -25,6 +25,8 @@ const ContextProvider = (props) => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingDevices, setLoadingDevices] = useState(true);
+
+  const [settings, setSettings] = useState(null);
 
   // const [notifications, setNotifications] = useState([]);
 
@@ -201,6 +203,56 @@ const ContextProvider = (props) => {
     }
   };
 
+  const fetchSettings = async () => {
+    try {
+      const { data } = await axios.get(backendUrl + "/api/user/settings");
+      if (data.success) {
+        setSettings(data.Data);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
+  // updateSetting with optimistic UI + debounced API call
+  const updateTimeout = useRef();
+  
+  const updateSetting = (section, key, value) => {
+    // optimistic
+    setSettings((prev) => ({
+      ...prev,
+      [section]: { ...prev[section], [key]: value },
+    }));
+    // debounce
+    clearTimeout(updateTimeout.current);
+    updateTimeout.current = setTimeout(async () => {
+      try {
+        await axios.put(backendUrl + "/api/user/settings", {
+          [section]: { [key]: value },
+        });
+      } catch (err) {
+        toast.error("Failed to save setting");
+      }
+    }, 300);
+  };
+
+  //  resetSettings
+  const resetSettings = async () => {
+    try {
+      const { data } = await axios.post(backendUrl + "/api/user/settings/reset");
+      if (data.success) {
+        setSettings(data.Data);
+        toast.success("Settings restored to defaults");
+      }else{
+        toast.error(data.message);
+      }
+    } catch (err) {
+      toast.error("Failed to reset settings");
+    }
+  };
+
   useEffect(() => {
     getAuthState();
     // getNotificationsData(userData?.userId);
@@ -210,6 +262,7 @@ const ContextProvider = (props) => {
     if (userData && userData.userId) {
       getProjectsData(userData.userId);
       fetchUserDevices();
+      fetchSettings();
     }
   }, [userData]);
 
@@ -221,6 +274,10 @@ const ContextProvider = (props) => {
   useEffect(() => {
     console.log("isLoggedin changed ➜", isLoggedin);
   }, [isLoggedin]);
+
+  useEffect(() => {
+    console.log("🔧 settings updated:", settings);
+  }, [settings]);
 
   const value = {
     // getNotificationsData,
@@ -250,6 +307,9 @@ const ContextProvider = (props) => {
     isLoadingDevices,
     rovers,
     base,
+    settings,
+    updateSetting,
+    resetSettings,
   };
 
   return <Context.Provider value={value}>{props.children}</Context.Provider>;
