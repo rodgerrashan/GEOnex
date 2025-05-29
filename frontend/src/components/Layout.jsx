@@ -19,7 +19,7 @@ export default function Layout() {
   }, [open]);
 
   return (
-    <div className="flex min-h-screen bg-[#e8e8e8]">
+    <div className="flex min-h-screen bg-[#e8e8e8] dark:bg-gray-900">
       {/* ❋ backdrop shown only while the sidebar is open on phones */}
       {open && (
         <div
@@ -31,18 +31,20 @@ export default function Layout() {
       <Navbar mobileOpen={open} onClose={() => setOpen(false)} />
 
       {/* ───── page area ───── */}
-      <div className="flex-1 relative h-screen overflow-y-auto">
+      <div className="flex-1 relative h-screen overflow-y-auto
+      bg-[#e8e8e8] dark:bg-gray-900">
         {/* mobile hamburger */}
         <button
           onClick={() => setOpen(true)}
-          className="md:hidden p-3 m-2 rounded hover:bg-gray-200 focus:outline-none focus:ring"
+          className="md:hidden p-3 m-2 rounded hover:bg-gray-200 focus:outline-none focus:ring
+          dark:bg-gray-700"
         >
           {/* burger icon */}
           <img className="w-5 h-5" src={assets.hamburger_icon} />
         </button>
 
         {/* routed pages */}
-        <div className="w-full max-w-7xl mx-auto px-5 py-8 dark:bg-gray-900">
+        <div className="w-full max-w-7xl mx-auto px-5 py-8">
           <Outlet />
         </div>
       </div>
