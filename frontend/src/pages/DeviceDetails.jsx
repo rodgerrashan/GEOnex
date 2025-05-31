@@ -8,6 +8,38 @@ import { assets } from "../assets/assets";
 import { useContext } from "react";
 import { Context } from "../context/Context";
 
+const getDeviceTypeIcon = (type, cls = "w-5 h-5") => {
+  switch ((type || "").toLowerCase()) {
+    case "rover":
+      return (
+        <svg className={cls} viewBox="0 0 24 24" fill="none">
+          <path
+            d="M17 10a6 6 0 11-12 0 6 6 0 0112 0Z"
+            stroke="currentColor"
+            strokeWidth="2"
+          />
+          <path d="M11 16v4M7 20h8" stroke="currentColor" strokeWidth="2" />
+        </svg>
+      );
+    case "base":
+      return (
+        <svg className={cls} viewBox="0 0 24 24" fill="none">
+          <rect
+            x="4"
+            y="8"
+            width="16"
+            height="14"
+            stroke="currentColor"
+            strokeWidth="2"
+          />
+          <path d="M8 8V4M16 8V4" stroke="currentColor" strokeWidth="2" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+};
+
 const DeviceDetails = () => {
   const { deviceId } = useParams();
   const { backendUrl } = useContext(Context);
@@ -53,11 +85,20 @@ const DeviceDetails = () => {
   return (
     <div className="text-gray-900 dark:text-gray-100">
       {/* Header */}
-      <div className="flex ">
+      <div className="relative">
         <PageTopic
           topic={device.Name}
           intro={`Device Code: ${device.DeviceCode}`}
         />
+        {/* simple badge */}
+      <div className="absolute top-4 right-12 hidden md:block">
+        <div className="size-16 flex items-center justify-center
+                        rounded-full bg-gray-300 dark:bg-gray-700 
+                        border border-gray-300 dark:border-gray-600
+                        ">
+          {getDeviceTypeIcon(device.Type, "w-8 h-8")}
+        </div>
+      </div>
       </div>
 
       <div
