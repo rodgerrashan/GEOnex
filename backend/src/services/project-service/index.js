@@ -23,3 +23,7 @@ connectDb()
         console.error('Failed to connect to database', error);
     });
  
+
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'healthy', service: 'project-service' });
+});

@@ -16,3 +16,8 @@ const PORT = process.env.SERVER_PORT || 5003;
 app.listen(PORT, () => {
   console.log(`Device service running on port ${PORT}`);
 });
+
+
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'healthy', service: 'device-service' });
+});

@@ -16,3 +16,6 @@ const PORT = process.env.SERVER_PORT || 5008;
 app.listen(PORT, () => {
   console.log(`Notification service running on port ${PORT}`);
 });
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'healthy', service: 'notification-service' });
+});

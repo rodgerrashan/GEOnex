@@ -22,3 +22,8 @@ app.listen(PORT, () => {
 
 // Initialize MQTT connection
 mqttService.init();
+
+
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'healthy', service: 'mqtt-service' });
+});

@@ -23,3 +23,8 @@ app.use("/api/points", pointRoutes);
 
 const PORT = process.env.SERVER_PORT || 5005;
 app.listen(PORT, () => console.log(`Point Service running on port ${PORT}`));
+
+
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'healthy', service: 'point-service' });
+});
