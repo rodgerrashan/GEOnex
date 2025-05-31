@@ -57,7 +57,7 @@ const Dashboard = () => {
 
           {/* Right side: "Add New Project" Button */}
           <button
-            className="flex items-center justify-center gap-2 px-4 py-2 bg-black 
+            className="flex items-center justify-center gap-2 px-4 py-2 bg-black  hover:bg-gray-800  
                       text-white rounded-lg text-sm md:text-lg lg:text-xl
                       dark:bg-indigo-600 dark:hover:bg-indigo-500"
             onClick={() => {

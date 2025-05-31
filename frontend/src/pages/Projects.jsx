@@ -38,7 +38,7 @@ const Projects = () => {
           {/* Right side: "Add New Project" Button */}
           <button
             className="flex text-sm md:text-lg lg:text-xl
-            items-center gap-1 text-s px-4 py-2 bg-black text-white rounded-lg
+            items-center gap-1 text-s px-4 py-2 bg-black  hover:bg-gray-800 text-white rounded-lg
             dark:bg-indigo-600 dark:hover:bg-indigo-500"
             onClick={() => {
               navigate(`/${userId}/newproject`);

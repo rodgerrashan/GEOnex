@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import RenamePointPopup from "../components/RenamePointPopup";
+import PageTopic from "../components/PageTopic";
 
 const TakenPoints = () => {
   const {
@@ -73,32 +74,12 @@ const TakenPoints = () => {
   };
 
   return (
-    <div>
+    <div className="text-gray-900 dark:text-gray-100">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:grid-rows-[80px_auto]">
         {/* Header row with left group and right button */}
         <div className="col-span-1 md:col-span-2 flex items-center justify-between">
           {/* Left group: arrow and title */}
-          <div className="flex items-center gap-3">
-            {/* Left arrow button */}
-            <button
-              className="text-2xl"
-              onClick={() => {
-                navigate(-1);
-              }}
-            >
-              <img className="w-8 h-8" src={assets.arrow} alt="Go back" />
-            </button>
-
-            {/* Title & subtitle */}
-            <div>
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold">
-                Taken Points
-              </h1>
-              <p className="text-sm md:text-base lg:text-lg mt-1">
-                Play with points
-              </p>
-            </div>
-          </div>
+          <PageTopic topic="Taken Points" intro="Play with points" />
 
           <div className="flex items-center gap-3">
             {/* refresh button */}
@@ -107,14 +88,16 @@ const TakenPoints = () => {
               onClick={() => window.location.reload()}
             >
               <img
-                className="w-7 h-7 md:w-9 md:h-9"
+                className="w-7 h-7 md:w-9 md:h-9 invert-0 dark:invert dark:brightness-0"
                 src={assets.refresh}
                 alt="refresh"
               />
             </button>
 
             <button
-              className="flex items-center gap-1 text-sm md:text-base lg:text-lg md:px-10 px-4 py-2 bg-black text-white rounded-xl"
+              className="flex items-center gap-1 text-sm md:text-base lg:text-lg md:px-10 px-4 py-2 
+              bg-black hover:bg-gray-800 text-white rounded-xl
+              dark:bg-indigo-600 dark:hover:bg-indigo-500"
               onClick={() => {
                 navigate(`/project/${projectId}`);
               }}
@@ -133,7 +116,7 @@ const TakenPoints = () => {
                 className=" w-full text-xs md:text-base text-left border-separate border-spacing-y-2"
                 style={{ borderCollapse: "separate" }}
               >
-                <thead className="text-sm md:text-base text-gray-700 uppercase">
+                <thead className="text-sm md:text-base text-gray-700 dark:text-gray-200 uppercase">
                   <tr>
                     <th scope="col" className="px-6 py-3">
                       Point
@@ -159,7 +142,8 @@ const TakenPoints = () => {
                   {points.map((point, index) => (
                     <tr
                       key={point._id || index}
-                      style={{ backgroundColor: "rgba(217,217,217,1)" }}
+                      className="bg-[rgba(217,217,217,1)] dark:bg-gray-700"
+                      
                     >
                       <td className="px-6 py-4 rounded-l-lg">{point.Name}</td>
                       <td className="px-6 py-4">{point.Latitude}</td>
@@ -174,7 +158,7 @@ const TakenPoints = () => {
                         <div className="flex flex-col md:flex-row gap-2 w-full">
                           <button
                             className="flex-1 text-white text-xs md:text-sm 
-                        bg-black hover:text-blue-700 
+                        bg-black hover:bg-gray-800 dark:bg-indigo-600 dark:hover:bg-indigo-500  
                         px-2 py-1 rounded-lg"
                             onClick={() => handleRenamePoint(point._id)}
                           >
@@ -183,7 +167,7 @@ const TakenPoints = () => {
 
                           <button
                             className="flex-1 text-white text-xs md:text-sm 
-                          bg-red-500 hover:text-red-700 
+                          bg-red-500 hover:bg-red-600 
                           px-2 py-1 rounded-lg"
                             onClick={() => handleDeletePoint(point._id)}
                           >
@@ -201,7 +185,7 @@ const TakenPoints = () => {
       </div>
 
       {showRenamePoint && pointToRename && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[5px] z-[2000]">
+        <div className="fixed text-gray-900 inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[5px] z-[2000]">
           <RenamePointPopup
             existingName={pointToRename.Name}
             onRename={onRename}

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect }  from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { assets } from "../assets/assets";
 import { Context } from "../context/Context";
 import MapSection from "../components/MapSection";
@@ -6,12 +6,13 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import SensorData from "../components/SensorData";
+import PageTopic from "../components/PageTopic";
 
 const PointSurvey = () => {
-  const { navigate, backendUrl} = useContext(Context);
-  const { projectId } = useParams(); 
-  const [projectName, setProjectName] = useState(""); 
-  
+  const { navigate, backendUrl } = useContext(Context);
+  const { projectId } = useParams();
+  const [projectName, setProjectName] = useState("");
+
   useEffect(() => {
     // Fetch project name
     const fetchName = async () => {
@@ -32,54 +33,42 @@ const PointSurvey = () => {
   }, [projectId]);
 
   return (
-    <div>
-      <div className="grid grid-cols-1 gap-4
-       md:grid-cols-2 md:grid-rows-7 md:h-screen ">
-
+    <div className="text-gray-900 dark:text-gray-100">
+      <div
+        className="grid grid-cols-1 gap-4
+       md:grid-cols-2 md:grid-rows-7 md:h-screen "
+      >
         {/* Header row with left group and right button */}
         <div className="col-span-1 md:col-span-2 flex flex-row items-center justify-between">
           {/* Left group: arrow and title */}
-          <div className="flex items-center gap-3">
-            {/* Left arrow button */}
-            <button
-              className="text-2xl"
-              onClick={() => {
-                navigate(`/project/${projectId}`)
-              }}
-            >
-              <img className="w-6 h-6 md:w-8 md:h-8" src={assets.arrow} alt="Go back" />
-            </button>
 
-            {/* Title & subtitle */}
-            <div>
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold">{projectName || "Loading..."}</h1>
-              <p className="text-sm md:text-base lg:text-lg mt-1">Feel free to do surveys</p>
-            </div>
-          </div>
+          <PageTopic
+            topic={projectName || "Loading..."}
+            intro="Feel free to do surveys"
+          />
 
           {/* Right side: "Proceed" Button */}
           <button
             className="flex items-center gap-1 text-sm md:text-base lg:text-lg
-             px-4 md:px-10 py-2 bg-black text-white rounded-xl"
+             px-4 md:px-10 py-2 bg-black hover:bg-gray-800 text-white rounded-xl dark:bg-indigo-600 dark:hover:bg-indigo-500"
             onClick={() => {
               navigate(`/takenpoints/${projectId}`);
             }}
           >
             Proceed <span>→</span>
           </button>
-
         </div>
-        <div className="col-span-1 md:col-span-2 
+        <div
+          className="col-span-1 md:col-span-2 
         h-[70vh] 
         md:row-span-6 md:h-auto 
         bg-white rounded-lg
-        flex flex-col gap-4 overflow-auto">
+        flex flex-col gap-4 overflow-auto"
+        >
           <MapSection />
-
-        </div>        
+        </div>
 
         {/* <SensorData/> */}
-
       </div>
     </div>
   );

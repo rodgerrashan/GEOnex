@@ -192,8 +192,7 @@ const MapSection = () => {
 
   return (
     <div
-      className="w-full h-full relative p-2 bg-gray "
-      style={{ backgroundColor: "rgb(232, 232, 232)" }}
+      className="w-full h-full relative p-2 bg-[rgba(232,232,232,1)] dark:bg-gray-900 text-gray-900"
     >
       <MapContainer
         center={center}
