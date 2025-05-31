@@ -176,7 +176,7 @@ const Dashboard = () => {
         </div> */}
 
         <div className="col-span-1 md:col-span-2 lg:col-span-3 bg-white p-4 
-        rounded-lg dark:bg-gray-700">
+        rounded-lg dark:bg-gray-800">
           {memoizedRecentProjects}
         </div>
       </div>

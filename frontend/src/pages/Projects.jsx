@@ -14,7 +14,7 @@ const Projects = () => {
   }, [getProjectsData]);
 
   return (
-    <div>
+    <div className="text-gray-900 dark:text-gray-100">
       <div
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4
         md:grid-rows-[80px_auto]"
@@ -36,7 +36,8 @@ const Projects = () => {
           {/* Right side: "Add New Project" Button */}
           <button
             className="flex text-sm md:text-lg lg:text-xl
-            items-center gap-1 text-s px-4 py-2 bg-black text-white rounded-lg"
+            items-center gap-1 text-s px-4 py-2 bg-black text-white rounded-lg
+            dark:bg-indigo-600"
             onClick={() => {
               navigate("/newproject");
             }}
@@ -48,16 +49,16 @@ const Projects = () => {
 
         <div
           className="col-span-1 md:col-span-2 lg:col-span-3
-          bg-white p-4 rounded-lg"
+          bg-white p-4 rounded-lg dark:bg-gray-800"
         >
-          <div className="bg-white p-4 rounded-lg">
+          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg">
             <div className="overflow-x-auto">
               <table
                 className="w-full text-sm text-left border-separate border-spacing-y-2"
                 style={{ borderCollapse: "separate" }}
               >
-                <thead className="text-xs md:text-sm lg:text-base text-gray-700 uppercase bg-gray-50">
-                  <tr>
+                <thead className="uppercase bg-gray-50 dark:bg-gray-700">
+                  <tr className="text-xs md:text-sm lg:text-base text-gray-700 dark:text-gray-200 ">
                     <th scope="col" className="px-6 py-3">
                       Project
                     </th>
@@ -85,9 +86,11 @@ const Projects = () => {
                     return (
                       <tr
                         key={index}
-                        style={{ backgroundColor: "rgba(197,197,198,1)" }}
                         onClick={() => navigate(`/project/${project._id}`)}
-                        className="cursor-pointer text-xs md:text-sm lg:text-base"
+                        className="cursor-pointer text-xs md:text-sm lg:text-base 
+                        bg-[rgba(197,197,198,1)]  hover:bg-[rgba(180,180,180,1)] 
+                        transition-colors duration-200 rounded-lg shadow-sm
+                        dark:bg-gray-700 dark:hover:bg-gray-600"
                       >
                         <td className="px-6 py-4 rounded-l-lg">
                           {project.Name}
@@ -100,10 +103,10 @@ const Projects = () => {
                             <span
                               className={`px-1 py-1 text-xs md:text-sm lg:text-base font-semibold ${
                                 project.Status === "Active"
-                                  ? "text-blue-700"
+                                  ? "text-blue-700 dark:text-blue-400"
                                   : project.Status === "Pending"
-                                  ? "text-orange-500"
-                                  : "text-green-700"
+                                  ? "text-orange-500 dark:text-orange-400"
+                                  : "text-green-700 dark:text-green-400"
                               }`}
                             >
                               {project.Status}
@@ -114,10 +117,17 @@ const Projects = () => {
                               className="w-3 h-3       
                                       sm:w-4 sm:h-4 
                                       md:w-5 md:h-5
-                                      cursor-pointer"
+                                      cursor-pointer
+                                      hover:scale-110 transition"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                removeProject(project._id);
+                                if (
+                                  window.confirm(
+                                    `Delete project “${project.Name}”?\nThis action cannot be undone.`
+                                  )
+                                ) {
+                                  removeProject(project._id);
+                                }
                               }}
                             />
                           </div>

@@ -16,13 +16,14 @@ const RecentProjects = ({userId}) => {
     .slice(0, 4);
 
   return (
-    <div className="bg-white p-4 rounded-lg">
+    <div className="bg-white dark:bg-gray-800 dark:text-gray-100 p-4 rounded-lg">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg md:text-xl lg:text-2xl font-semibold">Recent Projects</h2>
         
 
         <button
-            className="text-sm md:text-base lg:text-lg px-4 py-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors"
+            className="text-sm md:text-base lg:text-lg px-4 py-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors
+            dark:text-indigo-400 dark:hover:text-indigo-300 dark:hover:bg-indigo-900/20"
             onClick={() => navigate("/projects")}
           >
             View All
@@ -33,8 +34,8 @@ const RecentProjects = ({userId}) => {
           className="w-full text-sm text-left border-separate border-spacing-y-2"
           style={{ borderCollapse: "separate" }}
         >
-          <thead className="text-xs md:text-sm lg:text-base text-gray-700 uppercase bg-gray-50">
-            <tr>
+          <thead className=" uppercase bg-gray-50 dark:bg-gray-700">
+            <tr className="text-xs md:text-sm lg:text-base text-gray-700 dark:text-gray-200">
               <th scope="col" className="px-6 py-3">
                 Project
               </th>
@@ -62,7 +63,10 @@ const RecentProjects = ({userId}) => {
                 <tr
                   key={index}
                   onClick={() => navigate(`/project/${project._id}`)}
-                  className="cursor-pointer text-xs md:text-sm lg:text-base bg-slate-100 hover:bg-slate-200 transition-colors duration-200 rounded-lg shadow-sm"
+                  className="cursor-pointer text-xs md:text-sm lg:text-base 
+                  bg-[rgba(197,197,198,1)]  hover:bg-[rgba(180,180,180,1)] 
+                  transition-colors duration-200 rounded-lg shadow-sm
+                  dark:bg-gray-700 dark:hover:bg-gray-600"
                 >
                   <td className="px-6 py-4 rounded-l-lg">{project.Name}</td>
                   <td className="px-6 py-4">{createdOn}</td>

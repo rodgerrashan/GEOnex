@@ -58,9 +58,9 @@ const Network = ({ data, onChange }) => {
   else variant = "disabled"; // gray
 
   const classesByVariant = {
-    disabled: "bg-gray-400 cursor-not-allowed",
-    idle: "bg-red-500 hover:bg-red-600",
-    active: "bg-blue-500 hover:bg-blue-600",
+    disabled: "bg-gray-400 dark:bg-gray-600 cursor-not-allowed",
+    idle: "bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700",
+    active: "bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700",
   };
 
   const buttonLabel = backendIsCustom ? "RESET TO DEFAULT" : "SAVE NETWORK";
@@ -76,13 +76,14 @@ const Network = ({ data, onChange }) => {
         <select
           value={type}
           onChange={(e) => setType(e.target.value)}
-          className="text-blue-600 cursor-pointer outline-none rounded px-2 py-1"
+          className="text-blue-600 cursor-pointer outline-none rounded px-2 py-1 
+          dark:text-indigo-400 dark:bg-gray-800"
         >
           <option>Default</option>
           <option>Custom</option>
         </select>
       </div>
-      <hr className="border-gray-300" />
+      <hr className="border-gray-300 dark:border-gray-600" />
 
       <label className="block font-medium text-lg mt-4">Custom MQTT URL</label>
       <input
@@ -93,11 +94,11 @@ const Network = ({ data, onChange }) => {
         disabled={type !== "Custom"}
         className={`w-full rounded-full mt-2 mb-4 py-2 px-4 ${
           type === "Custom"
-            ? "border border-gray-300 focus:outline-none"
-            : "bg-gray-200 text-gray-500 cursor-not-allowed"
+            ? "border border-gray-300 focus:outline-none dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
+            : "bg-gray-200 text-gray-500 cursor-not-allowed dark:bg-gray-700 dark:text-gray-400"
         }`}
       />
-      <hr className="border-gray-300" />
+      <hr className="border-gray-300 dark:border-gray-600" />
 
       {/* dynamic single button */}
       <button

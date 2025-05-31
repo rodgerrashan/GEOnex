@@ -17,20 +17,20 @@ const Map = ({ data = {}, onChange }) => {
         <select
           value={accuracyCircles}
           onChange={(e) => onChange("accuracyCircles", e.target.value)}
-          className="text-blue-600 cursor-pointer rounded px-2 py-1 border border-gray-300 outline-none"
+          className="text-blue-600 cursor-pointer rounded px-2 py-1 dark:text-indigo-400 dark:bg-gray-800 outline-none"
         >
           <option value="Show">Show</option>
           <option value="Hide">Hide</option>
         </select>
       </div>
-      <hr className="border-gray-300" />
+      <hr className="border-gray-300 dark:border-gray-600" />
 
       {/* Provider (readonly) */}
       <div className="flex items-center justify-between mt-4">
         <span>Provider</span>
-        <span className="text-gray-600">{provider}</span>
+        <span className="text-gray-500 dark:text-gray-300">{provider}</span>
       </div>
-      <hr className="border-gray-300" />
+      <hr className="border-gray-300 dark:border-gray-600" />
 
       {/* Theme */}
       <div className="flex items-center justify-between mt-4">
@@ -38,7 +38,7 @@ const Map = ({ data = {}, onChange }) => {
         <select
           value={theme}
           onChange={(e) => onChange("theme", e.target.value)}
-          className="text-blue-600 cursor-pointer rounded px-2 py-1 border border-gray-300 outline-none"
+          className="text-blue-600 cursor-pointer rounded px-2 py-1 outline-none dark:text-indigo-400 dark:bg-gray-800"
         >
           <option value="Light">Light</option>
           <option value="Dark">Dark</option>

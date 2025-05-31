@@ -60,18 +60,18 @@ const ContextProvider = (props) => {
     }
   };
 
-  const getProjectsData = async (userId) => {
+  const getProjectsData = async (userId = userData?.userId) => {
     try {
-      if (userId !== undefined) {
-        const response = await axios.get(
-          backendUrl + `/api/projects/recentprojects/${userId}`
-        );
+      if (!userId) return;
 
-        if (response.data.success) {
-          setProjects(response.data.projects);
-        } else {
-          toast.error(response.data.message);
-        }
+      const response = await axios.get(
+        backendUrl + `/api/projects/recentprojects/${userId}`
+      );
+
+      if (response.data.success) {
+        setProjects(response.data.projects);
+      } else {
+        toast.error(response.data.message);
       }
     } catch (error) {
       console.error("Error fetching projects:", error);
@@ -86,7 +86,8 @@ const ContextProvider = (props) => {
       );
       if (response.data.success) {
         toast.success(response.data.message);
-        getProjectsData();
+        setProjects((prev) => prev.filter((p) => p._id !== projectId));
+        await getProjectsData();
       } else {
         toast.error(response.data.message);
       }

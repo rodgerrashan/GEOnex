@@ -21,7 +21,7 @@ const Settings = () => {
     );
   }
   return (
-    <div className="min-h-screen p-1">
+    <div className="min-h-screen p-1 text-gray-900 dark:text-gray-100">
       <div className="mb-10">
         <h1 className="text-4xl font-semi-bold">Settings</h1>
         <p className="text-md mt-1">
@@ -33,14 +33,14 @@ const Settings = () => {
         {/* Left column */}
         <div className="flex-1 min-w-[300px]">
           {/* System */}
-          <section className="bg-white p-4 rounded-lg mb-4 h-[300px]">
+          <section className="bg-white dark:bg-gray-800 p-4 rounded-lg mb-4 h-[300px]">
             <System
               data={settings.system}
               onChange={(key, val) => updateSetting("system", key, val)}
             />
           </section>
 
-          <section className="bg-white p-4 rounded-lg mb-4 h-[496px]">
+          <section className="bg-white dark:bg-gray-800  p-4 rounded-lg mb-4 h-[496px]">
             <Device
               data={settings.device}
               onChange={(key, val) => updateSetting("device", key, val)}
@@ -51,7 +51,7 @@ const Settings = () => {
         {/* Right column */}
         <div className="flex-1 min-w-[300px]">
           {/* Network */}
-          <section className="bg-white p-4 rounded-lg mb-4 h-[300px]">
+          <section className="bg-white dark:bg-gray-800 p-4 rounded-lg mb-4 h-[300px]">
             <Network
               data={settings.network}
               onChange={(key, val) => updateSetting("network", key, val)}
@@ -59,7 +59,7 @@ const Settings = () => {
           </section>
 
           {/* Map */}
-          <section className="bg-white p-4 rounded-lg mb-4 h-[200px]">
+          <section className="bg-white dark:bg-gray-800 p-4 rounded-lg mb-4 h-[200px]">
             <Map
               data={settings.map}
               onChange={(key, val) => updateSetting("map", key, val)}
@@ -67,15 +67,15 @@ const Settings = () => {
           </section>
 
           {/* Account */}
-          <section className="bg-white p-4 rounded-lg mb-4 h-[280px]">
+          <section className="bg-white dark:bg-gray-800 p-4 rounded-lg mb-4 h-[280px]">
             <div>
               <h2 className="font-semibold text-xl">Account</h2>
 
               <div className="flex items-center justify-between mt-4">
                 <span>Email</span>
-                <span className="text-gray-500">{userData.email}</span>
+                <span className="text-gray-500 dark:text-gray-300">{userData.email}</span>
               </div>
-              <hr className="border-gray-300" />
+              <hr className="border-gray-300 dark:border-gray-600" />
 
               <div className="flex items-center justify-between mt-4">
                 <span>Notifications</span>
@@ -84,19 +84,20 @@ const Settings = () => {
                   onChange={(e) =>
                     updateSetting("account", "notifications", e.target.value)
                   }
-                  className="text-blue-600 cursor-pointer outline-none rounded px-2 py-1"
+                  className="text-blue-600 dark:text-indigo-400 dark:bg-gray-800 cursor-pointer outline-none rounded px-2 py-1"
                 >
                   <option>ON</option>
                   <option>OFF</option>
                 </select>
               </div>
             </div>
-            <hr className="border-gray-300" />
+            <hr className="border-gray-300 dark:border-gray-600" />
 
             <div className="space-y-3 mt-8">
               <button
                 onClick={() => setShowPw(true)}
-                className="w-full bg-black text-white rounded-full py-2 hover:bg-gray-900 transition"
+                className="w-full bg-black text-white rounded-full py-2 hover:bg-gray-900 transition
+                dark:bg-indigo-600 dark:hover:bg-indigo-500"
               >
                 CHANGE PASSWORD
               </button>
