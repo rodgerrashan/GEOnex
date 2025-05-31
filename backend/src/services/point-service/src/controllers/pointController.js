@@ -1,7 +1,6 @@
-const {getDb} = require('../db.js');
+const {getDb} = require('../config/db.js');
 const Point = require('../models/Point');
-const {getProjectById} = require('../../project-service/controllers/projectController.js');
-const Project = require('../../project-service/models/Project.js');
+const Project = require('../models/Project.js');
 const {ObjectId} = require('mongodb');
 
 

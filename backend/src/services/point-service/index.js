@@ -16,7 +16,7 @@ mongoose.connect(process.env.MONGO_URI, {
 .catch(err => console.error("MongoDB Connection Error:", err));
 
 // Routes
-const pointRoutes = require("./routes/pointRoutes");
+const pointRoutes = require("./src/routes/pointRoutes");
 app.use("/api/points", pointRoutes);
 
 // Start Service
