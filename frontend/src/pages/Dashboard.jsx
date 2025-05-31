@@ -61,7 +61,7 @@ const Dashboard = () => {
                       text-white rounded-lg text-sm md:text-lg lg:text-xl
                       dark:bg-indigo-600 dark:hover:bg-indigo-500"
             onClick={() => {
-              navigate(`/${userId}/newproject`);
+              navigate(`/projects/${userId}/newproject`);
             }}
           >
             <svg
