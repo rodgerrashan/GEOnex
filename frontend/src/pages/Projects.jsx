@@ -116,7 +116,7 @@ const Projects = () => {
                             <img
                               src={assets.bin}
                               alt="Delete Project"
-                              className="w-3 h-3       
+                              className="w-3 h-3 dark:invert    
                                       sm:w-4 sm:h-4 
                                       md:w-5 md:h-5
                                       cursor-pointer

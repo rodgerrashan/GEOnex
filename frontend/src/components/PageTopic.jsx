@@ -14,7 +14,7 @@ const PageTopic = ({topic, intro}) => {
           }}
         >
           <img
-            className="w-6 h-6 md:w-8 md:h-8"
+            className="w-6 h-6 md:w-8 md:h-8 dark:invert dark:brightness-0 "
             src={assets.arrow}
             alt="goback"
           />
