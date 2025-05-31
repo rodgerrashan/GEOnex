@@ -165,9 +165,9 @@ const Dashboard = () => {
             <p className="font-semi-bold text-lg md:text-xl lg:text-2xl">
               Client Connected
             </p>
-            {/* <div>{rovers.map((rover, i) => <div key={i}><span className="text-xs">{rover.DeviceCode}</span>
+            <div>{rovers.map((rover, i) => <div key={i}><span className="text-xs">{rover.DeviceCode}</span>
 
-            </div>)}</div> */}
+            </div>)}</div>
           </div>
         </div>
 
