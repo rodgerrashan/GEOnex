@@ -1,12 +1,9 @@
-const express = require("express");
-const {ObjectId} = require('mongodb');
-const { getDb } = require("../../point-service/db");
-const router = express.Router();
-const { getPointsByProjectId } = require("../../point-service/controllers/pointController");
-const { exportToTxt, exportToPng, exportToDxf, exportToPdf } = require("../../../utils/export");
-const Point = require("../../point-service/models/Point");
-const path = require("path");
 const fs = require("fs").promises;
+const {ObjectId} = require('mongodb');
+const { getDb } = require("../config/db");
+
+const { exportToTxt, exportToPng, exportToDxf, exportToPdf } = require("../utils/export");
+
 
 // Validation middleware for projectId
 const validateProjectId = (req, res, next) => {
@@ -40,8 +37,7 @@ const cleanupFile = async (filePath) => {
 };
 
 
-// Export TXT
-router.get("/txt/:projectId", validateProjectId, async (req, res) => {
+const exportTxt = async (req, res) => {
   let filePath = null;
   
   try {
@@ -93,10 +89,11 @@ router.get("/txt/:projectId", validateProjectId, async (req, res) => {
       error: process.env.NODE_ENV === 'development' ? err.message : "Internal server error"
     });
   }
-});
+}
 
-// Export PNG
-router.get("/png/:projectId", validateProjectId, async (req, res) => {
+
+
+const exportPng= async (req, res) => {
   let filePath = null;
   
   try {
@@ -148,10 +145,10 @@ router.get("/png/:projectId", validateProjectId, async (req, res) => {
       error: process.env.NODE_ENV === 'development' ? err.message : "Internal server error"
     });
   }
-});
+}
 
-// Export DXF
-router.get("/dxf/:projectId", validateProjectId, async (req, res) => {
+
+const exportDxf =  async (req, res) => {
   let filePath = null;
   
   try {
@@ -203,12 +200,9 @@ router.get("/dxf/:projectId", validateProjectId, async (req, res) => {
       error: process.env.NODE_ENV === 'development' ? err.message : "Internal server error"
     });
   }
-});
+}
 
-
-
-// Export PDF
-router.get("/pdf/:projectId", validateProjectId, async (req, res) => {
+const exportPdf = async (req, res) => {
   let filePath = null;
   
   try {
@@ -260,17 +254,14 @@ router.get("/pdf/:projectId", validateProjectId, async (req, res) => {
       error: process.env.NODE_ENV === 'development' ? err.message : "Internal server error"
     });
   }
-});
+}
 
 
-
-// Health check endpoint
-router.get("/health", (req, res) => {
-  res.status(200).json({ 
-    status: "OK", 
-    service: "Export Router",
-    timestamp: new Date().toISOString()
-  });
-});
-
-module.exports = router;
+module.exports = {
+  exportTxt,
+  exportPng,
+  exportDxf,
+  exportPdf,
+  validateProjectId,
+  
+};

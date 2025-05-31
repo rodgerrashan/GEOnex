@@ -1,4 +1,4 @@
-const {getDb} = require('../db.js');
+const {getDb} = require('../config/db');
 const Device = require('../models/Device');
 const {ObjectId} = require('mongodb');
 
@@ -45,6 +45,7 @@ const getDeviceById = async (req, res) => {
         res.json({success:true, device});
     } catch (error) {
         console.error("Error fetching device:", error);
+        
         res.status(500).json({success:false , message: 'Error fetching device', error: error.message });
     }
 };

@@ -1,7 +1,4 @@
-const {getDb} = require('../db.js');
 const Alert = require('../models/Alert.js');
-const {ObjectId} = require('mongodb');
-
 
 const createAlert = async (req, res) => {
     

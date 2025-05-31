@@ -4,15 +4,19 @@ const app = express();
 require("dotenv").config();
 const {connectDb} = require('./src/config/db');
 
-const deviceRouter = require('./src/routes/deviceRoutes');
+const exportRoutes = require('./src/routes/exportRoutes');
 
 app.use(express.json());
-app.use('/api/devices',deviceRouter);
+app.use('/api/export',exportRoutes);
 
 connectDb();
 
 
-const PORT = process.env.SERVER_PORT || 5003;
+const PORT = process.env.SERVER_PORT || 5006;
 app.listen(PORT, () => {
-  console.log(`Device service running on port ${PORT}`);
+  console.log(`Export service running on port ${PORT}`);
 });
+
+
+
+

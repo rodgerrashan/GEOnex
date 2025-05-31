@@ -1,0 +1,19 @@
+{
+  "name": "export-service",
+  "version": "1.0.0",
+  "description": "This handles all exporting services",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "canvas": "^3.1.0",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "fs": "^0.0.1-security",
+    "mongodb": "^6.16.0",
+    "mongoose": "^8.15.1"
+  }
+}
