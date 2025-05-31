@@ -1,4 +1,4 @@
-const {getDb} = require('../db.js');
+const {getDb} = require('../config/db');
 const Project = require('../models/Project');
 const {ObjectId} = require('mongodb');
 

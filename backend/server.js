@@ -4,7 +4,7 @@ require("dotenv").config();
 const cors = require('cors');
 const cookieParser=require('cookie-parser');
 const connectDB = require('./src/config/db');
-const projectRoutes = require('./src/services/project-service/routes/projectRoutes');
+const projectRoutes = require('./src/services/project-service/src/routes/projectRoutes');
 const pointRoutes = require('./src/services/point-service/src/routes/pointRoutes');
 const mqttService = require('./src/services/mqtt-service/mqttClient');
 const socketService = require('./src/services/socket-service/socketServer');

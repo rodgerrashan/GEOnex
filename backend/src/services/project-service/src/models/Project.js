@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const deviceSchema = require("../../device-service/models/Device");
 
 
 const projectSchema = new mongoose.Schema({

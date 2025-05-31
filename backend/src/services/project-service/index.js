@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const { connectDb } = require('./db');
-const projectRoutes = require('./routes/projectRoutes');
+require('dotenv').config();
+const { connectDb } = require('./src/config/db');
+const projectRoutes = require('./src/routes/projectRoutes');
 
 const app = express();
 app.use(cors());
@@ -9,7 +10,8 @@ app.use(express.json());
 
 app.use('/api/projects', projectRoutes);
 
-const PORT = 5004;
+
+const PORT = process.env.SERVER_PORT || 5004;
 
 connectDb()
     .then(() => {
