@@ -13,7 +13,7 @@ const deviceServices = require('./src/services/device-service/routes/deviceRoute
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const authRouter = require('./src/services/auth-service/routes/authRoutes');
 const userRouter = require('./src/services/auth-service/routes/userRoutes');
-const notificationRouter = require('./src/services/notification-service/routes/notificationRoutes');
+const notificationRouter = require('./src/services/notification-service/src/routes/notificationRoutes');
 
 const exportRoutes = require("./src/services/export-service/routes/exportRoutes");
 
