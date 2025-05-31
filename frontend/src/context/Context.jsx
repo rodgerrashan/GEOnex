@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 axios.defaults.withCredentials = true;
@@ -13,7 +13,6 @@ const ContextProvider = (props) => {
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-
   const [rovers, setRovers] = useState([]);
   const [base, setBase] = useState();
 
@@ -27,7 +26,11 @@ const ContextProvider = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingDevices, setLoadingDevices] = useState(true);
 
-  const [notifications, setNotifications] = useState([]);
+  const [settings, setSettings] = useState(null);
+
+  const [theme, setTheme] = useState("Light");
+
+  // const [notifications, setNotifications] = useState([]);
 
   const getAuthState = async () => {
     try {
@@ -35,7 +38,7 @@ const ContextProvider = (props) => {
       if (data.success && data.verified) {
         setIsLoggedin(true);
         await getUserData();
-      }else{
+      } else {
         setIsLoggedin(false);
         setUserData(null);
       }
@@ -43,8 +46,8 @@ const ContextProvider = (props) => {
       setIsLoggedin(false);
       toast.error(error.message);
       navigate("/login");
-    }finally{
-      setIsLoading(false)
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -57,19 +60,19 @@ const ContextProvider = (props) => {
     }
   };
 
-  const getProjectsData = async (userId) => {
+  const getProjectsData = async (userId = userData?.userId) => {
     try {
-      if (userId !== undefined) {
-        const response = await axios.get(backendUrl + `/api/projects/recentprojects/${userId}`);
+      if (!userId) return;
+
+      const response = await axios.get(
+        backendUrl + `/api/projects/recentprojects/${userId}`
+      );
 
       if (response.data.success) {
         setProjects(response.data.projects);
       } else {
         toast.error(response.data.message);
       }
-
-      }
-      
     } catch (error) {
       console.error("Error fetching projects:", error);
       toast.error(error.message);
@@ -83,7 +86,8 @@ const ContextProvider = (props) => {
       );
       if (response.data.success) {
         toast.success(response.data.message);
-        getProjectsData();
+        setProjects((prev) => prev.filter((p) => p._id !== projectId));
+        await getProjectsData();
       } else {
         toast.error(response.data.message);
       }
@@ -117,7 +121,7 @@ const ContextProvider = (props) => {
       const response = await axios.delete(
         `${backendUrl}/api/points/${projectId}/${pointId}`
       );
-      if (response.data.message) {
+      if (response.data.success) {
         toast.success(response.data.message);
         // Remove the deleted point from the local state
         setPoints((prevPoints) =>
@@ -132,85 +136,168 @@ const ContextProvider = (props) => {
     }
   };
 
+  // Notifications
+  // const getNotificationsData = async (userId, numOfNotifications) => {
+  //   try {
+  //     console.log("Getting notifications for user:", userId);
+  //     const response = await axios.get(`${backendUrl}/api/notifications/user/${userId}/${numOfNotifications || 10}`);
+  //     console.log("Notifications response:", response.data);
+  //     if (Array.isArray(response.data.notifications)) {
+  //       setNotifications(response.data.notifications);
+  //     } else {
+  //       console.warn("Unexpected notifications format", response.data);
+  //       setNotifications([]);
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to fetch notifications", error);
+  //     setNotifications([]);
+  //   }
+  // };
 
-
-  // Notifications 
-  const getNotificationsData = async (userId, numOfNotifications) => {
-    try {
-      console.log("Getting notifications for user:", userId);
-      const response = await axios.get(`${backendUrl}/api/notifications/user/${userId}/${numOfNotifications || 10}`);
-      console.log("Notifications response:", response.data);
-      if (Array.isArray(response.data.notifications)) {
-        setNotifications(response.data.notifications);
-      } else {
-        console.warn("Unexpected notifications format", response.data);
-        setNotifications([]);
-      }
-    } catch (error) {
-      console.error("Failed to fetch notifications", error);
-      setNotifications([]);
-    }
-  };
-
-
-  const markAsRead = async (id) => {
-  try {
-    console.log("Marking notification as read:", id);
-
-    const response = await axios.put(`${backendUrl}/api/notifications/mark-read`, { id });
-    console.log("Mark as read response:", response.data);
-
-    if (response.data.success) {
-      setNotifications((prevNotifications) =>
-        prevNotifications.map((note) =>
-          note._id === id ? { ...note, read: true } : note
-        )
-      );
-    } else {
-      toast.error("Failed to mark notification as read.");
-    }
-  } catch (error) {
-    console.error("Error marking notification as read:", error);
-    toast.error("Failed to mark notification as read.");
-  }
-};
-
-
+  //   const markAsRead = async (id) => {
+  //   try {
+  //     console.log("Marking notification as read:", id);
+  //     if (response.data.success) {
+  //       setNotifications((prevNotifications) =>
+  //         prevNotifications.map((note) =>
+  //           note._id === id ? { ...note, read: true } : note
+  //         )
+  //       );
+  //     } else {
+  //       toast.error("Failed to mark notification as read.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error marking notification as read:", error);
+  //     toast.error("Failed to mark notification as read.");
+  //   }
+  // };
 
   // devices
   const fetchUserDevices = async () => {
+    if (!userData || !userData.userId) {
+      console.warn("User ID not available, skipping device fetch");
+      return;
+    }
     setLoadingDevices(true);
     try {
-        const response = await fetch(`${backendUrl}/api/user/${userData.userId}/devices`);
-        if (!response.ok) {
-            throw new Error("Failed to fetch devices");
-        }
+      const response = await axios.get(
+        `${backendUrl}/api/user/${userData.userId}/devices`
+      );
+      const data = response.data;
+      console.log("Full response:", data);
+      const rovers =
+        data.connectedDevices?.filter((device) => device.Type === "rover") ||
+        [];
+      const baseDevice = data.connectedDevices?.find(
+        (device) => device.Type === "base"
+      );
 
-        const data = await response.json();
-        console.log("Full response:", data);
-        // Filter and set devices based on their type
-        const rovers = data.connectedDevices?.filter(device => device.Type === 'rover') || [];
-        const baseDevice = data.connectedDevices?.find(device => device.Type === 'base');
-        
-        setRovers(rovers);
-        setBase(baseDevice);
-
-        console.log(rovers);
-        console.log(baseDevice);
+      setRovers(rovers);
+      setBase(baseDevice);
     } catch (error) {
-        console.error("Error fetching devices:", error);
-        setError("Failed to load connected devices");
+      console.error("Error fetching devices:", error);
+      toast.error("Failed to load connected devices");
     } finally {
-        setLoadingDevices(false);
+      setLoadingDevices(false);
     }
-};
+  };
+
+  const fetchSettings = async () => {
+    try {
+      const { data } = await axios.get(backendUrl + "/api/user/settings");
+      if (data.success) {
+        setSettings(data.Data);
+        setTheme(data.Data.map.theme);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
+  // updateSetting with optimistic UI + debounced API call
+  const updateTimeout = useRef();
+
+  const updateSetting = (section, key, value) => {
+    // optimistic
+    setSettings((prev) => ({
+      ...prev,
+      [section]: { ...prev[section], [key]: value },
+    }));
+
+    // if the user just changed the map theme, update <html> immediately
+    if (section === "map" && key === "theme") {
+      setTheme(value);
+    }
+
+    // debounce
+    clearTimeout(updateTimeout.current);
+    updateTimeout.current = setTimeout(async () => {
+      try {
+        await axios.put(backendUrl + "/api/user/settings", {
+          [section]: { [key]: value },
+        });
+      } catch (err) {
+        toast.error("Failed to save setting");
+      }
+    }, 300);
+  };
+
+  //  resetSettings
+  const resetSettings = async () => {
+    try {
+      const { data } = await axios.post(
+        backendUrl + "/api/user/settings/reset"
+      );
+      if (data.success) {
+        setSettings(data.Data);
+        toast.success("Settings restored to defaults");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (err) {
+      toast.error("Failed to reset settings");
+    }
+  };
+
+  const logout = async () => {
+    try {
+      axios.defaults.withCredentials = true;
+      const { data } = await axios.post(backendUrl + "/api/auth/logout");
+      if (data.success) {
+        setIsLoggedin(false);
+        setUserData(false);
+        toast.success("Logged out successfully");
+        navigate("/");
+      }
+    } catch (error) {
+      toast.error(error.message || "Logout failed");
+    }
+  };
 
   useEffect(() => {
     getProjectsData();
     getAuthState();
-    fetchUserDevices();
-    getNotificationsData(userData?.userId);
+    // fetchUserDevices();
+    // getNotificationsData(userData?.userId);
   }, []);
+
+  useEffect(() => {
+    if (userData && userData.userId) {
+      getProjectsData(userData.userId);
+      fetchUserDevices();
+      fetchSettings();
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    if (theme === "Dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme]);
 
   // 🔍 watch auth state change
   useEffect(() => {
@@ -221,10 +308,15 @@ const ContextProvider = (props) => {
     console.log("isLoggedin changed ➜", isLoggedin);
   }, [isLoggedin]);
 
+  useEffect(() => {
+    console.log("🔧 settings updated:", settings);
+    console.log("theme", theme);
+  }, [settings]);
+
   const value = {
-    getNotificationsData,
-    notifications,
-    markAsRead,
+    // getNotificationsData,
+    // notifications,
+    // markAsRead,
     navigate,
     showPointRecorded,
     setShowPointRecorded,
@@ -245,9 +337,14 @@ const ContextProvider = (props) => {
     userData,
     setUserData,
     getUserData,
+    isLoading,
     isLoadingDevices,
     rovers,
-    base
+    base,
+    settings,
+    updateSetting,
+    resetSettings,
+    logout,
   };
 
   return <Context.Provider value={value}>{props.children}</Context.Provider>;

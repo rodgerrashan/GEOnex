@@ -4,7 +4,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const PointRecorded = ({ sensorData, baseData, projectId }) => {
-  const { backendUrl, setShowPointRecorded, fetchPoints  } = useContext(Context);
+  const { backendUrl, setShowPointRecorded, fetchPoints, points } =
+    useContext(Context);
 
   const [pointName, setPointName] = useState("New Point");
   const [loading, setLoading] = useState(false);
@@ -22,9 +23,11 @@ const PointRecorded = ({ sensorData, baseData, projectId }) => {
     }
   }, [sensorData]);
 
-
-  
-
+  useEffect(() => {
+    if (points) {
+      setPointName(`Point ${points.length + 1}`);
+    }
+  }, [points]);
 
   const handleSave = async () => {
     // Ensure sensor data is available
@@ -67,13 +70,15 @@ const PointRecorded = ({ sensorData, baseData, projectId }) => {
 
   return (
     <div>
-      <div className="bg-white p-2 rounded-2xl shadow-lg 
+      <div
+        className="bg-white p-2 rounded-2xl shadow-lg 
       w-full md:w-[280px] 
-      text-center">
+      text-center"
+      >
         {/* Title */}
         <h2 className="sm:text-lg md:text-xl font-bold">Record a Point</h2>
         <p className="text-green-500 text-sm  md:text-base font-semibold mt-1">
-          Accuracy: {clientDevice?.accuracy || 'N/A'}
+          Accuracy: {clientDevice?.accuracy || "N/A"}
         </p>
 
         {/* Divider */}
@@ -92,29 +97,31 @@ const PointRecorded = ({ sensorData, baseData, projectId }) => {
           />
         </div>
 
-
         <div className="mt-4 px-4">
           <label className="block text-sm md:text-base text-gray-700">
             Select Client Device
           </label>
           {sensorData && sensorData.length > 0 ? (
             <select
-              value={clientDevice?.deviceName || ''}
+              value={clientDevice?.deviceName || ""}
               onChange={(e) => {
-                const device = sensorData.find(d => d.deviceName === e.target.value);
+                const device = sensorData.find(
+                  (d) => d.deviceName === e.target.value
+                );
                 setClientDevice(device);
               }}
               className="w-full mt-1 p-1 border rounded-xl text-sm md:text-base"
               style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
             >
               <option value="">Select a device...</option>
-              {sensorData.map((device, index) => (
-                device.deviceName !== "N/A" && (
-                  <option key={index} value={device.deviceName}>
-                    {device.deviceName}
-                  </option>
-                )
-              ))}
+              {sensorData.map(
+                (device, index) =>
+                  device.deviceName !== "N/A" && (
+                    <option key={index} value={device.deviceName}>
+                      {device.deviceName}
+                    </option>
+                  )
+              )}
             </select>
           ) : (
             <div className="text-red-500 text-sm mt-1">
@@ -123,15 +130,15 @@ const PointRecorded = ({ sensorData, baseData, projectId }) => {
           )}
         </div>
 
-
-
-
         {/* Buttons */}
         <div className="mt-4 px-4 flex flex-col gap-2 ">
-          <button className="bg-black text-white p-2 rounded-xl text-sm md:text-base"
-          onClick={handleSave}
-          disabled={loading || !isTakePoint}
-          style={{ backgroundColor: (loading || !isTakePoint) ? "grey" : "black" }}
+          <button
+            className="bg-black text-white p-2 rounded-xl text-sm md:text-base"
+            onClick={handleSave}
+            disabled={loading || !isTakePoint}
+            style={{
+              backgroundColor: loading || !isTakePoint ? "grey" : "black",
+            }}
           >
             {loading ? "Saving..." : "Save"}
           </button>

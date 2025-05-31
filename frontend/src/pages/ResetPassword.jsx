@@ -1,9 +1,12 @@
-import React, { useEffect, useState} from "react";
+import React, { useContext, useEffect, useState} from "react";
 import ResetOtp from "../components/ResetOtp";
 import ChangePassword from "../components/ChangePassword";
 import VerifyResetOtp from "../components/VerifyResetOtp";
+import { Context } from "../context/Context";
 
 const ResetPassword = () => {
+
+  const {navigate} = useContext(Context)
 
   const [email, setEmail] = useState("");
   const [isEmailSent, setIsEmailSent] = useState(false)
@@ -37,7 +40,8 @@ const ResetPassword = () => {
       flex flex-col justify-center"
       >
         {/* Logo */}
-        <h1 className="text-center text-3xl font-light text-gray-900">
+        <h1 onClick={() => navigate("/")}
+        className="text-center text-3xl font-light text-gray-900 cursor-pointer">
           <span className="font-semibold">GEO</span>nex
         </h1>
 

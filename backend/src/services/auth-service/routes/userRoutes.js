@@ -1,23 +1,39 @@
-const express = require('express');
-const userAuth = require('../middleware/userAuth.js');
-const { getUserData } = require('../controllers/userController.js');
-const { addDeviceToUser, getUserDevices, removeDeviceFromUser, getUserBases,getUserClientDevices ,getUserRegisteredDevices, getUserDeviceAlerts} = require('../controllers/userController.js');
+const express = require("express");
+const userAuth = require("../middleware/userAuth.js");
+const {
+  getUserData,
+  getSettingsData,
+  updateSettingsData,
+  resetSettingsData,
+  changePassword,
+} = require("../controllers/userController.js");
+const {
+  addDeviceToUser,
+  getUserDevices,
+  removeDeviceFromUser,
+  getUserBases,
+  getUserClientDevices,
+  getUserRegisteredDevices,
+  getUserDeviceAlerts,
+} = require("../controllers/userController.js");
 
 const userRouter = express.Router();
 
-userRouter.get('/data',userAuth,getUserData);
-userRouter.post('/:userId/add-device',addDeviceToUser);
-userRouter.get('/:userId/devices', getUserDevices);
-userRouter.get('/:userId/registereddevices', getUserRegisteredDevices);
-userRouter.delete('/:userId/remove-device', removeDeviceFromUser);
+userRouter.get("/data", userAuth, getUserData);
+userRouter.post("/:userId/add-device", addDeviceToUser);
+userRouter.get("/:userId/devices", getUserDevices);
+userRouter.get("/:userId/registereddevices", getUserRegisteredDevices);
+userRouter.delete("/:userId/remove-device", removeDeviceFromUser);
 
+userRouter.get("/settings", userAuth, getSettingsData);
+userRouter.put("/settings", userAuth, updateSettingsData);
+userRouter.post("/settings/reset", userAuth, resetSettingsData);
 
+userRouter.post("/change-password", userAuth, changePassword);
 
+userRouter.get("/:userId/devices/base-stations", getUserBases);
+userRouter.get("/:userId/devices/client-devices", getUserClientDevices);
 
-userRouter.get('/:userId/devices/base-stations', getUserBases);
-userRouter.get('/:userId/devices/client-devices', getUserClientDevices);
+userRouter.get("/:userId/device-alerts", getUserDeviceAlerts);
 
-userRouter.get('/:userId/device-alerts', getUserDeviceAlerts);
-
-
-module.exports = userRouter;    
+module.exports = userRouter;

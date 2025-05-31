@@ -1,5 +1,12 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { MapContainer, TileLayer, useMap, Marker, Popup, Tooltip } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  useMap,
+  Marker,
+  Popup,
+  Tooltip,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { assets } from "../assets/assets";
@@ -11,15 +18,14 @@ import useBaseSensorData from "./useBaseSensorData";
 import LoadingSpinner from "./LoadingSpinner";
 
 import { useParams } from "react-router-dom";
-import './MarkerStyles.css';
+import "./MarkerStyles.css";
 import MapPopUp from "./MapPopUp";
 
 // Hook to track window width
 function useWindowSize() {
   const [size, setSize] = useState({ width: window.innerWidth });
   useEffect(() => {
-    const handle = () =>
-      setSize({ width: window.innerWidth });
+    const handle = () => setSize({ width: window.innerWidth });
     window.addEventListener("resize", handle);
     return () => window.removeEventListener("resize", handle);
   }, []);
@@ -34,7 +40,7 @@ const MapSection = () => {
 
   const [base, setBase] = useState({ lat: 7.254822, lng: 80.59252 });
   const [center, setCenter] = useState({ lat: 7.254822, lng: 80.59215 });
-  
+
   const {
     navigate,
     fetchPoints,
@@ -47,30 +53,32 @@ const MapSection = () => {
     setShowConfirmDiscard,
   } = useContext(Context);
 
-  // mock devices 
+  // mock devices
   const rovers = ["device123", "device456"];
   const baseStation = "base123";
   // Define your WebSocket URL here
   const WS_URL = "http://localhost:5000";
   // Use our custom hook to get sensor data and connection status
   const { sensorData, connectionStatus } = useSensorData(WS_URL, rovers);
-  const { baseSensorData, baseconnectionStatus } = useBaseSensorData(WS_URL, baseStation);
-
-
+  const { baseSensorData, baseconnectionStatus } = useBaseSensorData(
+    WS_URL,
+    baseStation
+  );
 
   // Update the base position when base sensor data updates
   useEffect(() => {
     console.log("Base Sensor Data:", baseSensorData);
-    if (baseSensorData &&
-      typeof baseSensorData.latitude === 'number' && 
-      typeof baseSensorData.longitude === 'number') {
+    if (
+      baseSensorData &&
+      typeof baseSensorData.latitude === "number" &&
+      typeof baseSensorData.longitude === "number"
+    ) {
       setBase({
         lat: baseSensorData.latitude,
         lng: baseSensorData.longitude,
       });
     }
   }, [baseSensorData, baseStation]);
-
 
   // Fetch previously recorded points from Context when projectId changes
   useEffect(() => {
@@ -79,49 +87,49 @@ const MapSection = () => {
     }
   }, [projectId]);
 
-
-
   // Update the center position based on rover and base positions
   useEffect(() => {
     // If we have valid sensor data from rovers
     if (Array.isArray(sensorData) && sensorData.length > 0) {
-
-      const validRoverData = sensorData.filter(data => 
-      data && typeof data.latitude === 'number' && typeof data.longitude === 'number'
+      const validRoverData = sensorData.filter(
+        (data) =>
+          data &&
+          typeof data.latitude === "number" &&
+          typeof data.longitude === "number"
       );
 
       if (validRoverData.length > 0) {
-      // Calculate average of all valid rover positions
-      const avgLat = validRoverData.reduce((sum, data) => sum + data.latitude, 0) / validRoverData.length;
-      const avgLng = validRoverData.reduce((sum, data) => sum + data.longitude, 0) / validRoverData.length;
+        // Calculate average of all valid rover positions
+        const avgLat =
+          validRoverData.reduce((sum, data) => sum + data.latitude, 0) /
+          validRoverData.length;
+        const avgLng =
+          validRoverData.reduce((sum, data) => sum + data.longitude, 0) /
+          validRoverData.length;
 
-      setCenter({
-        lat:avgLat,
-        lng:avgLng
-      });
-
-      }
-
-
-    } else if (points && points.length > 0) {
-          // Calculate average of fetched points
-          const avgLat = points.reduce((sum, point) => sum + point.Latitude, 0) / points.length;
-          const avgLng = points.reduce((sum, point) => sum + point.Longitude, 0) / points.length;
-          setCenter({
-            lat: avgLat,
-            lng: avgLng
-          });
-        }else if (base) {
-        // If no valid rover data, set center to base position
         setCenter({
-          lat: base.lat,
-          lng: base.lng
+          lat: avgLat,
+          lng: avgLng,
         });
-      } 
-    
+      }
+    } else if (points && points.length > 0) {
+      // Calculate average of fetched points
+      const avgLat =
+        points.reduce((sum, point) => sum + point.Latitude, 0) / points.length;
+      const avgLng =
+        points.reduce((sum, point) => sum + point.Longitude, 0) / points.length;
+      setCenter({
+        lat: avgLat,
+        lng: avgLng,
+      });
+    } else if (base) {
+      // If no valid rover data, set center to base position
+      setCenter({
+        lat: base.lat,
+        lng: base.lng,
+      });
+    }
   }, [sensorData, base, points]);
-
-  
 
   // Recenter the map when center state changes
   const RecenterAutomatically = ({ center }) => {
@@ -146,32 +154,31 @@ const MapSection = () => {
   }, [width]);
 
   const staticTakenPointIcon = L.divIcon({
-  className: '',
-  html: `
+    className: "",
+    html: `
     <div class="relative w-3 h-3">
       <div class="w-full h-full bg-blue-600 rounded-full border-2 border-white shadow-md"></div>
     </div>
   `,
-  iconSize: [24, 24],
-  iconAnchor: [12, 12],
-});
-
+    iconSize: [24, 24],
+    iconAnchor: [12, 12],
+  });
 
   const pulseIcon = L.divIcon({
-  className: '',
-  html: `
+    className: "",
+    html: `
     <div class="relative w-10 h-10">
       <div class="absolute w-full h-full bg-blue-500 rounded-full opacity-60 animate-pulse-signal"></div>
       <div class="absolute w-2.5 h-2.5 bg-blue-600 rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"></div>
     </div>
   `,
-  iconSize: [20, 20],
-  iconAnchor: [10, 10],
-});
+    iconSize: [20, 20],
+    iconAnchor: [10, 10],
+  });
 
-const baseIcon = L.divIcon({
-  className: '',
-  html: `
+  const baseIcon = L.divIcon({
+    className: "",
+    html: `
     <div class="relative w-12 h-12">
       <div class="absolute w-full h-full bg-gray-500 rounded-full opacity-60 animate-wave"></div>
       <div class="absolute w-full h-full bg-gray-600 rounded-full opacity-60 animate-wave-delay"></div>
@@ -179,13 +186,14 @@ const baseIcon = L.divIcon({
       <div class="absolute w-3 h-3 bg-gray-900 rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"></div>
     </div>
   `,
-  iconSize: [24, 24],
-  iconAnchor: [12, 12],
-});
-
+    iconSize: [24, 24],
+    iconAnchor: [12, 12],
+  });
 
   return (
-    <div className="w-full h-full relative p-2 bg-gray " style={{ backgroundColor: 'rgb(232, 232, 232)' }}>
+    <div
+      className="w-full h-full relative p-2 bg-[rgba(232,232,232,1)] dark:bg-gray-900 text-gray-900"
+    >
       <MapContainer
         center={center}
         zoom={ZOOM_LEVEL}
@@ -203,15 +211,25 @@ const baseIcon = L.divIcon({
         {/* Live Device Markers */}
         {sensorData.map((data) => (
           <Marker
-            key={data.deviceName}  
+            key={data.deviceName}
             position={[data.latitude, data.longitude]}
             icon={pulseIcon}
           >
             <Popup>
-              <MapPopUp battery={data.battery} deviceName={data.deviceName} signal={data.signal} status={data.status}/>
+              <MapPopUp
+                battery={data.battery}
+                deviceName={data.deviceName}
+                signal={data.signal}
+                status={data.status}
+              />
             </Popup>
 
-            <Tooltip permanent={true} direction="right" offset={[10, 10]} className="modern-tooltip">
+            <Tooltip
+              permanent={true}
+              direction="right"
+              offset={[10, 10]}
+              className="modern-tooltip"
+            >
               <span className="point-name">{data.deviceName || "Rover"}</span>
             </Tooltip>
           </Marker>
@@ -219,15 +237,25 @@ const baseIcon = L.divIcon({
 
         {/* Base Device Marker */}
         <Marker position={[base.lat, base.lng]} icon={baseIcon}>
-          <Popup >
- <MapPopUp battery={baseSensorData.battery} deviceName={baseSensorData.deviceName} signal={baseSensorData.signal} status={baseSensorData.status}/>
-</Popup>
+          <Popup>
+            <MapPopUp
+              battery={baseSensorData.battery}
+              deviceName={baseSensorData.deviceName}
+              signal={baseSensorData.signal}
+              status={baseSensorData.status}
+            />
+          </Popup>
 
-            <Tooltip permanent={true} direction="right" offset={[10, 10]} className="modern-tooltip">
-              <span className="point-name">{baseSensorData.deviceName || "Base"}</span>
-            </Tooltip>
-
-
+          <Tooltip
+            permanent={true}
+            direction="right"
+            offset={[10, 10]}
+            className="modern-tooltip"
+          >
+            <span className="point-name">
+              {baseSensorData.deviceName || "Base"}
+            </span>
+          </Tooltip>
         </Marker>
 
         {/* Recorded Points Markers (from Context) */}
@@ -238,17 +266,23 @@ const baseIcon = L.divIcon({
               position={[point.Latitude, point.Longitude]}
               icon={staticTakenPointIcon}
             >
-              <Tooltip permanent={true} direction="top" offset={[0, -10]} className="modern-tooltip">
-              <span className="point-name">{point.Name || "Unnamed Point"}</span>
-            </Tooltip>
+              <Tooltip
+                permanent={true}
+                direction="top"
+                offset={[0, -10]}
+                className="modern-tooltip"
+              >
+                <span className="point-name">
+                  {point.Name || "Unnamed Point"}
+                </span>
+              </Tooltip>
             </Marker>
           ))}
-        
 
         {/* Loading Overlay */}
         {loadingPoints && (
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[1500] backdrop-blur-0">
-            <LoadingSpinner size={10}/>
+            <LoadingSpinner size={10} />
             {/* Replace with a spinner or skeleton loader if desired */}
           </div>
         )}
@@ -269,7 +303,11 @@ const baseIcon = L.divIcon({
             navigate(`/takenpoints/${projectId}`);
           }}
         >
-          <img src={assets.filter} alt="Button 1" className="w-4 h-4 md:w-6 md:h-6" />
+          <img
+            src={assets.filter}
+            alt="Button 1"
+            className="w-4 h-4 md:w-6 md:h-6"
+          />
         </button>
 
         {/* Button 2 */}
@@ -277,7 +315,11 @@ const baseIcon = L.divIcon({
           className="bg-orange-500 p-2 md:p-3 rounded-full shadow-md w-8 h-8 md:w-12 md:h-12 flex items-center "
           onClick={() => setShowConfirmDiscard(true)}
         >
-          <img src={assets.reverse} alt="Button 2" className="w-4 h-4 md:w-6 md:h-6" />
+          <img
+            src={assets.reverse}
+            alt="Button 2"
+            className="w-4 h-4 md:w-6 md:h-6"
+          />
         </button>
 
         {/* Button 3 */}
@@ -285,21 +327,29 @@ const baseIcon = L.divIcon({
           className="bg-blue-500 p-3 md:p-4 rounded-full shadow-md w-10 h-10 md:w-16 md:h-16 flex items-center "
           onClick={() => setShowPointRecorded(true)}
         >
-          <img src={assets.add_location} alt="Button 3" className="w-4 h-4 md:w-8 md:h-8" />
+          <img
+            src={assets.add_location}
+            alt="Button 3"
+            className="w-4 h-4 md:w-8 md:h-8"
+          />
         </button>
       </div>
 
       {/* Show Point Recorded Popup */}
       {showPointRecorded && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[5px] z-[2000]">
-          <PointRecorded sensorData={sensorData} baseData={baseSensorData} projectId={projectId} />
+          <PointRecorded
+            sensorData={sensorData}
+            baseData={baseSensorData}
+            projectId={projectId}
+          />
         </div>
       )}
 
       {/* Show Confirm Discard Popup */}
       {showConfirmDiscard && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[5px] z-[2000]">
-          <ConfirmDiscard projectId={projectId}/>
+          <ConfirmDiscard projectId={projectId} />
         </div>
       )}
     </div>

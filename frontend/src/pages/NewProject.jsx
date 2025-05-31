@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { assets } from "../assets/assets";
 import axios from "axios";
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown } from "lucide-react";
 
 import { toast } from "react-toastify";
 import PageTopic from "../components/PageTopic";
@@ -72,7 +72,6 @@ const NewProject = () => {
 
   const handleSubmit = async () => {
     try {
-      
       const payload = {
         Name: projectName,
         Description: description,
@@ -81,8 +80,6 @@ const NewProject = () => {
           document.querySelectorAll('input[name="clientDevice"]:checked')
         ).map((checkbox) => checkbox.value),
         UserId: userId,
-
-
       };
 
       // POST to your create project endpoint
@@ -107,7 +104,7 @@ const NewProject = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col text-gray-900 dark:text-gray-100">
       {/* Header Section */}
       <PageTopic
         topic="New Project"
@@ -116,7 +113,7 @@ const NewProject = () => {
 
       {/* Form Section */}
       <div className="flex-1 p-4 max-w-3xl mx-4 pl-10">
-        <div className="bg-white rounded-lg p-6 shadow-sm">
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
           {/* Project Name */}
           <div className="mb-6">
             <label
@@ -128,8 +125,10 @@ const NewProject = () => {
             <input
               id="projectName"
               type="text"
-              className="w-full rounded-xl p-2 pl-5 text-sm md:text-base"
-              style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
+              className="w-full rounded-xl p-2 pl-5 text-sm md:text-base
+              bg-[rgba(232,232,232,1)] dark:bg-gray-700 dark:text-gray-100
+              focus:outline-none focus:ring-2 focus:ring-black
+              dark:focus:ring-indigo-500 "
               value={projectName}
               placeholder="Enter project name"
               onChange={(e) => setProjectName(e.target.value)}
@@ -143,15 +142,15 @@ const NewProject = () => {
             </p>
             <select
               id="baseStation"
-              className="w-full rounded-xl p-3 text-sm md:text-base appearance-none"
-              style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
+              className="w-full rounded-xl p-3 text-sm md:text-base appearance-none
+              bg-[rgba(232,232,232,1)] dark:bg-gray-700 dark:text-gray-100
+              focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-indigo-500"
               value={selectedBaseStation}
               onChange={(e) => setSelectedBaseStation(e.target.value)}
             >
               <option value="" disabled>
                 Select a base station
               </option>
-
 
               {baseStations.length === 0 && (
                 <option value="" disabled>
@@ -164,16 +163,17 @@ const NewProject = () => {
                 </option>
               ))}
             </select>
-            
+
             <div className="absolute right-3 top-14 -translate-y-1/2 pointer-events-none">
-            {baseloading ? (
-              <LoadingSpinner size={6} className="animate-spin text-gray-500" />
-            ) : (
-              <ChevronDown size={16} className="text-gray-500" />
-            )}
-          </div>
-
-
+              {baseloading ? (
+                <LoadingSpinner
+                  size={6}
+                  className="animate-spin text-gray-500"
+                />
+              ) : (
+                <ChevronDown size={16} className="text-gray-500 dark:text-gray-400" />
+              )}
+            </div>
           </div>
 
           {/* Client Devices */}
@@ -182,11 +182,14 @@ const NewProject = () => {
               Available Client Devices
             </p>
             <div
-              className="flex flex-col gap-2 p-3 rounded-xl"
-              style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
+              className="flex flex-col gap-2 p-3 rounded-xl
+              bg-[rgba(232,232,232,1)] dark:bg-gray-700"
+              
             >
               {!clientDevices || clientDevices.length === 0 ? (
-                <p className="text-sm text-gray-800">No client devices available</p>
+                <p className="text-sm text-gray-800 dark:text-gray-300">
+                  No client devices available
+                </p>
               ) : (
                 clientDevices.map((device, index) => (
                   <label
@@ -197,10 +200,11 @@ const NewProject = () => {
                       type="checkbox"
                       name="clientDevice"
                       value={device._id}
+                      className="accent-blue-600 dark:accent-indigo-500"
                     />
                     <span className="flex-1">
-                      {device.Name} 
-                      <span className="ml-auto pl-2 text-xs md:text-sm text-gray-500">
+                      {device.Name}
+                      <span className="ml-auto pl-2 text-xs md:text-sm text-gray-500 dark:text-gray-400">
                         {device.DeviceCode}
                       </span>
                     </span>
@@ -220,9 +224,11 @@ const NewProject = () => {
             </label>
             <textarea
               id="description"
-              className="w-full h-32 rounded-xl p-3 text-sm md:text-base"
+              className="w-full h-32 rounded-xl p-3 text-sm md:text-base
+              bg-[rgba(232,232,232,1)] dark:bg-gray-700 dark:text-gray-100 
+              focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-indigo-500"
               placeholder="Short description of the project"
-              style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
+              
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
@@ -230,7 +236,8 @@ const NewProject = () => {
 
           {/* Start Survey Button */}
           <button
-            className="w-full bg-black text-white py-3 rounded-xl text-sm md:text-base font-semibold mt-4"
+            className="w-full bg-black text-white py-3 rounded-xl text-sm md:text-base 
+            font-semibold mt-4 hover:bg-gray-900 dark:bg-indigo-600 dark:hover:bg-indigo-500 "
             onClick={handleSubmit}
           >
             Start Survey
