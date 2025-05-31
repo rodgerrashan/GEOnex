@@ -238,7 +238,7 @@ useEffect(() => {
 }, []);
 
 return (
-    <div ref={containerRef} className="flex flex-col items-center w-full h-full p-2 ">
+    <div ref={containerRef} className="flex flex-col items-center w-full h-full p-2 text-gray-900 ">
         <div className=" w-full h-full flex flex-grow flex-col bg-white p-6">
             <div className="relative flex-grow flex items-center justify-center">
                 {/* Loading overlay */}

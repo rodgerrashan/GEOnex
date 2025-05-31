@@ -59,7 +59,7 @@ const Dashboard = () => {
           <button
             className="flex items-center justify-center gap-2 px-4 py-2 bg-black 
                       text-white rounded-lg text-sm md:text-lg lg:text-xl
-                      dark:bg-indigo-600"
+                      dark:bg-indigo-600 dark:hover:bg-indigo-500"
             onClick={() => {
               navigate(`/${userId}/newproject`);
             }}

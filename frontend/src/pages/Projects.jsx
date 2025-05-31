@@ -6,8 +6,10 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const Projects = () => {
-  const { navigate, projects, getProjectsData, removeProject } =
+  const { navigate, projects, getProjectsData, removeProject, userData } =
     useContext(Context);
+
+  const userId = userData.userId;
 
   useEffect(() => {
     getProjectsData();
@@ -37,9 +39,9 @@ const Projects = () => {
           <button
             className="flex text-sm md:text-lg lg:text-xl
             items-center gap-1 text-s px-4 py-2 bg-black text-white rounded-lg
-            dark:bg-indigo-600"
+            dark:bg-indigo-600 dark:hover:bg-indigo-500"
             onClick={() => {
-              navigate("/newproject");
+              navigate(`/${userId}/newproject`);
             }}
           >
             <span>+</span>
