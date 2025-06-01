@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { createCanvas } = require("canvas"); // npm install canvas
+const { createCanvas } = require("canvas"); 
 
 
 const utm = require("utm");
