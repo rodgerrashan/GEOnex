@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const Login = () => {
-  const { navigate, backendUrl, setIsLoggedin, getUserData } =
+  const { navigate, backendUrl, setIsLoggedin, getUserData, authPort } =
     useContext(Context);
 
   const [state, setState] = useState("Log In");
@@ -25,9 +25,10 @@ const Login = () => {
       axios.defaults.withCredentials = true;
 
       if (state === "Sign Up") {
+        console.log(backendUrl, authPort);
         /* create the user */
         const { data: signRes } = await axios.post(
-          backendUrl + "/api/auth/register",
+          `${backendUrl}${authPort}/api/auth/register`,
           {
             name,
             email,
@@ -42,7 +43,7 @@ const Login = () => {
 
         /* ask server to generate & send OTP */
         const { data: otpRes } = await axios.get(
-          `${backendUrl}/api/auth/sendverifyotp`,
+          `${backendUrl}${authPort}/api/auth/sendverifyotp`,
           { withCredentials: true }
         );
 
@@ -53,9 +54,10 @@ const Login = () => {
           toast.error(otpRes.message || "Failed to send verification OTP.");
         }
       } else {
+        
         /* Log-in branch */
         const { data: loginRes } = await axios.post(
-          backendUrl + "/api/auth/login",
+          `${backendUrl}${authPort}/api/auth/login`,
           {
             email,
             password,

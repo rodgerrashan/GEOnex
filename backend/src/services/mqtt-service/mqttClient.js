@@ -65,6 +65,7 @@ const init = () => {
         
 
             try {
+                //  Part of the code that sends the alert to the devices server
                 const serverIP = process.env.NODE_ENV === 'production' 
                     ? process.env.PROD_SERVER_IP 
                     : process.env.DEV_SERVER_IP;

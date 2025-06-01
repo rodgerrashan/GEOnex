@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import { assets } from "../assets/assets";
 import axios from "axios";
 import { ChevronDown } from 'lucide-react';
@@ -7,9 +7,13 @@ import { toast } from "react-toastify";
 import PageTopic from "../components/PageTopic";
 import { useParams, useNavigate } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { Context } from "../context/Context";
 
 const NewProject = () => {
-  const navigate = useNavigate();
+
+  const { navigate, backendUrl,userPort, projectsPort } =
+    useContext(Context);
+    
   const [projectName, setProjectName] = useState("");
   const [description, setDescription] = useState("");
   const [baseStations, setBaseStations] = useState([]);
@@ -18,7 +22,6 @@ const NewProject = () => {
   const [clientloading, setClientLoading] = useState(true);
   const [selectedBaseStation, setSelectedBaseStation] = useState("");
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const { userId } = useParams();
 
   useEffect(() => {
@@ -37,7 +40,7 @@ const NewProject = () => {
   const fetchAssignedBaseStations = async () => {
     try {
       const response = await axios.get(
-        backendUrl + `/api/user/${userId}/devices/base-stations`
+        backendUrl + userPort+`/api/user/${userId}/devices/base-stations`
       );
       const baseStations = response.data.connectedDevices || [];
       if (baseStations.length > 0) {
@@ -56,7 +59,7 @@ const NewProject = () => {
   const fetchAssignedClientDevices = async () => {
     try {
       const response = await axios.get(
-        backendUrl + `/api/user/${userId}/devices/client-devices`
+        backendUrl+userPort + `/api/user/${userId}/devices/client-devices`
       );
       const clientDevices = response.data.connectedDevices || [];
       if (clientDevices.length > 0) {
@@ -86,7 +89,7 @@ const NewProject = () => {
       };
 
       // POST to your create project endpoint
-      const response = await axios.post(backendUrl + "/api/projects/", payload);
+      const response = await axios.post(backendUrl+projectsPort + "/api/projects/", payload);
       console.log("Project created:", response.data);
 
       // Extract the newly created project ID from response data

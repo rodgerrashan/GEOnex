@@ -6,13 +6,13 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const Navbar = ({ mobileOpen = false, onClose = () => {} }) => {
-  const { navigate, backendUrl, setUserData, userData, setIsLoggedin } =
+  const { navigate, backendUrl, setUserData, userData, setIsLoggedin,authPort } =
     useContext(Context);
 
   const logout = async () => {
     try {
       axios.defaults.withCredentials = true;
-      const { data } = await axios.post(backendUrl + "/api/auth/logout");
+      const { data } = await axios.post(backendUrl + authPort+ "/api/auth/logout");
       if (data.success) {
         setIsLoggedin(false);
         setUserData(false);

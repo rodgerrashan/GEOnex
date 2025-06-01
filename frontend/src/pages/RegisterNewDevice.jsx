@@ -4,8 +4,12 @@ import { assets } from "../assets/assets";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+import { Context } from "../context/Context";
+
 
 const RegisterNewDevice = () => {
+
+const { navigate, backendUrl, devicesPort} =useContext(Context);
   
   const [deviceId, setDeviceId] = useState("");
   const [deviceName, setDeviceName] = useState("");
@@ -14,8 +18,6 @@ const RegisterNewDevice = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const navigate = useNavigate();
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   
   const { userId } = useParams(); 
@@ -43,7 +45,7 @@ const RegisterNewDevice = () => {
     try {
 
     // Register the device
-    const response = await axios.post(`${backendUrl}/api/devices/`, {
+    const response = await axios.post(`${backendUrl}${devicesPort}/api/devices/`, {
       DeviceCode: deviceId,
       Name: deviceName,
       Type: deviceType,

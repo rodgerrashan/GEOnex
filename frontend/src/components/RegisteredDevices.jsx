@@ -11,11 +11,10 @@ export default function RegisteredDevices() {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
-    const { userData } = useContext(Context);
+    const { userData, backendUrl, userPort } = useContext(Context);
 
     // Mock user ID (in real app, this would come from auth context)
     const userId = userData.userId;
-    const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 
     useEffect(() => {
@@ -26,7 +25,7 @@ export default function RegisteredDevices() {
     const fetchUserDevices = async () => {
     setLoading(true);
     try {
-        const response = await fetch(`${backendUrl}/api/user/${userId}/registereddevices`);
+        const response = await fetch(`${backendUrl}${userPort}/api/user/${userId}/registereddevices`);
         if (!response.ok) {
             throw new Error("Failed to fetch registered devices");
         }

@@ -12,6 +12,15 @@ app.use('/api/notifications',notificationRouter);
 connectDb();
 
 
+const cors = require('cors');
+
+// Allow all origins with credentials
+app.use(cors({
+  origin: true,  // allows all origins
+  credentials: true // allow cookies/auth headers
+}));
+
+
 const PORT = process.env.SERVER_PORT || 5008;
 app.listen(PORT, () => {
   console.log(`Notification service running on port ${PORT}`);

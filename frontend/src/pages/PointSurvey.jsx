@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import SensorData from "../components/SensorData";
 
 const PointSurvey = () => {
-  const { navigate, backendUrl} = useContext(Context);
+  const { navigate, backendUrl, projectsPort} = useContext(Context);
   const { projectId } = useParams(); 
   const [projectName, setProjectName] = useState(""); 
   
@@ -17,7 +17,7 @@ const PointSurvey = () => {
     const fetchName = async () => {
       try {
         const response = await axios.get(
-          `${backendUrl}/api/projects/${projectId}`
+          `${backendUrl}${projectsPort}/api/projects/${projectId}`
         );
         if (response.data.success) {
           setProjectName(response.data.project.Name);

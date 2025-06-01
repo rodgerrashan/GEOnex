@@ -24,7 +24,7 @@ export default function MapDeviceData() {
     const baseStation = "base123";
     
     // Define your WebSocket URL here
-    const WS_URL = "http://localhost:5000";
+    const WS_URL = "http://localhost:5007";
     
     // Use our custom hook to get sensor data and connection status
     const { sensorData, connectionStatus } = useSensorData(WS_URL, rovers);

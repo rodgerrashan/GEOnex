@@ -11,6 +11,13 @@ app.use('/api/devices',deviceRouter);
 
 connectDb();
 
+const cors = require('cors');
+
+// Allow all origins with credentials
+app.use(cors({
+  origin: true,  // allows all origins
+  credentials: true // allow cookies/auth headers
+}));
 
 const PORT = process.env.SERVER_PORT || 5003;
 app.listen(PORT, () => {

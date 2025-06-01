@@ -4,6 +4,8 @@ import React, { useState, useEffect,useContext } from "react";
 
 
 
+
+
 export default function ConnectedDevices() {
     const [devices, setDevices] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -12,11 +14,9 @@ export default function ConnectedDevices() {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
-    const { userData } = useContext(Context);
+    const { userData, userPort, devicesPort, backendUrl } = useContext(Context);
 
-    // Mock user ID (in real app, this would come from auth context)
     const userId = userData.userId;
-    const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 
 
@@ -30,7 +30,7 @@ export default function ConnectedDevices() {
         setError("");
         setSuccess("");
         try {
-            const response = await fetch(`${backendUrl}/api/user/${userId}/remove-device`, {
+            const response = await fetch(`${backendUrl}${userPort}/api/user/${userId}/remove-device`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -59,7 +59,7 @@ export default function ConnectedDevices() {
     const fetchUserDevices = async () => {
     setLoading(true);
     try {
-        const response = await fetch(`${backendUrl}/api/user/${userId}/devices`);
+        const response = await fetch(`${backendUrl}${userPort}/api/user/${userId}/devices`);
         if (!response.ok) {
             throw new Error("Failed to fetch devices");
         }
@@ -91,7 +91,7 @@ export default function ConnectedDevices() {
 
         try {
             // First check if device exists and is not connected to a project
-            const checkResponse = await fetch(`${backendUrl}/api/devices/${DeviceCode}/check`);
+            const checkResponse = await fetch(`${backendUrl}${devicesPort}/api/devices/${DeviceCode}/check`);
             if (!checkResponse.ok) {
                 throw new Error("Device not found");
             }
@@ -102,7 +102,7 @@ export default function ConnectedDevices() {
             }
 
             // Connect device to user
-            const connectResponse = await fetch(`${backendUrl}/api/user/${userId}/add-device`, {
+            const connectResponse = await fetch(`${backendUrl}${userPort}/api/user/${userId}/add-device`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

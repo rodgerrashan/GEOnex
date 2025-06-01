@@ -12,14 +12,17 @@ const ContextProvider = (props) => {
   const [showConfirmDiscard, setShowConfirmDiscard] = useState(false);
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const userPort = import.meta.env.API_USER_PORT;
-  const authPort = import.meta.env.API_AUTH_PORT;
-  const devicesPort = import.meta.env.API_DEVICES_PORT;
-  const projectsPort = import.meta.env.API_PROJECTS_PORT;
-  const pointsPort = import.meta.env.API_POINTS_PORT;
-  const exportPort = import.meta.env.API_EXPORT_PORT;
-  const mqttPort = import.meta.env.API_MQTT_PORT;
-  const notificationsPort = import.meta.env.API_NOTIFICATIONS_PORT;
+  const wsUrl = import.meta.env.VITE_WS_URL;
+
+
+  const userPort = import.meta.env.VITE_API_USER_PORT;
+  const authPort = import.meta.env.VITE_API_AUTH_PORT;
+  const devicesPort = import.meta.env.VITE_API_DEVICES_PORT;
+  const projectsPort = import.meta.env.VITE_API_PROJECTS_PORT;
+  const pointsPort = import.meta.env.VITE_API_POINTS_PORT;
+  const exportPort = import.meta.env.VITE_API_EXPORT_PORT;
+  const mqttPort = import.meta.env.VITE_API_MQTT_PORT;
+  const notificationsPort = import.meta.env.VITE_API_NOTIFICATIONS_PORT;
 
 
   const [rovers, setRovers] = useState([]);
@@ -37,6 +40,10 @@ const ContextProvider = (props) => {
 
   const [notifications, setNotifications] = useState([]);
 
+  useEffect(() => {
+    console.log(backendUrl, userPort, authPort, devicesPort, projectsPort, pointsPort, exportPort, mqttPort, notificationsPort);
+  }, [backendUrl, userPort, authPort, devicesPort, projectsPort, pointsPort, exportPort, mqttPort, notificationsPort]);
+  
   const getAuthState = async () => {
     try {
       const { data } = await axios.get(backendUrl +authPort+ "/api/auth/is-auth");
@@ -263,7 +270,8 @@ const ContextProvider = (props) => {
     getUserData,
     isLoadingDevices,
     rovers,
-    base
+    base,
+    wsUrl
   };
 
   return <Context.Provider value={value}>{props.children}</Context.Provider>;

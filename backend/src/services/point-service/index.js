@@ -5,6 +5,15 @@ const dotenv = require("dotenv");
 dotenv.config();
 const app = express();
 
+const cors = require('cors');
+
+// Allow all origins with credentials
+app.use(cors({
+  origin: true,  // allows all origins
+  credentials: true // allow cookies/auth headers
+}));
+
+
 app.use(express.json());
 
 // Database Connection

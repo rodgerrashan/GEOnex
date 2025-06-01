@@ -12,6 +12,14 @@ app.use('/api/export',exportRoutes);
 connectDb();
 
 
+const cors = require('cors');
+
+// Allow all origins with credentials
+app.use(cors({
+  origin: true,  // allows all origins
+  credentials: true // allow cookies/auth headers
+}));
+
 const PORT = process.env.SERVER_PORT || 5006;
 app.listen(PORT, () => {
   console.log(`Export service running on port ${PORT}`);
