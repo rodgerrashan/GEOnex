@@ -42,7 +42,7 @@ const getDeviceTypeIcon = (type, cls = "w-5 h-5") => {
 
 const DeviceDetails = () => {
   const { deviceId } = useParams();
-  const { backendUrl } = useContext(Context);
+  const { backendUrl, devicesPort } = useContext(Context);
 
   const [device, setDevice] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -52,7 +52,7 @@ const DeviceDetails = () => {
     (async () => {
       try {
         const { data } = await axios.get(
-          `${backendUrl}/api/devices/${deviceId}`
+          `${backendUrl}${devicesPort}/api/devices/${deviceId}`
         );
         setDevice(data.device);
       } catch (err) {
@@ -108,7 +108,7 @@ const DeviceDetails = () => {
       >
         {/* Actions Section (Left) */}
         <div
-          className="h-max bg-white p-5 rounded-lg flex flex-col gap-3 overflow-auto
+          className="h-max  p-5 rounded-lg flex flex-col gap-3 overflow-auto
               bg-white dark:bg-gray-800"
         >
           <h2 className="text-base md:text-lg font-semibold pb-5">Actions</h2>

@@ -11,8 +11,16 @@ const ContextProvider = (props) => {
   const [showPointRecorded, setShowPointRecorded] = useState(false);
   const [showConfirmDiscard, setShowConfirmDiscard] = useState(false);
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const wsUrl = import.meta.env.VITE_WS_URL;
+  const env = import.meta.env.VITE_ENV;
+
+  const backendUrl_Dev = import.meta.env.VITE_BACKEND_URL_DEV;
+  const wsUrl_Dev = import.meta.env.VITE_WS_URL_DEV;
+  const backendUrl_Pro = import.meta.env.VITE_BACKEND_URL_PRO;
+  const wsUrl_Pro = import.meta.env.VITE_WS_URL_PRO;
+
+  const backendUrl = env === "production" ? backendUrl_Pro : backendUrl_Dev;
+  const wsUrl = env === "production" ? wsUrl_Pro : wsUrl_Dev;
+
 
 
   const userPort = import.meta.env.VITE_API_USER_PORT;
