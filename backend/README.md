@@ -1,5 +1,49 @@
 # IoT Site Survey Backend
 
+## Docker Setup
+
+### **Using Docker Compose**
+1. Build and run all services:
+```bash
+cd backend/src/services
+docker-compose up --build
+```
+
+2. Run in detached mode:
+```bash
+docker-compose up -d
+```
+
+3. Stop all containers:
+```bash
+docker-compose down
+```
+
+### **Individual Container Management**
+```bash
+# List running containers
+docker ps
+
+# View container logs
+docker logs <container-name>
+
+# Stop specific container
+docker stop <container-name>
+```
+
+The services will be available at:
+- Auth Service: `localhost:5002`
+- User Service: `localhost:5002`
+- Device Service: `localhost:5003`
+- Project Service: `localhost:5004`
+- Points Service: `localhost:5005`
+- Export Service: `localhost:5006`
+- MQTT Service: `localhost:5007`
+- Notifications Service: `localhost:5008`
+
+---
+
+
 ## Overview
 This backend is built using **Node.js (Express.js)** and follows a **microservices architecture**. It connects to **MongoDB Atlas** for data storage, integrates with **AWS IoT Core** for MQTT messaging, and provides APIs for a React frontend to manage survey projects, devices, and tracking data.
 
