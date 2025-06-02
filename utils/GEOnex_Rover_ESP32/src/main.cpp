@@ -34,7 +34,7 @@ void setup()
   mpu.begin();
 
   // Initialize Battery monitor
-  initBatteryMonitor(); 
+  initBatteryMonitor();
 
   Serial.println("[INFO]  ESP32 Setup complete");
 }
