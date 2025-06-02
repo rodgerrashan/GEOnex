@@ -3,9 +3,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 import axios from "axios";
 import { toast } from "react-toastify";
+
+import { Context } from "../context/Context";
 import PageTopic from "../components/PageTopic";
 
 const RegisterNewDevice = () => {
+
+const { navigate, backendUrl, devicesPort} =useContext(Context);
+  
   const [deviceId, setDeviceId] = useState("");
   const [deviceName, setDeviceName] = useState("");
   const [deviceType, setDeviceType] = useState("rover");
@@ -13,10 +18,9 @@ const RegisterNewDevice = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const navigate = useNavigate();
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-  const { userId } = useParams();
+  
+  const { userId } = useParams(); 
 
   const handleClear = () => {
     setDeviceId("");
@@ -45,20 +49,21 @@ const RegisterNewDevice = () => {
     setSuccess("");
 
     try {
-      // Register the device
-      const response = await axios.post(`${backendUrl}/api/devices/`, {
-        DeviceCode: deviceId,
-        Name: deviceName,
-        Type: deviceType,
-        Registered_User_Id: userId,
-      });
 
-      setSuccess("Device registered successfully!");
-
-      // Wait a moment then navigate back
-      setTimeout(() => {
-        navigate(-1, { state: { refresh: true } });
-      }, 1500);
+    // Register the device
+    const response = await axios.post(`${backendUrl}${devicesPort}/api/devices/`, {
+      DeviceCode: deviceId,
+      Name: deviceName,
+      Type: deviceType,
+      Registered_User_Id: userId
+    });
+    
+    setSuccess("Device registered successfully!");
+    
+    // Wait a moment then navigate back
+    setTimeout(() => {
+      navigate(-1, { state: { refresh: true } });
+    }, 1500);
     } catch (error) {
       console.error("Error registering device:", error);
       setError(error.message);

@@ -4,8 +4,8 @@ require("dotenv").config();
 const cors = require('cors');
 const cookieParser=require('cookie-parser');
 const connectDB = require('./src/config/db');
-const projectRoutes = require('./src/services/project-service/routes/projectRoutes');
-const pointRoutes = require('./src/services/point-service/routes/pointRoutes');
+const projectRoutes = require('./src/services/project-service/src/routes/projectRoutes');
+const pointRoutes = require('./src/services/point-service/src/routes/pointRoutes');
 const mqttService = require('./src/services/mqtt-service/mqttClient');
 const socketService = require('./src/services/socket-service/socketServer');
 const deviceServices = require('./src/services/device-service/routes/deviceRoutes');        
@@ -13,7 +13,9 @@ const deviceServices = require('./src/services/device-service/routes/deviceRoute
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const authRouter = require('./src/services/auth-service/routes/authRoutes');
 const userRouter = require('./src/services/auth-service/routes/userRoutes');
-const notificationRouter = require('./src/services/notification-service/routes/notificationRoutes');
+const notificationRouter = require('./src/services/notification-service/src/routes/notificationRoutes');
+
+const exportRoutes = require("./src/services/export-service/routes/exportRoutes");
 
 connectDB();
 
@@ -36,6 +38,7 @@ app.use('/api/devices', deviceServices);
 app.use('/api/auth',authRouter);
 app.use('/api/user',userRouter);
 app.use('/api/notifications',notificationRouter);
+app.use('/api/export',exportRoutes);
 
 // Initialize socket server with the HTTP server instance
 socketService.init(server);

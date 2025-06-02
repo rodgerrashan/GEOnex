@@ -1,6 +1,10 @@
 import { Context } from "../context/Context";
 import LoadingSpinner from "./LoadingSpinner";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect,useContext } from "react";
+
+
+
+
 
 export default function ConnectedDevices() {
   const [devices, setDevices] = useState([]);
@@ -10,11 +14,12 @@ export default function ConnectedDevices() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const { userData, navigate } = useContext(Context);
+  const { userData, userPort, devicesPort, backendUrl, navigate } = useContext(Context);
 
-  // Mock user ID (in real app, this would come from auth context)
-  const userId = userData.userId;
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+    const userId = userData.userId;
+
+
+
 
   useEffect(() => {
     fetchUserDevices();
@@ -29,7 +34,7 @@ export default function ConnectedDevices() {
     setSuccess("");
     try {
       const response = await fetch(
-        `${backendUrl}/api/user/${userId}/remove-device`,
+        `${backendUrl}${userPort}/api/user/${userId}/remove-device`,
         {
           method: "DELETE",
           headers: {
@@ -57,10 +62,10 @@ export default function ConnectedDevices() {
   const fetchUserDevices = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${backendUrl}/api/user/${userId}/devices`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch devices");
-      }
+        const response = await fetch(`${backendUrl}${userPort}/api/user/${userId}/devices`);
+        if (!response.ok) {
+            throw new Error("Failed to fetch devices");
+        }
 
       const data = await response.json();
       console.log("Full response:", data);
@@ -86,31 +91,26 @@ export default function ConnectedDevices() {
     setError("");
     setSuccess("");
 
-    try {
-      // First check if device exists and is not connected to a project
-      const checkResponse = await fetch(
-        `${backendUrl}/api/devices/${DeviceCode}/check`
-      );
-      if (!checkResponse.ok) {
-        throw new Error("Device not found");
-      }
+        try {
+            // First check if device exists and is not connected to a project
+            const checkResponse = await fetch(`${backendUrl}${devicesPort}/api/devices/${DeviceCode}/check`);
+            if (!checkResponse.ok) {
+                throw new Error("Device not found");
+            }
 
       const deviceData = await checkResponse.json();
       if (deviceData.isInUse) {
         throw new Error("This device is already connected to a project");
       }
 
-      // Connect device to user
-      const connectResponse = await fetch(
-        `${backendUrl}/api/user/${userId}/add-device`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ DeviceCode }),
-        }
-      );
+            // Connect device to user
+            const connectResponse = await fetch(`${backendUrl}${userPort}/api/user/${userId}/add-device`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ DeviceCode }),
+            });
 
       if (!connectResponse.ok) {
         const errorData = await connectResponse.json();

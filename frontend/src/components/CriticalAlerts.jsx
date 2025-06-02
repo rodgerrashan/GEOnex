@@ -9,24 +9,21 @@ export default function CriticalAlerts() {
   const [devices, setDevices] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const { userData } = useContext(Context);
+    const { userData , backendUrl, userPort} = useContext(Context);
 
-  const userId = userData.userId;
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+    const userId = userData.userId;
 
   useEffect(() => {
     fetchDeviceAlert();
   }, []);
 
-  const fetchDeviceAlert = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(
-        `${backendUrl}/api/user/${userId}/device-alerts`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch critical alerts");
-      }
+    const fetchUserDevices = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch(`${backendUrl}${userPort}/api/user/${userId}/device-alerts`);
+            if (!response.ok) {
+                throw new Error("Failed to fetch critical alerts");
+            }
 
       const data = await response.json();
       console.log("Full response:", data);

@@ -171,9 +171,9 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* <div className="col-span-1 md:col-span-2 lg:col-span-3 bg-white p-4 rounded-lg">
-          <DashboardNotifications userId={userId}/>
-        </div> */}
+        <div className="col-span-1 md:col-span-2 lg:col-span-3 bg-white p-4 rounded-lg">
+          {/* <DashboardNotifications userId={userId}/> */}
+        </div>
 
         <div className="col-span-1 md:col-span-2 lg:col-span-3 bg-white p-4 
         rounded-lg dark:bg-gray-800">

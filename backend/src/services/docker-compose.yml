@@ -1,0 +1,136 @@
+version: '3.8'
+
+networks:
+  microservices-network:
+    driver: bridge
+
+services:
+  test:
+    image: busybox
+    command: ping -c 4 google.com
+    container_name: test
+    networks:
+      - microservices-network
+
+  # ================== Microservices ==================
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    ports:
+      - "5002:5002"
+    env_file:
+      - ./auth-service/.env
+    networks:
+      - microservices-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  device-service:
+    build: ./device-service
+    container_name: device-service
+    ports:
+      - "5003:5003"
+    env_file:
+      - ./device-service/.env
+    networks:
+      - microservices-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  project-service:
+    build: ./project-service
+    container_name: project-service
+    ports:
+      - "5004:5004"
+    env_file:
+      - ./project-service/.env
+    networks:
+      - microservices-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5004/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  point-service:
+    build: ./point-service
+    container_name: point-service
+    ports:
+      - "5005:5005"
+    env_file:
+      - ./point-service/.env
+    networks:
+      - microservices-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5005/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # export-service:
+  #   build: ./export-service
+  #   container_name: export-service
+  #   ports:
+  #     - "5006:5006"
+  #   env_file:
+  #     - ./export-service/.env
+  #   networks:
+  #     - microservices-network
+  #   volumes:
+  #     - .:/app          # Mount code
+  #     - /app/node_modules  # Prevent host node_modules from being mounted
+  #   restart: unless-stopped
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost:5006/health"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+  #     start_period: 30s
+
+  mqtt-service:
+    build: ./mqtt-service
+    container_name: mqtt-service
+    ports:
+      - "5007:5007"
+    env_file:
+      - ./mqtt-service/.env
+    networks:
+      - microservices-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5007/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  notification-service:
+    build: ./notification-service
+    container_name: notification-service
+    ports:
+      - "5008:5008"
+    env_file:
+      - ./notification-service/.env
+    networks:
+      - microservices-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5008/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s

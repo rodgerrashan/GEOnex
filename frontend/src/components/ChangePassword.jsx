@@ -4,7 +4,7 @@ import { Context } from "../context/Context";
 import axios from "axios";
 
 const ChangePassword = ({ email, otp }) => {
-  const { navigate, backendUrl } = useContext(Context);
+  const { navigate, backendUrl,authPort } = useContext(Context);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [newPassword, setNewPassword] = useState("");
@@ -24,7 +24,7 @@ const ChangePassword = ({ email, otp }) => {
     try {
       setIsSubmitting(true);
       const { data } = await axios.post(
-        `${backendUrl}/api/auth/reset-password`,
+        `${backendUrl}${authPort}/api/auth/reset-password`,
         { email, otp, newPassword }
       );
 

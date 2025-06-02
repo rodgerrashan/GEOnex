@@ -15,7 +15,7 @@ const SensorData = () => {
     const [connectionStatus, setConnectionStatus] = useState("Connecting...");
     
     // Set WebSocket URL (adjust for production)
-    const WS_URL =  "http://13.61.32.218:5000";
+    const WS_URL =  "http://localhost:5007";
 
     
     useEffect(() => {

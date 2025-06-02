@@ -19,19 +19,16 @@ export default function MapDeviceData() {
   const userId = userData.userId;
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-  // mock devices
-  const rovers = ["device123", "device456"];
-  const baseStation = "base123";
-
-  // Define your WebSocket URL here
-  const WS_URL = "http://localhost:5000";
-
-  // Use our custom hook to get sensor data and connection status
-  const { sensorData, connectionStatus } = useSensorData(WS_URL, rovers);
-  const { baseSensorData, baseConnectionStatus } = useBaseSensorData(
-    WS_URL,
-    baseStation
-  );
+    // mock devices 
+    const rovers = ["device123", "device456"];
+    const baseStation = "base123";
+    
+    // Define your WebSocket URL here
+    const WS_URL = "http://localhost:5007";
+    
+    // Use our custom hook to get sensor data and connection status
+    const { sensorData, connectionStatus } = useSensorData(WS_URL, rovers);
+    const { baseSensorData, baseConnectionStatus } = useBaseSensorData(WS_URL, baseStation);
 
   // Update the base position when base sensor data updates
   useEffect(() => {

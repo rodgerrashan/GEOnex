@@ -12,7 +12,7 @@ import PageTopic from "../components/PageTopic";
 dayjs.extend(relativeTime);
 
 const ProjectDetails = () => {
-  const { navigate, backendUrl, removeProject } = useContext(Context);
+  const { navigate, backendUrl, removeProject, projectsPort, exportPort } = useContext(Context);
   const { projectId } = useParams();
   const [project, setProject] = useState(null);
 
@@ -36,7 +36,7 @@ const ProjectDetails = () => {
     const fetchProject = async () => {
       try {
         const response = await axios.get(
-          `${backendUrl}/api/projects/${projectId}`
+          `${backendUrl}${projectsPort}/api/projects/${projectId}`
         );
         if (response.data.success) {
           setProject(response.data.project);
@@ -56,146 +56,73 @@ const ProjectDetails = () => {
     setExportStatus(null);
   };
 
-  // Helper function to convert points data to desired formats
-  const convertPointsData = (format) => {
-    // This is a placeholder - actual conversion would depend on your data structure
-    // and specific format requirements
+const handleExport = async () => {
+  try {
+    setIsExporting(true);
+    setExportStatus({ type: 'info', message: `Preparing ${exportFormat} file...` });
 
-    switch (format) {
-      case "dwg":
-        // In a real app, you'd use a library like three.js with DXF export
-        // or call a backend service for DWG conversion
-        return new Blob([JSON.stringify(pointsData)], {
-          type: "application/octet-stream",
-        });
+    // Call backend to export file (adjust URL based on format and project ID)
+    const response = await fetch(`${backendUrl}${exportPort}/api/export/${exportFormat}/${projectId}`, {
+      method: 'GET',
+    });
 
-      case "png":
-      case "jpeg":
-        // For image formats, typically you'd render the points to a canvas
-        // and then export the canvas as an image
-        const canvas = document.createElement("canvas");
-        canvas.width = 800;
-        canvas.height = 600;
-        const ctx = canvas.getContext("2d");
+    console.log("Export response:", response);
 
-        // Draw points on canvas (simplified example)
-        ctx.fillStyle = "black";
-        ctx.strokeStyle = "blue";
-        ctx.lineWidth = 1;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        if (pointsData && pointsData.length) {
-          pointsData.forEach((point) => {
-            // Scale points to fit canvas
-            const x = (point.x / 100) * canvas.width;
-            const y = (point.y / 100) * canvas.height;
-
-            ctx.beginPath();
-            ctx.arc(x, y, 3, 0, 2 * Math.PI);
-            ctx.fill();
-          });
-        }
-
-        // Return the canvas data as requested format
-        return new Promise((resolve) => {
-          canvas.toBlob(
-            (blob) => {
-              resolve(blob);
-            },
-            format === "png" ? "image/png" : "image/jpeg",
-            0.95
-          );
-        });
-
-      case "pdf":
-        // In a real app, you'd use a library like jsPDF
-        // This is just a placeholder
-        return new Blob([JSON.stringify(pointsData)], {
-          type: "application/pdf",
-        });
-
-      case "txt":
-        // Format points as plain text
-        let textContent = "X,Y,Z Coordinates\n";
-        if (pointsData && pointsData.length) {
-          pointsData.forEach((point) => {
-            textContent += `${point.x},${point.y},${point.z || 0}\n`;
-          });
-        }
-        return new Blob([textContent], { type: "text/plain" });
-
-      default:
-        return null;
+    if (!response.ok) {
+      throw new Error(`Failed to export: ${response.statusText}`);
     }
-  };
 
-  // Handle the export button click
-  const handleExport = async () => {
-    try {
-      setIsExporting(true);
-      setExportStatus({
-        type: "info",
-        message: `Preparing ${exportFormat} file...`,
-      });
+    // Get file blob and suggested filename
+    const blob = await response.blob();
+    const contentDisposition = response.headers.get("Content-Disposition");
+    let filename = `project-points.${exportFormat}`;
 
-      // Simulate processing time
-      await new Promise((resolve) => setTimeout(resolve, 800));
-
-      // Convert data to the selected format
-      const blob = await convertPointsData(exportFormat);
-
-      if (!blob) {
-        throw new Error("Failed to convert data");
-      }
-
-      // Create a download link
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `project-points.${exportFormat}`;
-      document.body.appendChild(link);
-      link.click();
-
-      // Clean up
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-
-      setExportStatus({
-        type: "success",
-        message: `Successfully exported as ${exportFormat}`,
-      });
-    } catch (error) {
-      console.error("Export failed:", error);
-      setExportStatus({
-        type: "error",
-        message: `Failed to export as ${exportFormat}`,
-      });
-    } finally {
-      setIsExporting(false);
+    if (contentDisposition && contentDisposition.includes("filename=")) {
+      filename = contentDisposition
+        .split("filename=")[1]
+        .replaceAll('"', '')
+        .trim();
     }
-  };
+
+    // Create a download link and trigger download
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+
+    // Clean up
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+
+    setExportStatus({ type: 'success', message: `Successfully exported as ${exportFormat}` });
+  } catch (error) {
+    console.error("Export failed:", error);
+    setExportStatus({ type: 'error', message: `Failed to export as ${exportFormat}` });
+  } finally {
+    setIsExporting(false);
+  }
+};
+
+
 
   if (!project) return <div>Loading...</div>;
 
   return (
-    <div className="text-gray-900 dark:text-gray-100">
-      <PageTopic topic={project.Name} intro={project.Description} />
+    <div>
+      <PageTopic topic={project.Name}  intro={project.Description} />
+      <div className="flex flex-col lg:flex-row gap-4 lg:ml-14 p-4">
 
-      <div
-        className="grid grid-cols-1  
-      md:grid-cols-2 lg:grid-cols-3 lg:grid-rows-7
-      gap-4 lg:h-screen lg:ml-14"
-      >
-        {/* Actions Section (Left) */}
-        <div
-          className="h-max bg-white p-5 rounded-lg flex flex-col gap-3 overflow-auto
-        bg-white dark:bg-gray-800"
-        >
+
+
+      <div className="flex flex-col gap-2">
+         {/* Actions Section (Left) */}
+        <div className="h-max bg-white p-5 rounded-lg flex flex-col gap-3 overflow-auto">
           <h2 className="text-base md:text-lg font-semibold pb-5">Actions</h2>
           <div
-            className="flex items-center gap-3 p-3 rounded-lg cursor-pointer
-            bg-[rgba(217,217,217,1)]  hover:bg-[rgba(200,200,200,1)] 
-            dark:bg-gray-700 dark:hover:bg-gray-600"
+            className="flex items-center gap-3 p-3 rounded-lg cursor-pointer"
+            style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
             onClick={() => {
               navigate(`/projects/pointsurvey/${projectId}`);
             }}
@@ -217,9 +144,8 @@ const ProjectDetails = () => {
 
           {/* Points */}
           <div
-            className="flex items-center gap-3 p-3 rounded-lg cursor-pointer
-            bg-[rgba(217,217,217,1)]  hover:bg-[rgba(200,200,200,1)] 
-            dark:bg-gray-700 dark:hover:bg-gray-600 "
+            className="flex items-center gap-3 p-3 rounded-lg cursor-pointer"
+            style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
             onClick={() => {
               navigate(`/projects/takenpoints/${projectId}`);
             }}
@@ -239,8 +165,8 @@ const ProjectDetails = () => {
 
           {/* Export Data */}
           <div
-            className="p-3 rounded-lg
-            bg-[rgba(217,217,217,1)] dark:bg-gray-700 "
+            className="p-3 rounded-lg"
+            style={{ backgroundColor: "rgba(232, 232, 232, 1)" }}
           >
             <div className="flex items-center gap-3 mb-2">
               <img
@@ -266,11 +192,10 @@ const ProjectDetails = () => {
               value={exportFormat}
               onChange={handleFormatChange}
             >
-              <option value="dwg">DWG (AutoCAD)</option>
+               <option value="dxf">DXF (AutoCAD)</option>
               <option value="png">PNG Image</option>
               <option value="pdf">PDF Document</option>
-              <option value="jpeg">JPEG Image</option>
-              <option value="txt">TXT (Comma-separated)</option>
+              <option value="txt">TXT</option>
             </select>
             <button
               className="bg-black hover:bg-gray-900 text-white px-8 py-1.5 rounded-xl text-sm md:text-base
@@ -343,8 +268,21 @@ const ProjectDetails = () => {
           </div>
         </div>
 
-        {/* Overview Section (Right) */}
-        <div className=" bg-white dark:bg-gray-800 p-5 rounded-lg flex flex-col gap-5 h-max ">
+
+
+        {/* assigned devices */}
+
+        <div className=" bg-white p-5 rounded-lg flex flex-col gap-5 h-max ">
+          <h2 className="text-base md:text-lg font-semibold pb-5">Devices</h2>
+
+          
+        </div>
+
+      </div>
+
+      <div className="flex flex-col gap-4">
+         {/* Overview Section (Right) */}
+        <div className=" bg-white p-5 rounded-lg flex flex-col gap-5 h-max ">
           <h2 className="text-base md:text-lg font-semibold pb-5">Overview</h2>
 
           <div className="flex justify-between items-center">
@@ -402,7 +340,26 @@ const ProjectDetails = () => {
             </span>
           </div>
         </div>
+
+
+        {/* assigned survayers */}
+
+        <div className=" bg-white p-5 rounded-lg flex flex-col gap-5 h-max ">
+          <h2 className="text-base md:text-lg font-semibold pb-5">Surveyers</h2>
+
+          
+        </div>
+
+
       </div>
+       
+           
+
+       
+        
+        
+      </div>
+      
     </div>
   );
 };

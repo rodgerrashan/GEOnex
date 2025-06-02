@@ -19,6 +19,7 @@ const EmailVerify = () => {
     setIsLoggedin,
     getUserData,
     userData,
+    authPort,
   } = useContext(Context);
 
   // Move focus as the user types
@@ -70,7 +71,7 @@ const EmailVerify = () => {
     try {
       setSubmitting(true);
 
-      const { data } = await axios.post(backendUrl + "/api/auth/verify-email", {
+      const { data } = await axios.post(backendUrl+authPort + "/api/auth/verify-email", {
         otp: code,
       });
       if (data.success) {
@@ -91,7 +92,7 @@ const EmailVerify = () => {
   const handleResend = async () => {
     if (cooldown > 0) return; // prevent spam
     try {
-      const { data } = await axios.get(backendUrl + "/api/auth/sendverifyotp", {
+      const { data } = await axios.get(backendUrl+authPort + "/api/auth/sendverifyotp", {
         withCredentials: true,
       });
 

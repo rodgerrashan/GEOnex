@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 const ResetOtp = ({ email, setEmail, setIsEmailSent }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { backendUrl } = useContext(Context);
+  const { backendUrl, authPort } = useContext(Context);
 
   axios.defaults.withCredentials = true;
 
@@ -17,7 +17,7 @@ const ResetOtp = ({ email, setEmail, setIsEmailSent }) => {
     try {
       setIsSubmitting(true);
       const { data } = await axios.post(
-        backendUrl + "/api/auth/send-reset-otp",
+        backendUrl +authPort+ "/api/auth/send-reset-otp",
         { email }
       );
       if (data.success) {

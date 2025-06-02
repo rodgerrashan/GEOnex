@@ -1,8 +1,7 @@
 const awsIot = require("aws-iot-device-sdk");
 const path = require("path");
 require("dotenv").config();
-const { sendToClients } = require("../socket-service/socketServer");
-const { createAlert } = require('../device-service/controllers/alertController');
+const { sendToClients } = require("./socketServer");
 
 
 const device = awsIot.device({
@@ -63,39 +62,37 @@ const init = () => {
             console.log("$ Running alert");
             // Construct a mock req and res for internal use of createAlert
             const parsedValue = JSON.parse(value);
-            const mockReq = {
-                body: {
-                    deviceId: deviceName,
-                    status: parsedValue.status,
-                    code: parsedValue.code,
-                    created_At: new Date().toISOString()
-                }
-            };
-
-            const mockRes = {
-                status: (code) => ({
-                    json: (data) => {
-                        console.log(`Alert created with status ${code}:`, data);
-                    }
-                }),
-                json: (data) => {
-                    console.log("Alert creation error:", data);
-                }
-            };
+        
 
             try {
-                await createAlert(mockReq, mockRes);
+                //  Part of the code that sends the alert to the devices server
+                const serverIP = process.env.NODE_ENV === 'production' 
+                    ? process.env.PROD_SERVER_IP 
+                    : process.env.DEV_SERVER_IP;
+                const response = await fetch(`http://${serverIP}:${process.env.DEVICES_SERVER_PORT}/add-alert`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        deviceId: deviceName,
+                        status: parsedValue.status,
+                        code: parsedValue.code,
+                        created_At: new Date().toISOString()
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const result = await response.json();
+                console.log('Alert created:', result);
             } catch (error) {
                 console.error("Error creating alert:", error.message);
             }
         }
     });
 
-        
-
-    
-
-    
     
     device.on('error', (error) => {
         console.error('MQTT Error:', error);
