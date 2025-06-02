@@ -21,8 +21,6 @@ const ContextProvider = (props) => {
   const backendUrl = env === "production" ? backendUrl_Pro : backendUrl_Dev;
   const wsUrl = env === "production" ? wsUrl_Pro : wsUrl_Dev;
 
-
-
   const userPort = import.meta.env.VITE_API_USER_PORT;
   const authPort = import.meta.env.VITE_API_AUTH_PORT;
   const devicesPort = import.meta.env.VITE_API_DEVICES_PORT;
@@ -57,7 +55,7 @@ const ContextProvider = (props) => {
   
   const getAuthState = async () => {
     try {
-      const { data } = await axios.get(backendUrl +authPort+ "/api/auth/is-auth");
+      const { data } = await axios.get(backendUrl+authPort+"/api/auth/is-auth");
       if (data.success && data.verified) {
         setIsLoggedin(true);
         await getUserData();
@@ -76,7 +74,7 @@ const ContextProvider = (props) => {
 
   const getUserData = async () => {
     try {
-      const { data } = await axios.get(backendUrl +userPort+ "/api/user/data");
+      const { data } = await axios.get(backendUrl+userPort+"/api/user/data");
       data.success ? setUserData(data.userData) : toast.error(data.message);
     } catch (error) {
       toast.error(error.message);
@@ -86,7 +84,7 @@ const ContextProvider = (props) => {
   const getProjectsData = async (userId) => {
     try {
       if (userId !== undefined) {
-        const response = await axios.get(backendUrl +projectsPort + `/api/projects/recentprojects/${userId}`);
+        const response = await axios.get(backendUrl+projectsPort+`/api/projects/recentprojects/${userId}`);
 
       if (response.data.success) {
         setProjects(response.data.projects);
@@ -232,7 +230,7 @@ const ContextProvider = (props) => {
 };
 const fetchSettings = async () => {
     try {
-      const { data } = await axios.get(backendUrl + userPort+ "/api/user/settings");
+      const { data } = await axios.get(backendUrl+userPort+"/api/user/settings");
       if (data.success) {
         setSettings(data.Data);
         setTheme(data.Data.map.theme);
@@ -263,7 +261,7 @@ const fetchSettings = async () => {
     clearTimeout(updateTimeout.current);
     updateTimeout.current = setTimeout(async () => {
       try {
-        await axios.put(backendUrl + userPort+"/api/user/settings", {
+        await axios.put(backendUrl+userPort+"/api/user/settings", {
           [section]: { [key]: value },
         });
       } catch (err) {
@@ -276,7 +274,7 @@ const fetchSettings = async () => {
   const resetSettings = async () => {
     try {
       const { data } = await axios.post(
-        backendUrl + userPort+"/api/user/settings/reset"
+        backendUrl+userPort+"/api/user/settings/reset"
       );
       if (data.success) {
         setSettings(data.Data);
@@ -292,7 +290,7 @@ const fetchSettings = async () => {
   const logout = async () => {
     try {
       axios.defaults.withCredentials = true;
-      const { data } = await axios.post(backendUrl + "/api/auth/logout");
+      const { data } = await axios.post(backendUrl+ authPort+"/api/auth/logout");
       if (data.success) {
         setIsLoggedin(false);
         setUserData(false);
@@ -347,15 +345,6 @@ const fetchSettings = async () => {
     fetchUserDevices();
     getNotificationsData(userData?.userId);
   }, []);
-
-  // 🔍 watch auth state change
-  useEffect(() => {
-    console.log("userData changed ➜", userData);
-  }, [userData]);
-
-  useEffect(() => {
-    console.log("isLoggedin changed ➜", isLoggedin);
-  }, [isLoggedin]);
 
   const value = {
     getNotificationsData,

@@ -9,11 +9,11 @@ const Dashboard = () => {
     useContext(Context);
 
   // Use a constant or get this from context instead of hardcoding
-  const userId = userData.userId; // Replace with actual user ID
+  const userId = userData.userId; 
 
   // Memoize the RecentProjects component to prevent unnecessary re-renders
   const memoizedRecentProjects = useMemo(() => {
-    return <RecentProjects userId={userId} />;
+    return <RecentProjects />;
   }, [userId]); // Only re-render if userId changes
 
   //   useEffect(() => {

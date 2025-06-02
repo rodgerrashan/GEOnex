@@ -3,9 +3,12 @@ import { Context } from "../context/Context";
 import dayjs from "dayjs";
 
 
-const RecentProjects = ({userId}) => {
-  const { navigate, projects, getProjectsData } = useContext(Context);
+const RecentProjects = () => {
+  const { navigate, projects, getProjectsData,userData } = useContext(Context);
 
+
+  const userId = userData.userId; 
+  
   useEffect(() => {
     console.log(userId);
     getProjectsData(userId);
