@@ -314,6 +314,7 @@ const fetchSettings = async () => {
       getProjectsData(userData.userId);
       fetchUserDevices();
       fetchSettings();
+      // getNotificationsData(userData?.userId);
     }
   }, [userData]);
 
@@ -339,12 +340,12 @@ const fetchSettings = async () => {
     console.log("theme", theme);
   }, [settings]);
 
-  useEffect(() => {
-    getProjectsData();
-    getAuthState();
-    fetchUserDevices();
-    getNotificationsData(userData?.userId);
-  }, []);
+  // useEffect(() => {
+  //   getProjectsData();
+  //   getAuthState();
+  //   fetchUserDevices();
+  //   getNotificationsData(userData?.userId);
+  // }, []);
 
   const value = {
     getNotificationsData,
@@ -385,7 +386,8 @@ const fetchSettings = async () => {
     updateSetting,
     resetSettings,
     logout,
-    wsUrl
+    wsUrl,
+    isLoading
   };
 
   return <Context.Provider value={value}>{props.children}</Context.Provider>;

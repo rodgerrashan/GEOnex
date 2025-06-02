@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { Context } from "../context/Context";
 
 const UpdatePassword = ({ isOpen, onClose }) => {
-  const { backendUrl } = useContext(Context);
+  const { backendUrl, userPort } = useContext(Context);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentPw, setCurrentPw] = useState("");
@@ -25,14 +25,14 @@ const UpdatePassword = ({ isOpen, onClose }) => {
       return;
     }
     if (newPw.length < 6) {
-      toast.info("Password must be at least 8 characters");
+      toast.info("Password must be at least 6 characters");
       return;
     }
 
     setIsSubmitting(true);
     try {
       const { data } = await axios.post(
-        backendUrl + "/api/user/change-password",
+        backendUrl + userPort + "/api/user/change-password",
         {
           currentPassword: currentPw,
           newPassword: newPw,
