@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
+import { Context } from "../context/Context";
 
 const SensorData = () => {
+
+    const {wsUrl, mqttPort} = useContext(Context);
+
+
     const [sensorData, setSensorData] = useState({
         deviceId: "Loading...",
         latitude: "Loading...",
@@ -15,7 +20,7 @@ const SensorData = () => {
     const [connectionStatus, setConnectionStatus] = useState("Connecting...");
     
     // Set WebSocket URL (adjust for production)
-    const WS_URL =  "http://localhost:5007";
+    const WS_URL =  `${wsUrl}${mqttPort}`;
 
     
     useEffect(() => {

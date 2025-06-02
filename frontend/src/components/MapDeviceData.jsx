@@ -13,18 +13,17 @@ export default function MapDeviceData() {
   const [base, setBase] = useState(null);
   const [points, setPoints] = useState([]);
 
-  const { userData } = useContext(Context);
+  const { userData , backendUrl, wsUrl, mqttPort} = useContext(Context);
 
   // Mock user ID (in real app, this would come from auth context)
   const userId = userData.userId;
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
     // mock devices 
     const rovers = ["device123", "device456"];
     const baseStation = "base123";
     
     // Define your WebSocket URL here
-    const WS_URL = "http://localhost:5007";
+    const WS_URL = `${wsUrl}${mqttPort}`;
     
     // Use our custom hook to get sensor data and connection status
     const { sensorData, connectionStatus } = useSensorData(WS_URL, rovers);
