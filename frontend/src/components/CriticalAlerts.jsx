@@ -14,7 +14,7 @@ export default function CriticalAlerts() {
     const userId = userData.userId;
 
   useEffect(() => {
-    fetchDeviceAlert();
+    fetchUserDevices();
   }, []);
 
     const fetchUserDevices = async () => {

@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 axios.defaults.withCredentials = true;
@@ -222,6 +222,116 @@ const ContextProvider = (props) => {
         setLoadingDevices(false);
     }
 };
+const fetchSettings = async () => {
+    try {
+      const { data } = await axios.get(backendUrl + userPort+ "/api/user/settings");
+      if (data.success) {
+        setSettings(data.Data);
+        setTheme(data.Data.map.theme);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
+  // updateSetting with optimistic UI + debounced API call
+  const updateTimeout = useRef();
+
+  const updateSetting = (section, key, value) => {
+    // optimistic
+    setSettings((prev) => ({
+      ...prev,
+      [section]: { ...prev[section], [key]: value },
+    }));
+
+    // if the user just changed the map theme, update <html> immediately
+    if (section === "map" && key === "theme") {
+      setTheme(value);
+    }
+
+    // debounce
+    clearTimeout(updateTimeout.current);
+    updateTimeout.current = setTimeout(async () => {
+      try {
+        await axios.put(backendUrl + userPort+"/api/user/settings", {
+          [section]: { [key]: value },
+        });
+      } catch (err) {
+        toast.error("Failed to save setting");
+      }
+    }, 300);
+  };
+
+  //  resetSettings
+  const resetSettings = async () => {
+    try {
+      const { data } = await axios.post(
+        backendUrl + userPort+"/api/user/settings/reset"
+      );
+      if (data.success) {
+        setSettings(data.Data);
+        toast.success("Settings restored to defaults");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (err) {
+      toast.error("Failed to reset settings");
+    }
+  };
+
+  const logout = async () => {
+    try {
+      axios.defaults.withCredentials = true;
+      const { data } = await axios.post(backendUrl + "/api/auth/logout");
+      if (data.success) {
+        setIsLoggedin(false);
+        setUserData(false);
+        toast.success("Logged out successfully");
+        navigate("/");
+      }
+    } catch (error) {
+      toast.error(error.message || "Logout failed");
+    }
+  };
+
+  useEffect(() => {
+    getProjectsData();
+    getAuthState();
+    // fetchUserDevices();
+    // getNotificationsData(userData?.userId);
+  }, []);
+
+  useEffect(() => {
+    if (userData && userData.userId) {
+      getProjectsData(userData.userId);
+      fetchUserDevices();
+      fetchSettings();
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    if (theme === "Dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme]);
+
+  // 🔍 watch auth state change
+  useEffect(() => {
+    console.log("userData changed ➜", userData);
+  }, [userData]);
+
+  useEffect(() => {
+    console.log("isLoggedin changed ➜", isLoggedin);
+  }, [isLoggedin]);
+
+  useEffect(() => {
+    console.log("🔧 settings updated:", settings);
+    console.log("theme", theme);
+  }, [settings]);
 
   useEffect(() => {
     getProjectsData();
@@ -241,7 +351,7 @@ const ContextProvider = (props) => {
 
   const value = {
     getNotificationsData,
-    notifications,
+    // notifications,
     markAsRead,
     navigate,
     showPointRecorded,

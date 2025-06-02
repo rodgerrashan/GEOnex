@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const PointRecorded = ({ sensorData, baseData, projectId }) => {
-  const { backendUrl, setShowPointRecorded, fetchPoints , pointsPort } = useContext(Context);
+  const { backendUrl, setShowPointRecorded, fetchPoints , pointsPort, points } = useContext(Context);
 
   const [pointName, setPointName] = useState("New Point");
   const [loading, setLoading] = useState(false);
