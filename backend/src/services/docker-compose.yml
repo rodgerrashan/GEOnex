@@ -23,12 +23,12 @@ services:
     networks:
       - microservices-network
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5002/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:5002/health"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 30s
 
   device-service:
     build: ./device-service
@@ -40,12 +40,12 @@ services:
     networks:
       - microservices-network
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5003/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:5003/health"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 30s
 
   project-service:
     build: ./project-service
@@ -57,12 +57,12 @@ services:
     networks:
       - microservices-network
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5004/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:5004/health"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 30s
 
   point-service:
     build: ./point-service
@@ -74,12 +74,12 @@ services:
     networks:
       - microservices-network
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5005/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:5005/health"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 30s
 
   # export-service:
   #   build: ./export-service
@@ -111,12 +111,12 @@ services:
     networks:
       - microservices-network
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5007/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:5007/health"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 30s
 
   notification-service:
     build: ./notification-service
@@ -128,9 +128,9 @@ services:
     networks:
       - microservices-network
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5008/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:5008/health"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 30s

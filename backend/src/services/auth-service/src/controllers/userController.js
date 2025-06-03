@@ -1,11 +1,9 @@
 const User = require("../models/User");
 const Settings = require("../models/Settings");
-// const Device = require("../../device-service/models/Device");
-const { get } = require("mongoose");
-// const Alert = require("../../device-service/models/Alert");
 const bcrypt = require("bcryptjs");
 
 const getUserData = async (req, res) => {
+  console.log("Get user data request received");
   try {
     const userId = req.userId;
 
@@ -30,6 +28,7 @@ const getUserData = async (req, res) => {
 };
 
 const changePassword = async (req, res) => {
+  console.log("Change password request received");
   try {
     const userId = req.userId;
     const { currentPassword, newPassword, confirmPassword } = req.body;
@@ -87,6 +86,7 @@ const changePassword = async (req, res) => {
 
 // get settings data
 const getSettingsData = async (req, res) => {
+  console.log("Get settings data request received");
   try {
     const userId = req.userId;
 
@@ -109,6 +109,7 @@ const getSettingsData = async (req, res) => {
 
 // update current user's settings
 const updateSettingsData = async (req, res) => {
+  console.log("Update settings data request received");
   try {
     const userId = req.userId;
     const updates = req.body; // Expect nested object like { system: {...}, device: {...} }
@@ -147,6 +148,7 @@ const updateSettingsData = async (req, res) => {
 
 // reset settings to default
 const resetSettingsData = async (req, res) => {
+  console.log("Reset settings data request received");
   try {
     const userId = req.userId;
 
@@ -206,6 +208,7 @@ const addDeviceToUser = async (req, res) => {
 };
 
 const getUserDevices = async (req, res) => {
+  console.log("Get user devices request received");
   const userId = req.params.userId;
 
   try {
@@ -229,6 +232,7 @@ const getUserDevices = async (req, res) => {
 };
 
 const removeDeviceFromUser = async (req, res) => {
+  console.log("Remove device from user request received");
   const userId = req.params.userId;
   const { deviceId } = req.body;
 
@@ -262,6 +266,7 @@ const removeDeviceFromUser = async (req, res) => {
 };
 
 const getUserBases = async (req, res) => {
+  console.log("Get user base stations request received");
   const userId = req.params.userId;
 
   try {
@@ -284,6 +289,7 @@ const getUserBases = async (req, res) => {
 };
 
 const getUserClientDevices = async (req, res) => {
+  console.log("Get user client devices request received");
   const userId = req.params.userId;
   try {
     const user = await User.findById(userId).populate("connectedDevices");
@@ -305,6 +311,7 @@ const getUserClientDevices = async (req, res) => {
 };
 
 const getUserRegisteredDevices = async (req, res) => {
+  console.log("Get user registered devices request received");
   const userId = req.params.userId;
 
   try {
@@ -323,6 +330,7 @@ const getUserRegisteredDevices = async (req, res) => {
 };
 
 const getUserDeviceAlerts = async (req, res) => {
+  console.log("Get user device alerts request received");
   const userId = req.params.userId;
 
   try {

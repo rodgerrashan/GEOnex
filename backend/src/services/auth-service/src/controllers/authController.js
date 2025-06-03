@@ -34,6 +34,7 @@ const loginUser = async (req, res) => {
 
 // Register a new user
 const register = async(req,res)=>{
+    console.log('Register request received');
 
     const {name,email,password}=req.body;
 
@@ -89,6 +90,8 @@ const register = async(req,res)=>{
 
 const login = async(req,res)=>{
 
+    console.log('Login request received');
+
     const {email, password} = req.body;
 
     if(!email || !password){
@@ -130,6 +133,7 @@ const login = async(req,res)=>{
 
 
 const logout= async (req,res)=>{
+    console.log('Logout request received');
     try {
         res.clearCookie('token',{
             httpOnly: true,
@@ -145,6 +149,7 @@ const logout= async (req,res)=>{
 
 //Send verification OTP to the User's Email
 const sendVerifyOtp = async(req,res)=>{
+    console.log('Send verification OTP request received');
     try {
     
         const userId = req.userId;
@@ -181,6 +186,7 @@ const sendVerifyOtp = async(req,res)=>{
 
 //verify the email using otp
 const verifyEmail = async (req,res) => {
+    console.log('Verify email request received');
 
     const userId=req.userId;
     const {otp}=req.body;
@@ -220,6 +226,7 @@ const verifyEmail = async (req,res) => {
 
 
 const isAuthenticated=async (req,res) => {
+    console.log('Authentication check request received');
     try {
         const user = await User.findById(req.userId);
 
@@ -244,6 +251,7 @@ const isAuthenticated=async (req,res) => {
 
 //Send password reset Otp
 const sendResetOtp = async (req,res) => {
+    console.log('Send password reset OTP request received');
     const {email}=req.body;
     if(!email){
         return res.json({success:false, message:'Email is required'})
@@ -278,6 +286,7 @@ const sendResetOtp = async (req,res) => {
 
 //Reset user password
 const resetPassword = async (req,res) => {
+    console.log('Reset password request received');
     const {email,otp,newPassword}=req.body;
     
     if(!email || !otp || !newPassword){
