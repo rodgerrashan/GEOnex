@@ -13,7 +13,7 @@ app.set('trust proxy', 1);
 
 
 const allowedOrigins = [
-  'http://localhost:5002',           // For local dev
+  'http://localhost:5173',           // For local dev
   'https://geonex.vercel.app'        // For production
 ];
 
