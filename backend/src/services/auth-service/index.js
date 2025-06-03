@@ -7,10 +7,19 @@ const cookieParser = require('cookie-parser');
 
 const cors = require('cors');
 
-// Allow all origins with credentials
+
+// Trust proxy (EC2 + HTTPS via Nginx or ALB)
+app.set('trust proxy', 1);
+
+
+const allowedOrigins = [
+  'http://localhost:5002',           // For local dev
+  'https://geonex.vercel.app'        // For production
+];
+
 app.use(cors({
-  origin: true,  // allows all origins
-  credentials: true // allow cookies/auth headers
+  origin: allowedOrigins,
+  credentials: true
 }));
 
 app.use(express.json());
@@ -22,13 +31,17 @@ const userRouter = require('./src/routes/userRoutes');
 app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
 
-connectDB();
-
-const PORT = process.env.USER_SERVICE_PORT || 5002;
-app.listen(PORT, () => {
-  console.log(`User service running on port ${PORT}`);
-});
 
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'healthy', service: 'auth-service' });
+});
+
+
+const PORT = process.env.USER_SERVICE_PORT || 5002;
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`User service running on port ${PORT}`);
+  });
+}).catch((err) => {
+  console.error('Failed to connect to database:', err);
 });

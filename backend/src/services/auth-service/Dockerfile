@@ -16,8 +16,5 @@ COPY . .
 # Expose the port the server listens on
 EXPOSE 5002
 
-# Set environment variables
-ENV NODE_ENV=production
-
 # Start the application
 CMD ["node", "index.js"]
