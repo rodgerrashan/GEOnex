@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const PointRecorded = ({ sensorData, baseData, projectId }) => {
-  const { backendUrl, setShowPointRecorded, fetchPoints , pointsPort, points } = useContext(Context);
+  const { backendUrl, setShowPointRecorded, fetchPoints, points } = useContext(Context);
 
   const [pointName, setPointName] = useState("New Point");
   const [loading, setLoading] = useState(false);
@@ -50,7 +50,7 @@ const PointRecorded = ({ sensorData, baseData, projectId }) => {
     };
 
     try {
-      const response = await axios.post(`${backendUrl}${pointsPort}/api/points`, payload);
+      const response = await axios.post(`${backendUrl}/api/points`, payload);
       if (response.data._id) {
         toast.success("Point recorded successfully.");
         // Refresh the points list so the new point appears on the map

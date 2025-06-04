@@ -52,8 +52,6 @@ const MapSection = () => {
     showConfirmDiscard,
     setShowConfirmDiscard,
     wsUrl,
-    mqttPort
-
   } = useContext(Context);
 
   // mock devices
@@ -61,7 +59,7 @@ const MapSection = () => {
 
   const baseStation = "base123";
   // Define your WebSocket URL here
-  const WS_URL = `${wsUrl}${mqttPort}`;
+  const WS_URL = `${wsUrl}`;
   // Use our custom hook to get sensor data and connection status
   const { sensorData, connectionStatus } = useSensorData(WS_URL, rovers);
   const { baseSensorData, baseconnectionStatus } = useBaseSensorData(

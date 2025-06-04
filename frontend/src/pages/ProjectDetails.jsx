@@ -12,7 +12,7 @@ import PageTopic from "../components/PageTopic";
 dayjs.extend(relativeTime);
 
 const ProjectDetails = () => {
-  const { navigate, backendUrl, removeProject, projectsPort, exportPort } = useContext(Context);
+  const { navigate, backendUrl, removeProject} = useContext(Context);
   const { projectId } = useParams();
   const [project, setProject] = useState(null);
 
@@ -36,7 +36,7 @@ const ProjectDetails = () => {
     const fetchProject = async () => {
       try {
         const response = await axios.get(
-          `${backendUrl}${projectsPort}/api/projects/${projectId}`
+          `${backendUrl}/api/projects/${projectId}`
         );
         if (response.data.success) {
           setProject(response.data.project);
@@ -62,7 +62,7 @@ const handleExport = async () => {
     setExportStatus({ type: 'info', message: `Preparing ${exportFormat} file...` });
 
     // Call backend to export file (adjust URL based on format and project ID)
-    const response = await fetch(`${backendUrl}${exportPort}/api/export/${exportFormat}/${projectId}`, {
+    const response = await fetch(`${backendUrl}/api/export/${exportFormat}/${projectId}`, {
       method: 'GET',
     });
 

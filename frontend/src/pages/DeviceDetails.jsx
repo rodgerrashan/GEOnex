@@ -42,7 +42,7 @@ const getDeviceTypeIcon = (type, cls = "w-5 h-5") => {
 
 const DeviceDetails = () => {
   const { deviceId } = useParams();
-  const { backendUrl, devicesPort } = useContext(Context);
+  const { backendUrl } = useContext(Context);
 
   const [device, setDevice] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -52,7 +52,7 @@ const DeviceDetails = () => {
     (async () => {
       try {
         const { data } = await axios.get(
-          `${backendUrl}${devicesPort}/api/devices/${deviceId}`
+          `${backendUrl}/api/devices/${deviceId}`
         );
         setDevice(data.device);
       } catch (err) {

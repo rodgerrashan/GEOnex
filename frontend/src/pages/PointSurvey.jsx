@@ -9,7 +9,7 @@ import SensorData from "../components/SensorData";
 import PageTopic from "../components/PageTopic";
 
 const PointSurvey = () => {
-  const { navigate, backendUrl, projectsPort} = useContext(Context);
+  const { navigate, backendUrl} = useContext(Context);
   const { projectId } = useParams(); 
   const [projectName, setProjectName] = useState(""); 
   
@@ -18,7 +18,7 @@ const PointSurvey = () => {
     const fetchName = async () => {
       try {
         const response = await axios.get(
-          `${backendUrl}${projectsPort}/api/projects/${projectId}`
+          `${backendUrl}/api/projects/${projectId}`
         );
         if (response.data.success) {
           setProjectName(response.data.project.Name);
