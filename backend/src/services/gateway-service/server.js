@@ -11,7 +11,8 @@ app.use(cors({
     'http://localhost:5173',
     'http://localhost:3000',
     'https://geonex.site',
-    'https://api.geonex.site'
+    'https://api.geonex.site',
+    'https://www.geonex.site'
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
