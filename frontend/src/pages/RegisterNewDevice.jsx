@@ -9,7 +9,7 @@ import PageTopic from "../components/PageTopic";
 
 const RegisterNewDevice = () => {
 
-const { navigate, backendUrl, devicesPort} =useContext(Context);
+const { navigate, backendUrl} =useContext(Context);
   
   const [deviceId, setDeviceId] = useState("");
   const [deviceName, setDeviceName] = useState("");
@@ -51,7 +51,7 @@ const { navigate, backendUrl, devicesPort} =useContext(Context);
     try {
 
     // Register the device
-    const response = await axios.post(`${backendUrl}${devicesPort}/api/devices/`, {
+    const response = await axios.post(`${backendUrl}/api/devices/`, {
       DeviceCode: deviceId,
       Name: deviceName,
       Type: deviceType,

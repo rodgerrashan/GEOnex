@@ -21,14 +21,7 @@ const ContextProvider = (props) => {
   const backendUrl = env === "production" ? backendUrl_Pro : backendUrl_Dev;
   const wsUrl = env === "production" ? wsUrl_Pro : wsUrl_Dev;
 
-  const userPort = import.meta.env.VITE_API_USER_PORT;
-  const authPort = import.meta.env.VITE_API_AUTH_PORT;
-  const devicesPort = import.meta.env.VITE_API_DEVICES_PORT;
-  const projectsPort = import.meta.env.VITE_API_PROJECTS_PORT;
-  const pointsPort = import.meta.env.VITE_API_POINTS_PORT;
-  const exportPort = import.meta.env.VITE_API_EXPORT_PORT;
-  const mqttPort = import.meta.env.VITE_API_MQTT_PORT;
-  const notificationsPort = import.meta.env.VITE_API_NOTIFICATIONS_PORT;
+
 
   const [rovers, setRovers] = useState([]);
   const [base, setBase] = useState();
@@ -49,13 +42,10 @@ const ContextProvider = (props) => {
 
   // const [notifications, setNotifications] = useState([]);
 
-  useEffect(() => {
-    console.log(backendUrl, userPort, authPort, devicesPort, projectsPort, pointsPort, exportPort, mqttPort, notificationsPort);
-  }, [backendUrl, userPort, authPort, devicesPort, projectsPort, pointsPort, exportPort, mqttPort, notificationsPort]);
-  
+ 
   const getAuthState = async () => {
     try {
-      const { data } = await axios.get(backendUrl+authPort+"/api/auth/is-auth");
+      const { data } = await axios.get(backendUrl+"/api/auth/is-auth");
       if (data.success && data.verified) {
         setIsLoggedin(true);
         await getUserData();
@@ -74,7 +64,7 @@ const ContextProvider = (props) => {
 
   const getUserData = async () => {
     try {
-      const { data } = await axios.get(backendUrl+userPort+"/api/user/data");
+      const { data } = await axios.get(backendUrl+"/api/user/data");
       data.success ? setUserData(data.userData) : toast.error(data.message);
     } catch (error) {
       toast.error(error.message);
@@ -84,7 +74,7 @@ const ContextProvider = (props) => {
   const getProjectsData = async (userId) => {
     try {
       if (userId !== undefined) {
-        const response = await axios.get(backendUrl+projectsPort+`/api/projects/recentprojects/${userId}`);
+        const response = await axios.get(backendUrl+`/api/projects/recentprojects/${userId}`);
 
       if (response.data.success) {
         setProjects(response.data.projects);
@@ -103,7 +93,7 @@ const ContextProvider = (props) => {
   const removeProject = async (projectId) => {
     try {
       const response = await axios.delete(
-        `${backendUrl}${projectsPort}/api/projects/${projectId}`
+        `${backendUrl}/api/projects/${projectId}`
       );
       if (response.data.success) {
         toast.success(response.data.message);
@@ -122,7 +112,7 @@ const ContextProvider = (props) => {
     setLoadingPoints(true);
     setPoints([]);
     try {
-      const response = await axios.get(`${backendUrl}${pointsPort}/api/points/${projectId}`);
+      const response = await axios.get(`${backendUrl}/api/points/${projectId}`);
       if (response.data.success) {
         setPoints(response.data.points);
       } else {
@@ -139,7 +129,7 @@ const ContextProvider = (props) => {
     console.log(projectId, pointId);
     try {
       const response = await axios.delete(
-        `${backendUrl}${pointsPort}/api/points/${projectId}/${pointId}`
+        `${backendUrl}/api/points/${projectId}/${pointId}`
       );
       if (response.data.message) {
         toast.success(response.data.message);
@@ -162,7 +152,7 @@ const ContextProvider = (props) => {
   const getNotificationsData = async (userId, numOfNotifications) => {
     try {
       console.log("Getting notifications for user:", userId);
-      const response = await axios.get(`${backendUrl}${notificationsPort}/api/notifications/user/${userId}/${numOfNotifications || 10}`);
+      const response = await axios.get(`${backendUrl}/api/notifications/user/${userId}/${numOfNotifications || 10}`);
       console.log("Notifications response:", response.data);
       if (Array.isArray(response.data.notifications)) {
         setNotifications(response.data.notifications);
@@ -181,7 +171,7 @@ const ContextProvider = (props) => {
   try {
     console.log("Marking notification as read:", id);
 
-    const response = await axios.put(`${backendUrl}${notificationsPort}/api/notifications/mark-read`, { id });
+    const response = await axios.put(`${backendUrl}/api/notifications/mark-read`, { id });
     console.log("Mark as read response:", response.data);
 
     if (response.data.success) {
@@ -205,7 +195,7 @@ const ContextProvider = (props) => {
   const fetchUserDevices = async () => {
     setLoadingDevices(true);
     try {
-        const response = await fetch(`${backendUrl}${userPort}/api/user/${userData.userId}/devices`);
+        const response = await fetch(`${backendUrl}/api/user/${userData.userId}/devices`);
         if (!response.ok) {
             throw new Error("Failed to fetch devices");
         }
@@ -230,7 +220,7 @@ const ContextProvider = (props) => {
 };
 const fetchSettings = async () => {
     try {
-      const { data } = await axios.get(backendUrl+userPort+"/api/user/settings");
+      const { data } = await axios.get(backendUrl+"/api/user/settings");
       if (data.success) {
         setSettings(data.Data);
         setTheme(data.Data.map.theme);
@@ -261,7 +251,7 @@ const fetchSettings = async () => {
     clearTimeout(updateTimeout.current);
     updateTimeout.current = setTimeout(async () => {
       try {
-        await axios.put(backendUrl+userPort+"/api/user/settings", {
+        await axios.put(backendUrl+"/api/user/settings", {
           [section]: { [key]: value },
         });
       } catch (err) {
@@ -274,7 +264,7 @@ const fetchSettings = async () => {
   const resetSettings = async () => {
     try {
       const { data } = await axios.post(
-        backendUrl+userPort+"/api/user/settings/reset"
+        backendUrl+"/api/user/settings/reset"
       );
       if (data.success) {
         setSettings(data.Data);
@@ -290,7 +280,7 @@ const fetchSettings = async () => {
   const logout = async () => {
     try {
       axios.defaults.withCredentials = true;
-      const { data } = await axios.post(backendUrl+ authPort+"/api/auth/logout");
+      const { data } = await axios.post(backendUrl+ "/api/auth/logout");
       if (data.success) {
         setIsLoggedin(false);
         setUserData(false);
@@ -357,14 +347,6 @@ const fetchSettings = async () => {
     showConfirmDiscard,
     setShowConfirmDiscard,
     backendUrl,
-    userPort,
-    authPort,
-    devicesPort,
-    projectsPort,
-    pointsPort,
-    exportPort,
-    mqttPort,
-    notificationsPort,
     projects,
     getProjectsData,
     removeProject,

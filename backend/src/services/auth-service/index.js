@@ -18,7 +18,12 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-  origin: true,
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://geonex.site',
+    'https://api.geonex.site'
+  ],
   credentials: true
 }));
 

@@ -4,7 +4,7 @@ import { Context } from "../context/Context";
 
 const SensorData = () => {
 
-    const {wsUrl, mqttPort} = useContext(Context);
+    const {wsUrl} = useContext(Context);
 
 
     const [sensorData, setSensorData] = useState({
@@ -20,7 +20,7 @@ const SensorData = () => {
     const [connectionStatus, setConnectionStatus] = useState("Connecting...");
     
     // Set WebSocket URL (adjust for production)
-    const WS_URL =  `${wsUrl}${mqttPort}`;
+    const WS_URL =  `${wsUrl}`;
 
     
     useEffect(() => {

@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const Login = () => {
-  const { navigate, backendUrl, setIsLoggedin, getUserData, authPort } =
+  const { navigate, backendUrl, setIsLoggedin, getUserData  } =
     useContext(Context);
 
   const [state, setState] = useState("Log In");
@@ -25,10 +25,10 @@ const Login = () => {
       axios.defaults.withCredentials = true;
 
       if (state === "Sign Up") {
-        console.log(backendUrl, authPort);
+        console.log(backendUrl);
         /* create the user */
         const { data: signRes } = await axios.post(
-          `${backendUrl}${authPort}/api/auth/register`,
+          `${backendUrl}/api/auth/register`,
           {
             name,
             email,
@@ -43,7 +43,7 @@ const Login = () => {
 
         /* ask server to generate & send OTP */
         const { data: otpRes } = await axios.get(
-          `${backendUrl}${authPort}/api/auth/sendverifyotp`,
+          `${backendUrl}/api/auth/sendverifyotp`,
           { withCredentials: true }
         );
 
@@ -57,7 +57,7 @@ const Login = () => {
         
         /* Log-in branch */
         const { data: loginRes } = await axios.post(
-          `${backendUrl}${authPort}/api/auth/login`,
+          `${backendUrl}/api/auth/login`,
           {
             email,
             password,

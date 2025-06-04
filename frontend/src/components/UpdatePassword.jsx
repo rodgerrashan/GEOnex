@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { Context } from "../context/Context";
 
 const UpdatePassword = ({ isOpen, onClose }) => {
-  const { backendUrl, userPort } = useContext(Context);
+  const { backendUrl } = useContext(Context);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentPw, setCurrentPw] = useState("");
@@ -32,7 +32,7 @@ const UpdatePassword = ({ isOpen, onClose }) => {
     setIsSubmitting(true);
     try {
       const { data } = await axios.post(
-        backendUrl + userPort + "/api/user/change-password",
+        backendUrl+ "/api/user/change-password",
         {
           currentPassword: currentPw,
           newPassword: newPw,

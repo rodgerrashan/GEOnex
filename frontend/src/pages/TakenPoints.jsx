@@ -16,7 +16,6 @@ const TakenPoints = () => {
     loadingPoints,
     deletePoint,
     backendUrl,
-    pointsPort
   } = useContext(Context);
   const { projectId } = useParams();
 
@@ -47,7 +46,7 @@ const TakenPoints = () => {
 
     try {
       const response = await axios.put(
-        backendUrl +pointsPort+ `/api/points/${projectId}/${pointToRename._id}/rename`,
+        backendUrl + `/api/points/${projectId}/${pointToRename._id}/rename`,
         { Name: newName }
       );
 

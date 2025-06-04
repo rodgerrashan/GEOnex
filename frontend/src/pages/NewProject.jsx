@@ -11,7 +11,7 @@ import { Context } from "../context/Context";
 
 const NewProject = () => {
 
-  const { navigate, backendUrl,userPort, projectsPort } =
+  const { navigate, backendUrl } =
     useContext(Context);
     
   const [projectName, setProjectName] = useState("");
@@ -40,7 +40,7 @@ const NewProject = () => {
   const fetchAssignedBaseStations = async () => {
     try {
       const response = await axios.get(
-        backendUrl + userPort+`/api/user/${userId}/devices/base-stations`
+        backendUrl + `/api/user/${userId}/devices/base-stations`
       );
       const baseStations = response.data.connectedDevices || [];
       if (baseStations.length > 0) {
@@ -59,7 +59,7 @@ const NewProject = () => {
   const fetchAssignedClientDevices = async () => {
     try {
       const response = await axios.get(
-        backendUrl+userPort + `/api/user/${userId}/devices/client-devices`
+        backendUrl+ `/api/user/${userId}/devices/client-devices`
       );
       const clientDevices = response.data.connectedDevices || [];
       if (clientDevices.length > 0) {
@@ -86,7 +86,7 @@ const NewProject = () => {
       };
 
       // POST to your create project endpoint
-      const response = await axios.post(backendUrl+projectsPort + "/api/projects/", payload);
+      const response = await axios.post(backendUrl + "/api/projects/", payload);
       console.log("Project created:", response.data);
 
       // Extract the newly created project ID from response data
