@@ -10,6 +10,7 @@
 #include "button_manager.h"
 #include "base_calibration.h"
 #include "battery_manager.h"
+#include "wifi_strength.h"
 #include "pin_manager.h"
 
 
@@ -69,8 +70,10 @@ void loop()
   }
 
   /* Publish data to MQTT  */
-  publishGPSData(lat, lon, satellites, time);
-  
+  //publishGPSData(lat, lon, satellites, time);
+
+  int wifiquality = get_signal_quality();
+  Serial.printf("[Test]  WiFi Quality: %d\n", wifiquality);
 
   mqttLoop();
 
@@ -79,6 +82,7 @@ void loop()
   int batteryPercentage = getBatteryPercentage(readBatteryVoltage());
   Serial.printf("[Test]  Battery Percentage: %d%%\n", batteryPercentage);
 
+  publishData(DEVICE_ID, "OK", lat, lon, satellites, time, batteryPercentage, wifiquality);
   //Main loop delay
   delay(MAIN_LOOP_DELAY);
 }
