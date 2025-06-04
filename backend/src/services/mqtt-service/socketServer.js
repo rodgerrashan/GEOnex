@@ -5,10 +5,11 @@ let io;
 const init = (server) => {
     io = new Server(server, {
         cors: {
-            origin: "*",
+            origin: ["https://api.geonex.site", "http://localhost:5173"],
             methods: ["GET", "POST"],
+            credentials: true,
         },
-        transports: ["websocket"], 
+        transports: ["polling", "websocket"]
     });
 
     io.on("connection", (socket) => {
