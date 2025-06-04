@@ -103,6 +103,40 @@ void publishGPSData(float latitude, float longitude, int satellites, String time
     }
 }
 
+void publishData(String deviceId, String status, float latitude, float longitude, int satellites,
+                 String time, int battery, int wifi)
+
+{
+    if (!mqttConnected())
+    {
+        Serial.println("[RETRYING]  MQTT not connected. Attempting to reconnect...");
+        connectMQTT();
+    }
+
+    JsonDocument jsonDoc;
+    jsonDoc["device_id"] = DEVICE_ID;
+    jsonDoc["status"] = status;
+    jsonDoc["latitude"] = latitude;
+    jsonDoc["longitude"] = longitude;
+    jsonDoc["Satellites"] = satellites;
+    jsonDoc["timestamp"] = time;
+    jsonDoc["battery"] = battery;
+    jsonDoc["wifi"] = wifi;
+
+    char jsonBuffer[256];
+    serializeJson(jsonDoc, jsonBuffer);
+
+    if (client.publish(MQTT_TOPIC_DATA_LIVE, jsonBuffer))
+    {
+        Serial.println("[INFO]  Data published successfully");
+        handleMQTTLED();
+    }
+    else
+    {
+        Serial.println("[FAILED]    Failed to publish Data");
+    }
+}
+
 void publishBaseFix(float latitude, float longitude)
 
 {
@@ -113,8 +147,8 @@ void publishBaseFix(float latitude, float longitude)
     }
 
     JsonDocument jsonDoc;
-    jsonDoc["latitude"] = latitude;
-    jsonDoc["longitude"] = longitude;
+    jsonDoc["Fixed_latitude"] = latitude;
+    jsonDoc["Fixed_longitude"] = longitude;
 
     char jsonBuffer[256];
     serializeJson(jsonDoc, jsonBuffer);
