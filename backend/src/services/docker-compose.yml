@@ -12,6 +12,27 @@ services:
     networks:
       - microservices-network
 
+
+  # ================== Gateway ==================
+  gateway-service:
+    build: ./gateway-service
+    container_name: gateway-service
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - microservices-network
+    depends_on:
+      - auth-service
+      - device-service
+      - project-service
+      - point-service
+      - mqtt-service
+      - notification-service
+
+    restart: unless-stopped
+
   # ================== Microservices ==================
   auth-service:
     build: ./auth-service
