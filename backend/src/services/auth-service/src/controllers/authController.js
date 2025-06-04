@@ -66,9 +66,9 @@ const register = async(req,res)=>{
 
         res.cookie('token',token, {
             httpOnly: true,
-            // secure:process.env.NODE_ENV==='production',
-            secure:false,
-            // sameSite: process.env.NODE_ENV==='production'?'none':'strict',
+            secure:process.env.NODE_ENV==='production',
+            // secure:false,
+            sameSite: process.env.NODE_ENV==='production'?'none':'strict',
             maxAge: 7*24*60*60*1000
         })
 
@@ -121,9 +121,9 @@ const login = async(req,res)=>{
 
         res.cookie('token',token, {
             httpOnly: true,
-            secure:false,
-            // secure:process.env.NODE_ENV==='production',
-            // sameSite: process.env.NODE_ENV==='production'?'none':'strict',
+            // secure:false,
+            secure:process.env.NODE_ENV==='production',
+            sameSite: process.env.NODE_ENV==='production'?'none':'strict',
             maxAge: 7*24*60*60*1000
         })
 
@@ -140,9 +140,9 @@ const logout= async (req,res)=>{
     try {
         res.clearCookie('token',{
             httpOnly: true,
-            secure:false,
-            // secure:process.env.NODE_ENV==='production',
-            // sameSite: process.env.NODE_ENV==='production'?'none':'strict'
+            // secure:false,
+            secure:process.env.NODE_ENV==='production',
+            sameSite: process.env.NODE_ENV==='production'?'none':'strict'
         })
         
         return res.json({success:true, message:'Logged out'});
