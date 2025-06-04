@@ -17,16 +17,21 @@ const allowedOrigins = [
   'https://geonex.vercel.app'        // For production
 ];
 
+// app.use(cors({
+//   origin: [
+//     'http://localhost:5173',
+//     'https://geonex.site',
+//     'https://api.geonex.site',
+//     'https://www.geonex.site'
+//   ],
+//   credentials: true
+// }));
+
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'https://geonex.site',
-    'https://api.geonex.site',
-    'https://www.geonex.site'
-  ],
+  origin: true, // Allow all origins temporarily
   credentials: true
 }));
+
 
 app.use(express.json());
 app.use(cookieParser());
