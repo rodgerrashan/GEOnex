@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { 
   exportTxt, 
-  exportPng, 
+  exportCsv, 
   exportDxf, 
   exportPdf ,
   validateProjectId
@@ -13,7 +13,7 @@ const {
 router.get("/txt/:projectId", validateProjectId, exportTxt );
 
 // Export PNG
-router.get("/png/:projectId", validateProjectId, exportPng);
+router.get("/csv/:projectId", validateProjectId, exportCsv);
 
 // Export DXF
 router.get("/dxf/:projectId", validateProjectId,exportDxf );

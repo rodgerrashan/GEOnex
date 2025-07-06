@@ -10,6 +10,7 @@ const ContextProvider = (props) => {
   const navigate = useNavigate();
   const [showPointRecorded, setShowPointRecorded] = useState(false);
   const [showConfirmDiscard, setShowConfirmDiscard] = useState(false);
+  const [surveyStatus, setSurveyStatus] = useState("active"); // 'active', 'paused', 'completed'
 
   const env = import.meta.env.VITE_ENV;
 
@@ -22,12 +23,16 @@ const ContextProvider = (props) => {
   const wsUrl = env === "production" ? wsUrl_Pro : wsUrl_Dev;
 
 
+  const [project, setProject] = useState(null);
+
+
 
   const [rovers, setRovers] = useState([]);
   const [base, setBase] = useState();
 
   const [projects, setProjects] = useState([]);
   const [points, setPoints] = useState([]);
+
   const [loadingPoints, setLoadingPoints] = useState(false);
 
   const [isLoggedin, setIsLoggedin] = useState(false);
@@ -41,6 +46,8 @@ const ContextProvider = (props) => {
   const [theme, setTheme] = useState("Light");
 
   // const [notifications, setNotifications] = useState([]);
+
+
 
  
   const getAuthState = async () => {
@@ -107,6 +114,30 @@ const ContextProvider = (props) => {
     }
   };
 
+
+  // Function to update project status
+  const updateProjectStatus = async (projectId, status) => {
+    try {
+      const response = await axios.put(
+        `${backendUrl}/api/projects/status/${projectId}`,
+        { Status: status }
+      );
+      if (response.data.success) {
+        setProject((prevProject) => ({
+          ...prevProject,
+          Status: status,
+        }));
+        toast.success("Project status updated successfully");
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error updating project status:", error);
+      toast.error("Failed to update project status");
+    }
+  };
+
+
   // Function to fetch points by project id
   const fetchPoints = async (projectId) => {
     setLoadingPoints(true);
@@ -145,6 +176,7 @@ const ContextProvider = (props) => {
       toast.error("Failed to delete point.");
     }
   };
+
 
 
 
@@ -189,6 +221,104 @@ const ContextProvider = (props) => {
   }
 };
 
+
+// get project data
+const fetchProject = async (projectId) => {
+      try {
+        const response = await axios.get(
+          `${backendUrl}/api/projects/${projectId}`
+        );
+        if (response.data.success) {
+          setProject(response.data.project);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching project details:", error);
+      }
+    };
+
+  const updateProjectSections = async (projectId, sections) => {
+    try {
+      const newSection = sections[sections.length - 1];
+      const response = await axios.put(
+        `${backendUrl}/api/projects/sections/${projectId}`,
+        { sectionName: newSection }
+      );
+      if (response.data.success) {
+        setProject((prevProject) => ({
+          ...prevProject,
+          Sections: sections,
+        }));
+        toast.success("Project sections updated successfully");
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error updating project sections:", error);
+      toast.error("Failed to update project sections");
+    }
+  };
+
+  const updateProjectBaseMode = async (projectId, baseMode) => {
+    try {
+      const response = await axios.put(
+        `${backendUrl}/api/projects/basemode/${projectId}`,
+        { baseMode :baseMode}
+      );
+      if (response.data.success) {
+        setProject((prevProject) => ({
+          ...prevProject,
+          BaseMode: baseMode,
+        }));
+        toast.success("Project base mode updated successfully");
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error updating project base mode:", error);
+      toast.error("Failed to update project base mode");
+    }
+  };
+
+
+  const updateProjectBaseLocations = async (projectId, baseLatitude, baseLongitude) => {
+    try {
+      const response = await axios.put(
+        `${backendUrl}/api/projects/baselocation/${projectId}`,
+        { baseLatitude: baseLatitude, 
+          baseLongitude: baseLongitude }
+      );
+      if (response.data.success) {
+        setProject((prevProject) => ({
+          ...prevProject,
+          BaseLatitude: baseLatitude,
+          BaseLongitude: baseLongitude,
+        }));
+        toast.success("Project base locations updated successfully");
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error updating project base locations:", error);
+      toast.error("Failed to update project base locations");
+    }
+  };
+
+  const removeProjectSection = async (projectId, section) => {
+    try { 
+      await axios.delete(
+  `${backendUrl}/api/projects/sections/${projectId}`,
+  {
+    data: { sectionName: section }, 
+  }
+);
+    }
+    catch (error) {
+      console.error("Error removing project section:", error);
+      toast.error("Failed to remove project section");
+    }
+  };
 
 
   // devices
@@ -369,7 +499,17 @@ const fetchSettings = async () => {
     resetSettings,
     logout,
     wsUrl,
-    isLoading
+    isLoading,
+    fetchProject,
+    setProject,
+    project,
+    updateProjectSections,
+    removeProjectSection,
+    updateProjectBaseMode,
+    updateProjectBaseLocations,
+    surveyStatus, 
+    setSurveyStatus,
+    updateProjectStatus
   };
 
   return <Context.Provider value={value}>{props.children}</Context.Provider>;

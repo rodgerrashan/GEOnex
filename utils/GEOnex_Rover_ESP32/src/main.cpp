@@ -13,13 +13,23 @@
 #include "pin_manager.h"
 #include "battery_manager.h"
 #include "wifi_strength.h"
-
+#include "mqtt_callback.h"
+#include "gps_correction.h"
+#include "gnss_config.h"
 
 IMUManager mpu(SDA, SCL);
+
+// GNSS configuration
+GNSSConfig gnss;
 
 void setup()
 {
   Serial.begin(SERIAL_BAUD_RATE);
+  // Serial1.begin(GNSS_BAUD_RATE);
+
+  // // Enable GNSS systems: GPS + Galileo + BeiDou +  GLONASS
+  // gnss.enableGNSS(Serial1);
+  // delay(2000); // Allow GPS to process config
 
   // Configures pin modes for LEDs and buttons
   setupPins();
@@ -37,6 +47,10 @@ void setup()
   initBatteryMonitor();
 
   Serial.println("[INFO]  ESP32 Setup complete");
+
+  // Set known fixed base location manually
+  // Comment this line to use the auto base fixed location
+  setManualBaseFixed(6.1042425, 80.222473);
 }
 
 void loop()
@@ -71,10 +85,14 @@ void loop()
     float roll = mpu.getRoll();
     correctGPSCoordinates(lat, lon, pitch, roll, POLE_HEIGHT);
 
-    Serial.print("[Test]  Corrected GPS: ");
+    Serial.print("[Test] MPU Corrected GPS: ");
     Serial.print(lat, 6);
     Serial.print(", ");
     Serial.println(lon, 6);
+
+    updateRoverLive(lat, lon, time); // ✅ Trigger correction
+
+    GpsPosition corrected = getCorrectedRoverPosition();
   }
   else
   {
@@ -102,6 +120,7 @@ void loop()
   publishData(DEVICE_ID, "OK", lat, lon, satellites, time, 0.0, 0.0, batteryPercentage, wifiquality);
 
   mqttLoop();
+  checkBaseTimeout();
 
   checkButtonPresses();
 

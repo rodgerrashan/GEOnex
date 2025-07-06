@@ -103,7 +103,7 @@ void publishGPSData(float latitude, float longitude, int satellites, String time
     }
 }
 
-void publishData(String deviceId, String status, float latitude, float longitude, int satellites,
+void publishData(String deviceId, String status, double latitude, double longitude, int satellites,
                  String time, int battery, int wifi)
 
 {
@@ -137,7 +137,7 @@ void publishData(String deviceId, String status, float latitude, float longitude
     }
 }
 
-void publishBaseFix(float latitude, float longitude)
+void publishBaseFix(double latitude, double longitude)
 
 {
     if (!mqttConnected())
@@ -153,7 +153,7 @@ void publishBaseFix(float latitude, float longitude)
     char jsonBuffer[256];
     serializeJson(jsonDoc, jsonBuffer);
 
-    if (client.publish(MQTT_TOPIC_DATA_LIVE, jsonBuffer))
+    if (client.publish(MQTT_TOPIC_DATA_FIXED, jsonBuffer))
     {
         Serial.println("[INFO]  GPS Base Clibration data published successfully");
         handleMQTTLED();
