@@ -48,6 +48,20 @@ const getProjectById = async (req, res) => {
 
     try {
         const project = await db.collection('projects').findOne({ _id: new ObjectId(id) });
+        if (project && project.BaseStation) {
+            const deviceCollection = db.collection('devices');
+            // Populate BaseStation
+            const baseStation = await deviceCollection.findOne({ _id: new ObjectId(project.BaseStation) });
+            project.BaseStation = baseStation;
+
+            // Populate ClientDevices
+            if (Array.isArray(project.ClientDevices)) {
+            const clientDevices = await deviceCollection
+                .find({ _id: { $in: project.ClientDevices.map(id => new ObjectId(id)) } })
+                .toArray();
+            project.ClientDevices = clientDevices;
+            }
+        }
 
         if (!project) {
             return res.status(404).json({ message: 'Project not found' });
@@ -75,7 +89,7 @@ const updateProject = async (req, res) => {
             return res.status(404).json({ message: 'Project not found' });
         }
 
-        res.json({ message: 'Project updated successfully' });
+        res.status(200).json({ message: 'Project updated successfully' });
     } catch (error) {
         console.error("Error updating project:", error);
         res.status(500).json({ message: 'Error updating project', error });
@@ -102,7 +116,7 @@ const updateProjectStatus = async (req, res) => {
       return res.status(404).json({ message: 'Project not found' });
     }
 
-    res.json({ message: 'Project updated successfully' });
+    res.status(200).json({ message: 'Project updated successfully' });
   } catch (error) {
     console.error("Error updating project:", error);
     res.status(500).json({ message: 'Error updating project', error });
