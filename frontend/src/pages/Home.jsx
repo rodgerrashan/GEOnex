@@ -24,7 +24,8 @@ const GEOnexLanding = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [errors, setErrors] = useState({});
 
-  const whatsappBaseUrl = "https://wa.me/+94788428664";
+  // const whatsappBaseUrl = "https://wa.me/+94788428664";
+  const whatsappBaseUrl = "";
 
   const validate = () => {
     const errs = {};
@@ -850,7 +851,8 @@ const GEOnexLanding = () => {
             <div className="flex justify-center">
               <button
                 type="submit"
-                nClick={handleWhatsAppRedirect}
+                disabled
+                onClick={handleWhatsAppRedirect}
                 className="w-full sm:w-[320px] 
           bg-transparent border-2 border-white text-white
                      px-6 sm:px-8 py-3 sm:py-2
